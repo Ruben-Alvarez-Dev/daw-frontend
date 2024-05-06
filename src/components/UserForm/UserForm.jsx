@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createUser } from '../../services/api';
 /* import './UserForm.css'; */
 
-const UserForm = () => {
+export const UserForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     first_surname: '',
@@ -43,5 +43,3 @@ const UserForm = () => {
     </div>
   );
 };
-
-export default UserForm;

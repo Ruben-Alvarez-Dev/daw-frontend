@@ -1,30 +1,38 @@
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
-import { Reservations } from './pages/Reservations.jsx';
-import { Users } from './pages/Users.jsx';
+import { Reservations } from './pages/ReservationsPage.jsx';
+import { Users } from './pages/UsersPage.jsx';
+import { Tables } from './pages/TablesPage.jsx';
+import './App.css';
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <nav>
+      <div className="app">
+        <nav className="navbar">
           <ul>
             <li>
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/reservations">Reservations</Link>
+              <Link to="/users">Users</Link>
             </li>
             <li>
-              <Link to="/users">Users</Link>
+              <Link to="/tables">Tables</Link>
+            </li>
+            <li>
+              <Link to="/reservations">Reservations</Link>
             </li>
           </ul>
         </nav>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/reservations" element={<Reservations />} />
-          <Route path="/users" element={<Users />} />
-        </Routes>
+        <main className="main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/tables" element={<Tables />} />
+            <Route path="/reservations" element={<Reservations />} />
+          </Routes>
+        </main>
       </div>
     </Router>
   );
@@ -32,8 +40,8 @@ function App() {
 
 function Home() {
   return (
-    <div>
-      <h2>Welcome to DAW Frontend React</h2>
+    <div className="home">
+      <h2>Welcome to the Home Page</h2>
     </div>
   );
 }

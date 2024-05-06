@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getUsers } from '../../services/api';
 /* import './UserList.css'; */
 
-const UserList = () => {
+export const UserList = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -37,5 +37,3 @@ const UserList = () => {
     </div>
   );
 };
-
-export default UserList;
