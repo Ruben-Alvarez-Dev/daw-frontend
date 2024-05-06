@@ -1,5 +1,6 @@
 import './App.css';
 import { Card } from './components/Card';
+import { Form } from './components/Form';
 
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
     <>
       <h1>DAW Frontend React</h1>
       <Card />
+      <Form />
     </>
   )
 }
