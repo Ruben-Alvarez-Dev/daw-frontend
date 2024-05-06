@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getReservations } from '../../services/api';
-/* import './ReservationList.css'; */
 
-const ReservationList = () => {
+export const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
 
   useEffect(() => {
@@ -38,5 +37,3 @@ const ReservationList = () => {
     </div>
   );
 };
-
-export default ReservationList;

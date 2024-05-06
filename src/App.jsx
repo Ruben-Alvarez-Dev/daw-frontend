@@ -1,13 +1,15 @@
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
-import { Reservations } from './pages/ReservationsPage.jsx';
-import { Users } from './pages/UsersPage.jsx';
-import { Tables } from './pages/TablesPage.jsx';
+import { Reservations } from './pages/ReservationPage.jsx';
+import { Users } from './pages/UserPage.jsx';
+import { Tables } from './pages/TablePage.jsx';
+import { Home } from './pages/HomePage.jsx';
 import './App.css';
 
 function App() {
   return (
     <Router>
       <div className="app">
+
         <nav className="navbar">
           <ul>
             <li>
@@ -35,14 +37,6 @@ function App() {
         </main>
       </div>
     </Router>
-  );
-}
-
-function Home() {
-  return (
-    <div className="home">
-      <h2>Welcome to the Home Page</h2>
-    </div>
   );
 }
 

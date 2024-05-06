@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getUsers } from '../../services/api';
-/* import './UserList.css'; */
 
 export const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -20,16 +19,15 @@ export const UserList = () => {
 
   return (
     <div className="user-list">
-      <h2>Users</h2>
       {users.length === 0 ? (
         <p>No users found.</p>
       ) : (
         <ul>
           {users.map((user) => (
-            <li key={user.id}>
-              <p>Name: {user.name}</p>
-              <p>Email: {user.email}</p>
-              <p>Phone: {user.phone}</p>
+            <li key={user.id} className="user-card">
+              <p>{user.name}</p>
+              <p>{user.email}</p>
+              <p>{user.phone}</p>
             </li>
           ))}
         </ul>

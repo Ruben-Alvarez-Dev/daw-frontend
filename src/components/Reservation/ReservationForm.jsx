@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createReservation } from '../../services/api';
-/* import './ReservationForm.css'; */
 
-const ReservationForm = () => {
+export const ReservationForm = () => {
   const [formData, setFormData] = useState({
     user_id: '',
     date: '',
@@ -43,5 +42,3 @@ const ReservationForm = () => {
     </div>
   );
 };
-
-export default ReservationForm;

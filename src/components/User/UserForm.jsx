@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { createUser } from '../../services/api';
-/* import './UserForm.css'; */
 
 export const UserForm = () => {
   const [formData, setFormData] = useState({
