@@ -31,3 +31,32 @@
     align-items: center;
     overflow-y: auto;
 }
+.page{
+    max-width: 1200px;
+    min-width: 90%;
+    margin: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: rgba(250, 235, 215, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(250, 235, 215, 0.1);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+
+}
+.card{
+    background-color: rgba(250, 235, 215, 0.1);
+    margin: 1rem;
+    padding: 1rem;
+    gap: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    border: 1px solid rgba(250, 235, 215, 0.1);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}

@@ -33,7 +33,7 @@ export const UserForm = () => {
   };
 
   return (
-    <div className="user-form">
+    <div className="user-form card">
       <h2>Create User</h2>
       <form onSubmit={handleSubmit}>
         {/* Render form fields */}

@@ -18,7 +18,7 @@ export const UserList = () => {
   }, []);
 
   return (
-    <div className="user-list">
+    <div className="user-list card">
       {users.length === 0 ? (
         <p>No users found.</p>
       ) : (

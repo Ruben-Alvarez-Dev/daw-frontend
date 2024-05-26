@@ -18,7 +18,7 @@ export const ReservationList = () => {
   }, []);
 
   return (
-    <div className="reservation-list">
+    <div className="reservation-list card">
       <h2>Reservations</h2>
       {reservations.length === 0 ? (
         <p>No reservations found.</p>

@@ -4,7 +4,7 @@ import '../components/Table/TablePage.css'
 
 export const Tables = () => {
   return (
-    <div className="table-page">
+    <div className="table-page page">
       <h2>Table Page</h2>
       <TableList />
       <TableForm />

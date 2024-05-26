@@ -4,7 +4,7 @@ export const Login = () => {
     <>
         <div className="login-title"></div>
         <div className="login-box">
-            <form>
+            <form className="login-form card">
                 <div className="textbox">
                 <input type="text" placeholder="Username" name="username" />
                 </div>

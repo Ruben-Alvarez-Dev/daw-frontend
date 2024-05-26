@@ -1,4 +1,4 @@
-.tables-page{
+.table-page{
     width: 90%;
     display: flex;
     flex-direction: column;
@@ -12,11 +12,14 @@
 }
 .table-list{
     width: 90%;
+    height: 25vh;
     background-color: rgba(250, 235, 215, 0.05);
     margin: 10px;
     padding: 10px;
     border-radius: 10px;
+    overflow-y: auto;
 }
+
 .table-card{
     background-color: rgba(250, 235, 215, 0.1);
     display: flex;
@@ -24,6 +27,7 @@
     justify-content: space-between;
     margin: 10px;
     padding: 10px;
+    gap: 20px;
     border-radius: 10px;
 }
 .table-form{
@@ -36,4 +40,31 @@
     margin: 10px;
     padding: 10px;
     border-radius: 10px;
+}
+form{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+.form-group{
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    
+    justify-content: space-between;
+
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid rgba(250, 235, 215, 0.5);
+}
+.form-line label{
+    display: flex;
+    justify-content: end;
+    align-items: center;
 }

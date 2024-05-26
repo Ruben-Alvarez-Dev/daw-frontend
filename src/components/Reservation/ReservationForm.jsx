@@ -33,7 +33,7 @@ export const ReservationForm = () => {
   };
 
   return (
-    <div className="reservation-form">
+    <div className="reservation-form card">
       <h2>Create Reservation</h2>
       <form onSubmit={handleSubmit}>
         {/* Render form fields */}

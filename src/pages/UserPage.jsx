@@ -5,7 +5,7 @@ import '../components/User/UserPage.css'
 
 export const Users = () => {
   return (
-    <div className="user-page">
+    <div className="user-page page">
       <h2>User Page</h2>
       <UserList />
       <UserForm />

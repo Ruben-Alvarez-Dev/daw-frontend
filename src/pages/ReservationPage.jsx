@@ -4,7 +4,7 @@ import '../components/Reservation/ReservationPage.css';
 
 export const Reservations = () => {
   return (
-    <div className="reservation-page">
+    <div className="reservation-page page">
       <h2>Reservation Page</h2>
       <ReservationList />
       <ReservationForm />
