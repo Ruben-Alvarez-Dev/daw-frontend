@@ -1,0 +1,12 @@
+.input-group{
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group input{
+    width: 50%;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
