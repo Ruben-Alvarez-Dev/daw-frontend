@@ -7,7 +7,7 @@ import TableForm from './TableForm';
 import ReservationList from './ReservationList';
 import ReservationForm from './ReservationForm';
 import axios from 'axios';
-import { getUsers } from '../helpers/api';
+import { getUsers, getTables, getReservations } from '../helpers/api';
 
 const Dashboard = () => {
   const [userMode, setUserMode] = useState('create');
@@ -18,9 +18,12 @@ const Dashboard = () => {
   const [reservationToEdit, setReservationToEdit] = useState(null);
   const [reservations, setReservations] = useState([]);
   const [users, setUsers] = useState([]);
+  const [tables, setTables] = useState([]);
 
   useEffect(() => {
     fetchUserList();
+    fetchTableList();
+    fetchReservations();
   }, []);
 
   const fetchUsers = async () => {
@@ -41,10 +44,10 @@ const Dashboard = () => {
     }
   };
 
-  const fetchTables = async () => {
+  const fetchTableList = async () => {
     try {
-      const response = await axios.get('https://reservations.rubenalvarez.dev/public/index.php/api/tables');
-      // Aquí puedes actualizar el estado de las mesas si es necesario
+      const data = await getTables();
+      setTables(data);
     } catch (error) {
       console.error('Error al obtener las mesas:', error);
     }
@@ -71,7 +74,7 @@ const Dashboard = () => {
   const handleSaveUser = () => {
     setUserMode('create');
     setUserToEdit(null);
-    fetchUserList(); // Actualizar la lista de usuarios después de guardar un usuario
+    fetchUserList();
   };
 
   const handleEditTable = (table) => {
@@ -82,6 +85,7 @@ const Dashboard = () => {
   const handleSaveTable = () => {
     setTableMode('create');
     setTableToEdit(null);
+    fetchTableList();
   };
 
   const handleEditReservation = (reservation) => {
@@ -109,11 +113,11 @@ const Dashboard = () => {
       <div className="card">
         <h2>Mesas</h2>
         {tableMode === 'edit' ? (
-          <TableForm table={tableToEdit} onSave={handleSaveTable} fetchTables={fetchTables} />
+          <TableForm table={tableToEdit} onSave={handleSaveTable} fetchTableList={fetchTableList} />
         ) : (
-          <TableForm onSave={handleSaveTable} fetchTables={fetchTables} />
+          <TableForm onSave={handleSaveTable} fetchTableList={fetchTableList} />
         )}
-        <TableList onEdit={handleEditTable} mode={tableMode} fetchTables={fetchTables} />
+        <TableList tables={tables} onEdit={handleEditTable} mode={tableMode} fetchTableList={fetchTableList} />
       </div>
 
       <div className="card">

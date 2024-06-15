@@ -64,6 +64,16 @@ export const getTables = async () => {
   }
 };
 
+export const getTable = async (tableId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/tables/${tableId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener la mesa:', error);
+    throw error;
+  }
+};
+
 export const postTable = async (tableData) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/tables`, tableData);
