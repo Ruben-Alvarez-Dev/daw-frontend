@@ -2,12 +2,12 @@ import './css/ReservationList.css';
 import React, { useEffect, useState } from 'react';
 import { getReservations, deleteReservation } from '../helpers/api';
 
-const ReservationList = ({ onEdit, mode, fetchReservations }) => {
+const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
   const [reservations, setReservations] = useState([]);
 
   useEffect(() => {
     fetchReservationsData();
-  }, [fetchReservations]);
+  }, [fetchReservationList]);
 
   const fetchReservationsData = async () => {
     try {

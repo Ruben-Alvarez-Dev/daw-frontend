@@ -23,7 +23,7 @@ const Dashboard = () => {
   useEffect(() => {
     fetchUserList();
     fetchTableList();
-    fetchReservations();
+    fetchReservationList();
   }, []);
 
   const fetchUsers = async () => {
@@ -57,6 +57,15 @@ const Dashboard = () => {
     try {
       const response = await axios.get('https://reservations.rubenalvarez.dev/public/index.php/api/reservations');
       setReservations(response.data);
+    } catch (error) {
+      console.error('Error al obtener las reservas:', error);
+    }
+  };
+
+  const fetchReservationList = async () => {
+    try {
+      const data = await getReservations();
+      setReservations(data);
     } catch (error) {
       console.error('Error al obtener las reservas:', error);
     }
@@ -127,19 +136,23 @@ const Dashboard = () => {
             reservation={reservationToEdit}
             onSave={handleSaveReservation}
             fetchReservations={fetchReservations}
+            fetchReservationList={fetchReservationList}
+            tables={tables} // Pasamos el estado tables directamente
           />
         ) : (
           <ReservationForm
             onSave={handleSaveReservation}
             fetchReservations={fetchReservations}
             updateReservations={updateReservations}
-          />
+            fetchReservationList={fetchReservationList}
+            tables={tables}
+        />
         )}
         <ReservationList
           reservations={reservations}
           onEdit={handleEditReservation}
           mode={reservationMode}
-          fetchReservations={fetchReservations}
+          fetchReservationList={fetchReservationList}
         />
       </div>
     </div>

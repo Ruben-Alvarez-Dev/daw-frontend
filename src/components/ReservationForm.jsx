@@ -1,85 +1,84 @@
 import './css/ReservationForm.css';
-import React, { useState, useEffect, useRef } from 'react';
-import { postReservation, putReservation, getTables, deleteReservation } from '../helpers/api';
+import React, { useState, useEffect } from 'react';
+import { postReservation, putReservation, deleteReservation } from '../helpers/api';
 
-
-const ReservationForm = ({ reservation, onSave, fetchReservations, updateReservations }) => {
-  const [userId, setUserId] = useState('');
-  const [selectedTableIds, setSelectedTableIds] = useState([]);
-  const [paxNumber, setPaxNumber] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [status, setStatus] = useState('pending');
+const ReservationForm = ({ reservation, onSave, fetchReservations, fetchReservationList, updateReservations, tables }) => {
+  const [reservationData, setReservationData] = useState({
+    userId: '',
+    selectedTableIds: [],
+    paxNumber: '',
+    date: '',
+    time: '',
+    status: 'pending',
+  });
   const [isEditing, setIsEditing] = useState(false);
-  const [availableTables, setAvailableTables] = useState([]);
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const selectRef = useRef(null);
-  const containerRef = useRef(null);
+  const [selectedTable, setSelectedTable] = useState(null);
 
   useEffect(() => {
     if (reservation) {
-      setUserId(reservation.user_id.toString());
-      setSelectedTableIds(reservation.table_ids);
-      setPaxNumber(reservation.pax_number.toString());
-      setDate(reservation.date);
-      setTime(reservation.time);
-      setStatus(reservation.status);
+      setReservationData({
+        userId: reservation.user_id.toString(),
+        selectedTableIds: reservation.table_ids,
+        paxNumber: reservation.pax_number.toString(),
+        date: reservation.date,
+        time: reservation.time,
+        status: reservation.status,
+      });
       setIsEditing(true);
     } else {
-      setUserId('');
-      setSelectedTableIds([]);
-      setPaxNumber('');
-      setDate('');
-      setTime('');
-      setStatus('pending');
+      setReservationData({
+        userId: '',
+        selectedTableIds: [],
+        paxNumber: '',
+        date: '',
+        time: '',
+        status: 'pending',
+      });
       setIsEditing(false);
     }
-    fetchAvailableTables();
   }, [reservation]);
-
-  const fetchAvailableTables = async () => {
-    try {
-      const data = await getTables();
-      setAvailableTables(data);
-    } catch (error) {
-      console.error('Error al obtener las mesas:', error);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const data = {
-        user_id: parseInt(userId),
-        table_ids: selectedTableIds,
-        pax_number: parseInt(paxNumber),
-        date,
-        time,
-        status,
+        user_id: parseInt(reservationData.userId),
+        table_ids: JSON.stringify(reservationData.selectedTableIds),
+        pax_number: parseInt(reservationData.paxNumber),
+        date: reservationData.date,
+        time: reservationData.time,
+        status: reservationData.status,
       };
-
+  
+      console.log('Datos enviados:', data);
+  
       if (isEditing) {
         await putReservation(reservation.id, data);
       } else {
         const newReservation = await postReservation(data);
         updateReservations(newReservation);
       }
-
+  
       onSave();
       fetchReservations();
+      fetchReservationList();
       resetForm();
     } catch (error) {
       console.error('Error al guardar la reserva:', error);
     }
   };
 
+
   const resetForm = () => {
-    setUserId('');
-    setSelectedTableIds([]);
-    setPaxNumber('');
-    setDate('');
-    setTime('');
-    setStatus('pending');
+    setReservationData({
+      userId: '',
+      selectedTableIds: [],
+      paxNumber: '',
+      date: '',
+      time: '',
+      status: 'pending',
+    });
+    setSelectedTable(null);
   };
 
   const handleDeleteReservation = async () => {
@@ -88,6 +87,7 @@ const ReservationForm = ({ reservation, onSave, fetchReservations, updateReserva
         await deleteReservation(reservation.id);
         onSave();
         fetchReservations();
+        fetchReservationList();
         resetForm();
       }
     } catch (error) {
@@ -95,59 +95,100 @@ const ReservationForm = ({ reservation, onSave, fetchReservations, updateReserva
     }
   };
 
-  const toggleSelect = () => {
-    setIsSelectOpen(!isSelectOpen);
-  };
-
-  const handleClickOutside = (e) => {
-    if (containerRef.current && !containerRef.current.contains(e.target)) {
-      setIsSelectOpen(false);
+  const handleAddTable = () => {
+    if (selectedTable) {
+      setReservationData((prevData) => ({
+        ...prevData,
+        selectedTableIds: [...prevData.selectedTableIds, selectedTable.id],
+      }));
+      setSelectedTable(null);
     }
   };
 
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  const handleClearTables = () => {
+    setReservationData((prevData) => ({
+      ...prevData,
+      selectedTableIds: [],
+    }));
+  };
 
   return (
     <form className="reservation-form" onSubmit={handleSubmit}>
-      <h2>{isEditing ? 'Editar Reserva' : 'Crear Reserva'}</h2>
-      <input type="number" placeholder="ID de Usuario" value={userId} onChange={(e) => setUserId(e.target.value)} />
-      <div ref={containerRef} className="table-select">
-        <label>Mesas:</label>
+      <div className="reservation-line">
+        <h2>{isEditing ? 'Editar Reserva' : 'Crear Reserva'}</h2>
+      </div>
+      <div className="reservation-line">
+        <input
+          type="number"
+          placeholder="ID de Usuario"
+          value={reservationData.userId}
+          onChange={(e) => setReservationData((prevData) => ({ ...prevData, userId: e.target.value }))}
+        />
+      </div>
+
+      <div className="reservation-line">
         <div>
+          <span>
+            {reservationData.selectedTableIds.length > 0
+              ? `Mesas seleccionadas: ${reservationData.selectedTableIds.join(', ')}`
+              : 'No hay mesas seleccionadas'}
+          </span>
           <select
-            multiple
-            value={selectedTableIds}
-            onChange={(e) => setSelectedTableIds(Array.from(e.target.selectedOptions, (option) => parseInt(option.value)))}
-            ref={selectRef}
-            size={isSelectOpen ? 5 : 1}
+            value={selectedTable ? selectedTable.id : ''}
+            onChange={(e) =>
+              setSelectedTable(tables.find((table) => table.id === parseInt(e.target.value)))
+            }
           >
-            <option value="">Seleccionar mesas</option>
-            {availableTables.map((table) => (
+            <option value="">Seleccionar mesa</option>
+            {tables.map((table) => (
               <option key={table.id} value={table.id}>
                 {table.name} (Capacidad: {table.capacity})
               </option>
             ))}
           </select>
-          <button type="button" onClick={toggleSelect}>
-            {isSelectOpen ? 'Contraer' : 'Expandir'}
+          <button type="button" onClick={handleAddTable}>
+            Agregar
+          </button>
+          <button type="button" onClick={handleClearTables}>
+            Clear
           </button>
         </div>
       </div>
-      <input type="number" placeholder="Número de Personas" value={paxNumber} onChange={(e) => setPaxNumber(e.target.value)} />
-      <input type="date" placeholder="Fecha" value={date} onChange={(e) => setDate(e.target.value)} />
-      <input type="time" placeholder="Hora" value={time} onChange={(e) => setTime(e.target.value)} />
-      <select value={status} onChange={(e) => setStatus(e.target.value)}>
-        <option value="pending">Pendiente</option>
-        <option value="confirmed">Confirmada</option>
-        <option value="cancelled">Cancelada</option>
-      </select>
-      <button type="submit">{isEditing ? 'Guardar' : 'Crear'}</button>
-      {isEditing && <button type="button" onClick={handleDeleteReservation}>Eliminar</button>}
+
+      <div className="reservation-line">
+        <input
+          type="date"
+          placeholder="Fecha"
+          value={reservationData.date}
+          onChange={(e) => setReservationData((prevData) => ({ ...prevData, date: e.target.value }))}
+        />
+        <input
+          type="time"
+          placeholder="Hora"
+          value={reservationData.time}
+          onChange={(e) => setReservationData((prevData) => ({ ...prevData, time: e.target.value }))}
+        />
+      </div>
+      <div className="reservation-line">
+        <input
+          type="number"
+          placeholder="Número de Personas"
+          value={reservationData.paxNumber}
+          onChange={(e) => setReservationData((prevData) => ({ ...prevData, paxNumber: e.target.value }))}
+        />
+        <select
+          value={reservationData.status}
+          onChange={(e) => setReservationData((prevData) => ({ ...prevData, status: e.target.value }))}
+        >
+          <option value="pending">Pendiente</option>
+          <option value="confirmed">Confirmada</option>
+          <option value="cancelled">Cancelada</option>
+        </select>
+      </div>
+      <div className="reservation-line">
+        <button type="submit">{isEditing ? 'Guardar' : 'Crear'}</button>
+        {isEditing && <button type="button" onClick={handleDeleteReservation}>Eliminar</button>}
+      </div>
     </form>
   );
 };

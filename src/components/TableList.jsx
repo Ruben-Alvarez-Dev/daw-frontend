@@ -13,16 +13,17 @@ const TableList = ({ tables, onEdit, mode, fetchTableList }) => {
       fetchTableList();
     } catch (error) {
       console.error('Error al eliminar la mesa:', error);
+      // Aquí puedes agregar un manejo de error más específico, como mostrar un mensaje al usuario
     }
   };
 
   return (
     <div className="table-list">
       <ul>
-        {tables.map(table => (
+        {tables.map((table) => (
           <li key={table.id}>
             <span>
-              {table.name} - Capacidad: {table.capacity}
+              {table.name} - Capacidad: {table.capacity} - Estado: {table.status}
             </span>
             <span>
               <button onClick={() => onEdit(table)}>

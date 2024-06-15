@@ -116,6 +116,9 @@ export const getReservations = async () => {
 
 export const postReservation = async (reservationData) => {
   try {
+    console.log('URL:', `${API_BASE_URL}/reservations`);
+    console.log('Datos:', reservationData);
+
     const response = await axios.post(`${API_BASE_URL}/reservations`, reservationData);
     return response.data;
   } catch (error) {
