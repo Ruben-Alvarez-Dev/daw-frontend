@@ -1,3 +1,4 @@
+import './css/ReservationList.css';
 import React, { useEffect, useState } from 'react';
 import { getReservations, deleteReservation } from '../helpers/api';
 
@@ -27,7 +28,7 @@ const ReservationList = ({ onEdit, mode, fetchReservations }) => {
   };
 
   return (
-    <div>
+    <div className="reservation-list">
       {mode === 'create' && reservations && reservations.length > 0 && (
         <ul>
           {reservations.map((reservation) => (

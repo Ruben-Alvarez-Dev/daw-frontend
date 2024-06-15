@@ -37,7 +37,7 @@ const TableForm = ({ table, onSave, fetchTables }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="table-form" onSubmit={handleSubmit}>
       <input type="text" placeholder="Nombre" value={name} onChange={e => setName(e.target.value)} />
       <input type="number" placeholder="Capacidad" value={capacity} onChange={e => setCapacity(e.target.value)} />
       <button type="submit">{table ? 'Guardar' : 'Crear'}</button>

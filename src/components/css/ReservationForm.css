@@ -1,0 +1,37 @@
+.reservation-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .reservation-form input,
+  .reservation-form select {
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+  
+  .reservation-form button {
+    padding: 8px 16px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .reservation-form button:hover {
+    background-color: #45a049;
+  }
+  
+  .table-select {
+    position: relative;
+  }
+  
+  .table-select select {
+    width: 100%;
+  }
+  
+  .table-select button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+  }

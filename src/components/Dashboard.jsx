@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import './css/Dashboard.css';
+import React, { useState, useEffect } from 'react';
 import UserList from './UserList';
 import UserForm from './UserForm';
 import TableList from './TableList';
@@ -6,6 +7,7 @@ import TableForm from './TableForm';
 import ReservationList from './ReservationList';
 import ReservationForm from './ReservationForm';
 import axios from 'axios';
+import { getUsers } from '../helpers/api';
 
 const Dashboard = () => {
   const [userMode, setUserMode] = useState('create');
@@ -14,11 +16,26 @@ const Dashboard = () => {
   const [userToEdit, setUserToEdit] = useState(null);
   const [tableToEdit, setTableToEdit] = useState(null);
   const [reservationToEdit, setReservationToEdit] = useState(null);
+  const [reservations, setReservations] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetchUserList();
+  }, []);
 
   const fetchUsers = async () => {
     try {
       const response = await axios.get('https://reservations.rubenalvarez.dev/public/index.php/api/users');
       // Aquí puedes actualizar el estado de los usuarios si es necesario
+    } catch (error) {
+      console.error('Error al obtener los usuarios:', error);
+    }
+  };
+
+  const fetchUserList = async () => {
+    try {
+      const data = await getUsers();
+      setUsers(data);
     } catch (error) {
       console.error('Error al obtener los usuarios:', error);
     }
@@ -36,10 +53,14 @@ const Dashboard = () => {
   const fetchReservations = async () => {
     try {
       const response = await axios.get('https://reservations.rubenalvarez.dev/public/index.php/api/reservations');
-      // Aquí puedes actualizar el estado de las reservas si es necesario
+      setReservations(response.data);
     } catch (error) {
       console.error('Error al obtener las reservas:', error);
     }
+  };
+
+  const updateReservations = (newReservation) => {
+    setReservations((prevReservations) => [...prevReservations, newReservation]);
   };
 
   const handleEditUser = (user) => {
@@ -50,6 +71,7 @@ const Dashboard = () => {
   const handleSaveUser = () => {
     setUserMode('create');
     setUserToEdit(null);
+    fetchUserList(); // Actualizar la lista de usuarios después de guardar un usuario
   };
 
   const handleEditTable = (table) => {
@@ -73,30 +95,49 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      <h2>Usuarios</h2>
-      {userMode === 'edit' ? (
-        <UserForm user={userToEdit} onSave={handleSaveUser} fetchUsers={fetchUsers} />
-      ) : (
-        <UserForm onSave={handleSaveUser} fetchUsers={fetchUsers} />
-      )}
-      <UserList onEdit={handleEditUser} mode={userMode} fetchUsers={fetchUsers} />
+    <div className="dashboard">
+      <div className="card">
+        <h2>Usuarios</h2>
+        {userMode === 'edit' ? (
+          <UserForm user={userToEdit} onSave={handleSaveUser} fetchUsers={fetchUsers} fetchUserList={fetchUserList} />
+        ) : (
+          <UserForm onSave={handleSaveUser} fetchUsers={fetchUsers} fetchUserList={fetchUserList} />
+        )}
+        <UserList users={users} onEdit={handleEditUser} mode={userMode} fetchUserList={fetchUserList} />
+      </div>
 
-      <h2>Mesas</h2>
-      {tableMode === 'edit' ? (
-        <TableForm table={tableToEdit} onSave={handleSaveTable} fetchTables={fetchTables} />
-      ) : (
-        <TableForm onSave={handleSaveTable} fetchTables={fetchTables} />
-      )}
-      <TableList onEdit={handleEditTable} mode={tableMode} fetchTables={fetchTables} />
+      <div className="card">
+        <h2>Mesas</h2>
+        {tableMode === 'edit' ? (
+          <TableForm table={tableToEdit} onSave={handleSaveTable} fetchTables={fetchTables} />
+        ) : (
+          <TableForm onSave={handleSaveTable} fetchTables={fetchTables} />
+        )}
+        <TableList onEdit={handleEditTable} mode={tableMode} fetchTables={fetchTables} />
+      </div>
 
-      <h2>Reservas</h2>
-      {reservationMode === 'edit' ? (
-        <ReservationForm reservation={reservationToEdit} onSave={handleSaveReservation} fetchReservations={fetchReservations} />
-      ) : (
-        <ReservationForm onSave={handleSaveReservation} fetchReservations={fetchReservations} />
-      )}
-      <ReservationList onEdit={handleEditReservation} mode={reservationMode} fetchReservations={fetchReservations} />
+      <div className="card">
+        <h2>Reservas</h2>
+        {reservationMode === 'edit' ? (
+          <ReservationForm
+            reservation={reservationToEdit}
+            onSave={handleSaveReservation}
+            fetchReservations={fetchReservations}
+          />
+        ) : (
+          <ReservationForm
+            onSave={handleSaveReservation}
+            fetchReservations={fetchReservations}
+            updateReservations={updateReservations}
+          />
+        )}
+        <ReservationList
+          reservations={reservations}
+          onEdit={handleEditReservation}
+          mode={reservationMode}
+          fetchReservations={fetchReservations}
+        />
+      </div>
     </div>
   );
 };

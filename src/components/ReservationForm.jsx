@@ -1,5 +1,7 @@
+import './css/ReservationForm.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { postReservation, putReservation, getTables, deleteReservation } from '../helpers/api';
+
 
 const ReservationForm = ({ reservation, onSave, fetchReservations, updateReservations }) => {
   const [userId, setUserId] = useState('');
@@ -111,10 +113,10 @@ const ReservationForm = ({ reservation, onSave, fetchReservations, updateReserva
   }, []);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="reservation-form" onSubmit={handleSubmit}>
       <h2>{isEditing ? 'Editar Reserva' : 'Crear Reserva'}</h2>
       <input type="number" placeholder="ID de Usuario" value={userId} onChange={(e) => setUserId(e.target.value)} />
-      <div ref={containerRef}>
+      <div ref={containerRef} className="table-select">
         <label>Mesas:</label>
         <div>
           <select

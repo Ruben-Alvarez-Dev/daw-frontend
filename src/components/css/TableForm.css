@@ -1,0 +1,21 @@
+.table-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .table-form input {
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+  
+  .table-form button {
+    padding: 8px 16px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .table-form button:hover {
+    background-color: #45a049;
+  }

@@ -14,6 +14,16 @@ export const getUsers = async () => {
   }
 };
 
+export const getUser = async (userId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener el usuario:', error);
+    throw error;
+  }
+};
+
 export const postUser = async (userData) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/users`, userData);

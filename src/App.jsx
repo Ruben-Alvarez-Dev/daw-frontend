@@ -3,9 +3,11 @@ import Dashboard from './components/Dashboard';
 
 const App = () => {
   return (
-    <div>
+    <div className='app'>
       <h1>Reservas de Restaurante</h1>
-      <Dashboard />
+      <div className='dashboard-container'>
+        <Dashboard />
+      </div>
     </div>
   );
 };

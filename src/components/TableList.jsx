@@ -27,7 +27,7 @@ const TableList = ({ onEdit, mode }) => {
   };
 
   return (
-    <div>
+    <div className="table-list">
       {mode === 'create' && (
         <ul>
           {tables.map(table => (

@@ -1,0 +1,28 @@
+.reservation-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .reservation-list li {
+    background-color: #f4f4f4;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .reservation-list li button {
+    padding: 5px 10px;
+    background-color: #e53935;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .reservation-list li button:hover {
+    background-color: #c62828;
+  }
