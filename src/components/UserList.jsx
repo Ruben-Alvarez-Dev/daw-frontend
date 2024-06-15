@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import UserForm from './UserForm';
+import { getUsers, deleteUser } from '../helpers/api';
 
-const UserList = ({ onEdit }) => {
+const UserList = ({ onEdit, mode }) => {
   const [users, setUsers] = useState([]);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get('https://reservations.rubenalvarez.dev/public/index.php/api/users');
-      setUsers(response.data);
-    } catch (error) {
-      console.error('Error al obtener los usuarios:', error);
-    }
-  };
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  const fetchUsers = async () => {
+    try {
+      const data = await getUsers();
+      setUsers(data);
+    } catch (error) {
+      console.error('Error al obtener los usuarios:', error);
+    }
+  };
+
   const handleDelete = async (userId) => {
     try {
-      await axios.delete(`https://reservations.rubenalvarez.dev/public/index.php/api/users/${userId}`);
+      await deleteUser(userId);
       fetchUsers();
     } catch (error) {
       console.error('Error al eliminar el usuario:', error);
@@ -29,16 +28,17 @@ const UserList = ({ onEdit }) => {
 
   return (
     <div>
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>
-            {user.name} - {user.email}
-            <button onClick={() => onEdit(user)}>Editar</button>
-            <button onClick={() => handleDelete(user.id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
-      <UserForm user={null} onSave={fetchUsers} />
+      {mode === 'create' && (
+        <ul>
+          {users.map(user => (
+            <li key={user.id}>
+              {user.name} - {user.email}
+              <button onClick={() => onEdit(user)}>Editar</button>
+              <button onClick={() => handleDelete(user.id)}>Eliminar</button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

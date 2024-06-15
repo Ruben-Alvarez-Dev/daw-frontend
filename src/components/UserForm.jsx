@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { postUser, putUser } from '../helpers/api';
 
-const UserForm = ({ user, onSave }) => {
+const UserForm = ({ user, onSave, fetchUsers }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,25 +22,22 @@ const UserForm = ({ user, onSave }) => {
     e.preventDefault();
     try {
       if (user) {
-        await axios.put(`https://reservations.rubenalvarez.dev/public/index.php/api/users/${user.id}`, {
-          name,
-          email,
-          password
-        });
+        await putUser(user.id, { name, email, password });
       } else {
-        await axios.post('https://reservations.rubenalvarez.dev/public/index.php/api/users', {
-          name,
-          email,
-          password
-        });
+        await postUser({ name, email, password });
       }
       onSave();
-      setName('');
-      setEmail('');
-      setPassword('');
+      fetchUsers();
+      resetForm();
     } catch (error) {
       console.error('Error al guardar el usuario:', error);
     }
+  };
+
+  const resetForm = () => {
+    setName('');
+    setEmail('');
+    setPassword('');
   };
 
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { getTables, deleteTable } from '../helpers/api';
 
-const TableList = ({ onEdit }) => {
+const TableList = ({ onEdit, mode }) => {
   const [tables, setTables] = useState([]);
 
   useEffect(() => {
@@ -10,8 +10,8 @@ const TableList = ({ onEdit }) => {
 
   const fetchTables = async () => {
     try {
-      const response = await axios.get('https://reservations.rubenalvarez.dev/public/index.php/api/tables');
-      setTables(response.data);
+      const data = await getTables();
+      setTables(data);
     } catch (error) {
       console.error('Error al obtener las mesas:', error);
     }
@@ -19,7 +19,7 @@ const TableList = ({ onEdit }) => {
 
   const handleDelete = async (tableId) => {
     try {
-      await axios.delete(`https://reservations.rubenalvarez.dev/public/index.php/api/tables/${tableId}`);
+      await deleteTable(tableId);
       fetchTables();
     } catch (error) {
       console.error('Error al eliminar la mesa:', error);
@@ -27,15 +27,19 @@ const TableList = ({ onEdit }) => {
   };
 
   return (
-    <ul>
-      {tables.map(table => (
-        <li key={table.id}>
-          {table.name} - Capacidad: {table.capacity}
-          <button onClick={() => onEdit(table)}>Editar</button>
-          <button onClick={() => handleDelete(table.id)}>Eliminar</button>
-        </li>
-      ))}
-    </ul>
+    <div>
+      {mode === 'create' && (
+        <ul>
+          {tables.map(table => (
+            <li key={table.id}>
+              {table.name} - Capacidad: {table.capacity}
+              <button onClick={() => onEdit(table)}>Editar</button>
+              <button onClick={() => handleDelete(table.id)}>Eliminar</button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 };
 

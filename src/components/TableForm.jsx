@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { postTable, putTable } from '../helpers/api';
 
-const TableForm = ({ table, onSave }) => {
+const TableForm = ({ table, onSave, fetchTables }) => {
   const [name, setName] = useState('');
   const [capacity, setCapacity] = useState('');
 
@@ -19,16 +19,21 @@ const TableForm = ({ table, onSave }) => {
     e.preventDefault();
     try {
       if (table) {
-        await axios.put(`https://reservations.rubenalvarez.dev/public/index.php/api/tables/${table.id}`, { name, capacity });
+        await putTable(table.id, { name, capacity: parseInt(capacity) });
       } else {
-        await axios.post('https://reservations.rubenalvarez.dev/public/index.php/api/tables', { name, capacity });
+        await postTable({ name, capacity: parseInt(capacity) });
       }
       onSave();
-      setName('');
-      setCapacity('');
+      fetchTables();
+      resetForm();
     } catch (error) {
       console.error('Error al guardar la mesa:', error);
     }
+  };
+
+  const resetForm = () => {
+    setName('');
+    setCapacity('');
   };
 
   return (
