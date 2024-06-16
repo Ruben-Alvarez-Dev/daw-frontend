@@ -1,14 +1,16 @@
 import './css/ReservationList.css';
 import React, { useEffect, useState } from 'react';
-import { getReservations, deleteReservation, getUsers } from '../helpers/api';
+import { getReservations, deleteReservation, getUsers, getTables } from '../helpers/api';
 
 const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
   const [reservations, setReservations] = useState([]);
   const [users, setUsers] = useState({});
+  const [tables, setTables] = useState({});
 
   useEffect(() => {
     fetchReservationsData();
     fetchUsersData();
+    fetchTablesData();
   }, [fetchReservationList]);
 
   const fetchReservationsData = async () => {
@@ -33,6 +35,19 @@ const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
     }
   };
 
+  const fetchTablesData = async () => {
+    try {
+      const data = await getTables();
+      const tablesMap = data.reduce((acc, table) => {
+        acc[table.id] = table;
+        return acc;
+      }, {});
+      setTables(tablesMap);
+    } catch (error) {
+      console.error('Error al obtener las mesas:', error);
+    }
+  };
+
   const handleDelete = async (reservationId) => {
     try {
       await deleteReservation(reservationId);
@@ -42,14 +57,29 @@ const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
     }
   };
 
+  const getStatusClassName = (status) => {
+    switch (status) {
+      case 'pending':
+        return 'pending';
+      case 'confirmed':
+        return 'confirmed';
+      case 'cancelled':
+        return 'cancelled';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="reservation-list">
       {reservations && reservations.length > 0 ? (
         <ul>
           {reservations.map((reservation) => (
-            <li key={reservation.id}>
+            <li key={reservation.id} className={getStatusClassName(reservation.status)}>
               {users[reservation.user_id] || 'Usuario desconocido'} -
-              {reservation.table_ids.length > 2 ? reservation.table_ids.join(', ') : 'Sin mesa'} -
+              {reservation.table_ids.length > 0
+                ? reservation.table_ids.map(tableId => tables[tableId]?.name).join(', ')
+                : 'Sin mesa'} -
               {reservation.date} - {reservation.time.slice(0, 5)} - 
               {" " + reservation.status} - Pax: {reservation.pax_number}
               <button onClick={() => onEdit(reservation)}>Editar</button>
