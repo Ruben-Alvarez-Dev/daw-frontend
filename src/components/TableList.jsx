@@ -5,7 +5,7 @@ import { deleteTable } from '../helpers/api';
 const TableList = ({ tables, onEdit, mode, fetchTableList }) => {
   useEffect(() => {
     fetchTableList();
-  }, [fetchTableList]);
+  }, [tables, fetchTableList]);
 
   const handleDelete = async (tableId) => {
     try {
@@ -23,7 +23,7 @@ const TableList = ({ tables, onEdit, mode, fetchTableList }) => {
         {tables.map((table) => (
           <li key={table.id}>
             <span>
-              {table.name} - Capacidad: {table.capacity} - Estado: {table.status}
+              {table.name} - Max: {table.capacity} - Is now: {table.status}
             </span>
             <span>
               <button onClick={() => onEdit(table)}>

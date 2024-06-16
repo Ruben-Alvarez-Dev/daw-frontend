@@ -1,6 +1,6 @@
-import './css/ReservationForm.css';
 import React, { useState, useEffect } from 'react';
-import { postReservation, putReservation, getUsers, getTables } from '../helpers/api';
+import { postReservation, putReservation, getUsers, getTables, putTable } from '../helpers/api';
+import './css/ReservationForm.css';
 
 const initialFormData = {
   id: '',
@@ -12,14 +12,14 @@ const initialFormData = {
   pax_number: ''
 };
 
-const ReservationForm = ({ reservation, onSave, onCancel }) => {
+const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fetchReservationList, tables, updateTables }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserList, setShowUserList] = useState(false);
-  const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
+  const [originalTableIds, setOriginalTableIds] = useState([]);
 
   useEffect(() => {
     if (reservation) {
@@ -32,6 +32,7 @@ const ReservationForm = ({ reservation, onSave, onCancel }) => {
         status: reservation.status || 'pending',
         pax_number: reservation.pax_number || ''
       });
+      setOriginalTableIds(reservation.table_ids || []);
 
       const fetchSelectedUser = async () => {
         try {
@@ -47,38 +48,16 @@ const ReservationForm = ({ reservation, onSave, onCancel }) => {
     } else {
       setFormData(initialFormData);
       setSelectedUser(null);
+      setOriginalTableIds([]);
     }
   }, [reservation]);
-
-  useEffect(() => {
-    fetchUsersData();
-    fetchTables();
-  }, []);
-
-  const fetchUsersData = async () => {
-    try {
-      const data = await getUsers();
-      setFilteredUsers(data); // Inicializar filteredUsers con todos los usuarios al cargar
-    } catch (error) {
-      console.error('Error al obtener los usuarios:', error);
-    }
-  };
-
-  const fetchTables = async () => {
-    try {
-      const tablesData = await getTables();
-      setTables(tablesData);
-    } catch (error) {
-      console.error('Error al obtener las mesas:', error);
-    }
-  };
 
   const handleInputChange = async (e) => {
     const { value } = e.target;
     setSearchTerm(value);
 
     try {
-      const data = await getUsers(); // Obtener los usuarios cada vez que cambia el input
+      const data = await getUsers();
       const filtered = data.filter(user =>
         user.name.toLowerCase().includes(value.toLowerCase()) ||
         user.email.toLowerCase().includes(value.toLowerCase())
@@ -98,25 +77,54 @@ const ReservationForm = ({ reservation, onSave, onCancel }) => {
       ...prevFormData,
       user_id: selectedUser.id
     }));
-    setSearchTerm(selectedUser.name); // Mostrar el nombre seleccionado como placeholder
-    setShowUserList(false); // Ocultar la lista de usuarios al seleccionar uno
+    setSearchTerm(selectedUser.name);
+    setShowUserList(false);
   };
 
-  const handleAddTable = () => {
+  const handleAddTable = async () => {
     if (selectedTable) {
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        table_ids: [...prevFormData.table_ids, selectedTable.id]
-      }));
-      setSelectedTable(null);
+      try {
+        // Actualizar el estado de la mesa a "scheduled"
+        const updatedTable = await putTable(selectedTable.id, { status: 'scheduled' });
+
+        // Agregar la mesa a la lista de mesas seleccionadas
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          table_ids: [...prevFormData.table_ids, selectedTable.id]
+        }));
+
+        // Actualizar el estado de las mesas en el componente padre
+        const updatedTables = await getTables();
+        updateTables(updatedTables);
+
+        setSelectedTable(null);
+      } catch (error) {
+        console.error('Error al actualizar la mesa:', error);
+      }
     }
   };
 
-  const handleClearTables = () => {
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      table_ids: []
-    }));
+  const handleClearTables = async () => {
+    try {
+      // Revertir el estado de las mesas agregadas a "free"
+      const updatedTables = await Promise.all(
+        formData.table_ids.map(async (tableId) => {
+          const table = await putTable(tableId, { status: 'free' });
+          return table;
+        })
+      );
+
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        table_ids: []
+      }));
+
+      // Actualizar el estado de las mesas en el componente padre
+      const allTables = await getTables();
+      updateTables(allTables);
+    } catch (error) {
+      console.error('Error al revertir el estado de las mesas:', error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -175,44 +183,40 @@ const ReservationForm = ({ reservation, onSave, onCancel }) => {
       </div>
 
       <div className="form-line column">
+        <div className="block">
+          <span>
+            {formData.table_ids.length > 0
+              ? `Mesas: ${formData.table_ids.join(', ')}`
+              : 'Sin mesa'}
+          </span>
+        </div>
 
-          <div className="block">
-            <span>
-              {formData.table_ids.length > 0
-                ? `Mesas: ${formData.table_ids.join(', ')}`
-                : 'Sin mesa'}
-            </span>
-          </div>
-          
-          <div className='row'>
-            
-            <div>
-              <select
-                value={selectedTable ? selectedTable.id : ''}
-                onChange={(e) =>
-                  setSelectedTable(tables.find((table) => table.id === parseInt(e.target.value)))
-                }
-              >
-                <option value="">Seleccionar...</option>
-                {tables.map((table) => (
-                  <option key={table.id} value={table.id}>
-                    {table.name} (Capacidad: {table.capacity})
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div className="button-bar">
-              <button type="button" onClick={handleAddTable}>
-                Agregar
-              </button>
-              <button type="button" onClick={handleClearTables}>
-                Clear
-              </button>
-            </div>
-            
+        <div className='row'>
+          <div>
+            <select
+              value={selectedTable ? selectedTable.id : ''}
+              onChange={(e) =>
+                setSelectedTable(tables.find((table) => table.id === parseInt(e.target.value)))
+              }
+            >
+              <option value="">Seleccionar...</option>
+              {tables.filter(table => table.status === 'free').map((table) => (
+                <option key={table.id} value={table.id}>
+                  {table.name} (Capacidad: {table.capacity})
+                </option>
+              ))}
+            </select>
           </div>
 
+          <div className="button-bar">
+            <button type="button" onClick={handleAddTable}>
+              Agregar
+            </button>
+            <button type="button" onClick={handleClearTables}>
+              Clear
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="form-line">
@@ -236,7 +240,7 @@ const ReservationForm = ({ reservation, onSave, onCancel }) => {
       </div>
 
       <div className="form-line">
-         <div className='block'>
+        <div className='block'>
           <select
             name="status"
             value={formData.status}

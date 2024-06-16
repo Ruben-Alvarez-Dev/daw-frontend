@@ -1,8 +1,8 @@
 import './css/ReservationList.css';
 import React, { useEffect, useState } from 'react';
-import { getReservations, deleteReservation, getUsers, getTables } from '../helpers/api';
+import { getReservations, deleteReservation, getUsers, getTables, putTable } from '../helpers/api';
 
-const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
+const ReservationList = ({ onEdit, mode, fetchReservationList, updateTables }) => {
   const [reservations, setReservations] = useState([]);
   const [users, setUsers] = useState({});
   const [tables, setTables] = useState({});
@@ -48,10 +48,25 @@ const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
     }
   };
 
-  const handleDelete = async (reservationId) => {
+  const handleDelete = async (reservation) => {
     try {
-      await deleteReservation(reservationId);
-      fetchReservationsData();
+      // Actualizar el estado de las mesas asociadas a la reserva a "free"
+      const updatedTables = await Promise.all(
+        reservation.table_ids.map(async (tableId) => {
+          const table = await putTable(tableId, { status: 'free' });
+          return table;
+        })
+      );
+
+      // Obtener la lista completa de mesas actualizada
+      const allTables = await getTables();
+      updateTables(allTables);
+
+      // Eliminar la reserva después de actualizar el estado de las mesas
+      await deleteReservation(reservation.id);
+
+      // Volver a obtener la lista de reservas después de eliminar la reserva
+      await fetchReservationsData();
     } catch (error) {
       console.error('Error al eliminar la reserva:', error);
     }
@@ -83,7 +98,7 @@ const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
               {reservation.date} - {reservation.time.slice(0, 5)} - 
               {" " + reservation.status} - Pax: {reservation.pax_number}
               <button onClick={() => onEdit(reservation)}>Editar</button>
-              <button onClick={() => handleDelete(reservation.id)}>Eliminar</button>
+              <button onClick={() => handleDelete(reservation)}>Eliminar</button>
             </li>
           ))}
         </ul>

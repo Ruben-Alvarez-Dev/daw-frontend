@@ -1,6 +1,6 @@
 import './css/TableForm.css';
 import React, { useState, useEffect, useCallback } from 'react';
-import { postTable, putTable, getTable, deleteTable } from '../helpers/api';
+import { postTable, putTable, getTable, deleteTable, getTables } from '../helpers/api';
 
 const TableForm = ({ table, onSave, fetchTableList, updateTables }) => {
   const [name, setName] = useState('');
@@ -58,15 +58,19 @@ const TableForm = ({ table, onSave, fetchTableList, updateTables }) => {
         status: status !== originalTable?.status ? status : undefined,
       };
 
+      let updatedTables;
+
       if (table) {
-        await putTable(table.id, updatedTable);
+        const response = await putTable(table.id, updatedTable);
+        updatedTables = await getTables();
       } else {
-        await postTable({ name, capacity: parseInt(capacity), status });
+        const newTable = await postTable({ name, capacity: parseInt(capacity), status });
+        updatedTables = await getTables();
       }
 
       onSave();
       fetchTableList();
-      updateTables();
+      updateTables(updatedTables);
       resetForm();
     } catch (error) {
       console.error('Error al guardar la mesa:', error);
@@ -87,9 +91,10 @@ const TableForm = ({ table, onSave, fetchTableList, updateTables }) => {
     try {
       if (isEditing && table.id) {
         await deleteTable(table.id);
+        const updatedTables = await getTables();
         onSave();
         fetchTableList();
-        updateTables();
+        updateTables(updatedTables);
         resetForm();
       }
     } catch (error) {

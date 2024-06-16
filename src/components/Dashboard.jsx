@@ -97,6 +97,10 @@ const Dashboard = () => {
     fetchTableList();
   };
 
+  const updateTables = (updatedTables) => {
+    setTables(updatedTables);
+  };
+
   const handleEditReservation = (reservation) => {
     setReservationMode('edit');
     setReservationToEdit(reservation);
@@ -122,9 +126,18 @@ const Dashboard = () => {
       <div className="card">
         <h2>Mesas</h2>
         {tableMode === 'edit' ? (
-          <TableForm table={tableToEdit} onSave={handleSaveTable} fetchTableList={fetchTableList} />
+          <TableForm
+            table={tableToEdit}
+            onSave={handleSaveTable}
+            fetchTableList={fetchTableList}
+            updateTables={updateTables}
+          />
         ) : (
-          <TableForm onSave={handleSaveTable} fetchTableList={fetchTableList} />
+          <TableForm
+            onSave={handleSaveTable}
+            fetchTableList={fetchTableList}
+            updateTables={updateTables}
+          />
         )}
         <TableList tables={tables} onEdit={handleEditTable} mode={tableMode} fetchTableList={fetchTableList} />
       </div>
@@ -137,7 +150,8 @@ const Dashboard = () => {
             onSave={handleSaveReservation}
             fetchReservations={fetchReservations}
             fetchReservationList={fetchReservationList}
-            tables={tables} // Pasamos el estado tables directamente
+            tables={tables}
+            updateTables={updateTables}
           />
         ) : (
           <ReservationForm
@@ -146,13 +160,15 @@ const Dashboard = () => {
             updateReservations={updateReservations}
             fetchReservationList={fetchReservationList}
             tables={tables}
-        />
+            updateTables={updateTables}
+          />
         )}
         <ReservationList
           reservations={reservations}
           onEdit={handleEditReservation}
           mode={reservationMode}
           fetchReservationList={fetchReservationList}
+          updateTables={updateTables}
         />
       </div>
     </div>
