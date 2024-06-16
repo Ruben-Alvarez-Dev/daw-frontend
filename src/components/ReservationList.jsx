@@ -48,7 +48,10 @@ const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
         <ul>
           {reservations.map((reservation) => (
             <li key={reservation.id}>
-              {users[reservation.user_id] || 'Usuario desconocido'} - {reservation.table_ids.length > 2 ? reservation.table_ids.join(', ') : 'Sin mesa'} - Fecha/Hora: {reservation.date} - {reservation.time} - {reservation.status} - Pax: {reservation.pax_number}
+              {users[reservation.user_id] || 'Usuario desconocido'} -
+              {reservation.table_ids.length > 2 ? reservation.table_ids.join(', ') : 'Sin mesa'} -
+              {reservation.date} - {reservation.time.slice(0, 5)} - 
+              {" " + reservation.status} - Pax: {reservation.pax_number}
               <button onClick={() => onEdit(reservation)}>Editar</button>
               <button onClick={() => handleDelete(reservation.id)}>Eliminar</button>
             </li>

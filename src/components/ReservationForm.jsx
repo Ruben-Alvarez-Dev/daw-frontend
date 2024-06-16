@@ -1,135 +1,163 @@
 import './css/ReservationForm.css';
 import React, { useState, useEffect } from 'react';
-import { postReservation, putReservation, deleteReservation } from '../helpers/api';
+import { postReservation, putReservation, getUsers, getTables } from '../helpers/api';
 
-const ReservationForm = ({ reservation, onSave, fetchReservations, fetchReservationList, updateReservations, tables }) => {
-  const [reservationData, setReservationData] = useState({
-    userId: '',
-    selectedTableIds: [],
-    paxNumber: '',
+const ReservationForm = ({ reservation, onSave, onCancel }) => {
+  const [formData, setFormData] = useState({
+    user_id: '',
+    table_ids: [],
     date: '',
     time: '',
-    status: 'pending',
+    status: '',
+    pax_number: ''
   });
-  const [isEditing, setIsEditing] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showUserList, setShowUserList] = useState(false);
+  const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
 
   useEffect(() => {
     if (reservation) {
-      setReservationData({
-        userId: reservation.user_id ? reservation.user_id.toString() : '',
-        selectedTableIds: reservation.table_ids ? reservation.table_ids : [],
-        paxNumber: reservation.pax_number ? reservation.pax_number.toString() : '',
+      setFormData({
+        user_id: reservation.user_id ? reservation.user_id.toString() : '',
+        table_ids: reservation.table_ids ? reservation.table_ids : [],
         date: reservation.date || '',
         time: reservation.time || '',
-        status: reservation.status || 'pending',
+        status: reservation.status || '',
+        pax_number: reservation.pax_number || ''
       });
-      setIsEditing(true);
+      setSelectedUser({ id: reservation.user_id, name: reservation.user_name }); // Asumiendo que 'user_name' es parte del objeto de reserva
     } else {
-      setReservationData({
-        userId: '',
-        selectedTableIds: [],
-        paxNumber: '',
+      setFormData({
+        user_id: '',
+        table_ids: [],
         date: '',
         time: '',
-        status: 'pending',
+        status: '',
+        pax_number: ''
       });
-      setIsEditing(false);
+      setSelectedUser(null);
     }
   }, [reservation]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetchUsersData(); // Cargar los usuarios al montar el componente
+    fetchTables(); // Cargar las mesas al montar el componente
+  }, []);
+
+  const fetchUsersData = async () => {
     try {
-      const data = {
-        user_id: parseInt(reservationData.userId) || null,
-        table_ids: reservationData.selectedTableIds,
-        pax_number: parseInt(reservationData.paxNumber) || null,
-        date: reservationData.date,
-        time: reservationData.time,
-        status: reservationData.status,
-      };
-
-      console.log('Datos enviados:', data);
-
-      if (isEditing) {
-        await putReservation(reservation.id, data);
-      } else {
-        const newReservation = await postReservation(data);
-        updateReservations(newReservation);
-      }
-
-      onSave();
-      fetchReservations();
-      fetchReservationList();
-      resetForm();
+      const data = await getUsers();
+      setFilteredUsers(data);
     } catch (error) {
-      console.error('Error al guardar la reserva:', error);
+      console.error('Error al obtener los usuarios:', error);
     }
   };
 
-  const resetForm = () => {
-    setReservationData({
-      userId: '',
-      selectedTableIds: [],
-      paxNumber: '',
-      date: '',
-      time: '',
-      status: 'pending',
-    });
-    setSelectedTable(null);
+  const fetchTables = async () => {
+    try {
+      const tablesData = await getTables();
+      setTables(tablesData);
+    } catch (error) {
+      console.error('Error al obtener las mesas:', error);
+    }
   };
 
-  const handleDeleteReservation = async () => {
-    try {
-      if (isEditing && reservation.id) {
-        await deleteReservation(reservation.id);
-        onSave();
-        fetchReservations();
-        fetchReservationList();
-        resetForm();
-      }
-    } catch (error) {
-      console.error('Error al eliminar la reserva:', error);
+  const handleInputChange = async (e) => {
+    const { value } = e.target;
+    setSearchTerm(value);
+    if (value.trim() === '') {
+      setFilteredUsers([]);
+      setShowUserList(false);
+    } else {
+      const filtered = filteredUsers.filter(user =>
+        user.name.toLowerCase().includes(value.toLowerCase()) ||
+        user.email.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredUsers(filtered);
+      setShowUserList(true);
     }
+  };
+
+  const handleUserSelect = (e) => {
+    const userId = parseInt(e.target.value);
+    const selectedUser = filteredUsers.find(user => user.id === userId);
+    setSelectedUser(selectedUser);
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      user_id: selectedUser.id
+    }));
+    setSearchTerm(selectedUser.name); // Mostrar el nombre seleccionado como placeholder
+    setShowUserList(false); // Ocultar la lista de usuarios al seleccionar uno
   };
 
   const handleAddTable = () => {
     if (selectedTable) {
-      setReservationData((prevData) => ({
-        ...prevData,
-        selectedTableIds: [...prevData.selectedTableIds, selectedTable.id],
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        table_ids: [...prevFormData.table_ids, selectedTable.id]
       }));
       setSelectedTable(null);
     }
   };
 
   const handleClearTables = () => {
-    setReservationData((prevData) => ({
-      ...prevData,
-      selectedTableIds: [],
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      table_ids: []
     }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (formData.id) {
+        await putReservation(formData.id, formData);
+      } else {
+        await postReservation(formData);
+      }
+      onSave();
+    } catch (error) {
+      console.error('Error al guardar la reserva:', error);
+    }
   };
 
   return (
     <form className="reservation-form" onSubmit={handleSubmit}>
-      <div className="reservation-line">
-        <h2>{isEditing ? 'Editar Reserva' : 'Crear Reserva'}</h2>
-      </div>
-      <div className="reservation-line">
+      <div className="form-line">
         <input
-          type="number"
-          placeholder="ID de Usuario"
-          value={reservationData.userId}
-          onChange={(e) => setReservationData((prevData) => ({ ...prevData, userId: e.target.value }))}
+          type="text"
+          id="user_search"
+          value={searchTerm}
+          placeholder={selectedUser ? selectedUser.name : "Buscar..."}
+          onChange={handleInputChange}
+          onFocus={() => setShowUserList(true)} // Mostrar la lista de usuarios al enfocar el input
         />
+        {showUserList && (
+          <select
+            className="user-select"
+            onChange={handleUserSelect}
+            value={selectedUser ? selectedUser.id : ''}
+          >
+            <option value="" disabled hidden>
+              {selectedUser ? selectedUser.name : "Ningún usuario seleccionado"}
+            </option>
+            {filteredUsers.map(user => (
+              <option key={user.id} value={user.id}>
+                {user.name} - {user.email}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
-      <div className="reservation-line">
+      <div className="form-line">
         <div>
           <span>
-            {reservationData.selectedTableIds.length > 0
-              ? `Mesas seleccionadas: ${reservationData.selectedTableIds.join(', ')}`
+            {formData.table_ids.length > 0
+              ? `Mesas seleccionadas: ${formData.table_ids.join(', ')}`
               : 'No hay mesas seleccionadas'}
           </span>
           <select
@@ -154,39 +182,49 @@ const ReservationForm = ({ reservation, onSave, fetchReservations, fetchReservat
         </div>
       </div>
 
-      <div className="reservation-line">
+      <div className="form-line">
+        <label htmlFor="date">Fecha</label>
         <input
           type="date"
-          placeholder="Fecha"
-          value={reservationData.date}
-          onChange={(e) => setReservationData((prevData) => ({ ...prevData, date: e.target.value }))}
+          name="date"
+          value={formData.date}
+          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          className="form-input"
         />
+      </div>
+      <div className="form-line">
+        <label htmlFor="time">Hora</label>
         <input
           type="time"
-          placeholder="Hora"
-          value={reservationData.time}
-          onChange={(e) => setReservationData((prevData) => ({ ...prevData, time: e.target.value }))}
+          name="time"
+          value={formData.time}
+          onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+          className="form-input"
         />
       </div>
-      <div className="reservation-line">
+      <div className="form-line">
+        <label htmlFor="status">Estado</label>
+        <input
+          type="text"
+          name="status"
+          value={formData.status}
+          onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+          className="form-input"
+        />
+      </div>
+      <div className="form-line">
+        <label htmlFor="pax_number">Número de personas</label>
         <input
           type="number"
-          placeholder="Número de Personas"
-          value={reservationData.paxNumber}
-          onChange={(e) => setReservationData((prevData) => ({ ...prevData, paxNumber: e.target.value }))}
+          name="pax_number"
+          value={formData.pax_number}
+          onChange={(e) => setFormData({ ...formData, pax_number: e.target.value })}
+          className="form-input"
         />
-        <select
-          value={reservationData.status}
-          onChange={(e) => setReservationData((prevData) => ({ ...prevData, status: e.target.value }))}
-        >
-          <option value="pending">Pendiente</option>
-          <option value="confirmed">Confirmada</option>
-          <option value="cancelled">Cancelada</option>
-        </select>
       </div>
-      <div className="reservation-line">
-        <button type="submit">{isEditing ? 'Guardar' : 'Crear'}</button>
-        {isEditing && <button type="button" onClick={handleDeleteReservation}>Eliminar</button>}
+      <div className="button-bar">
+        <button type="submit">Guardar</button>
+        <button type="button" onClick={onCancel}>Cancelar</button>
       </div>
     </form>
   );
