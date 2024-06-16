@@ -17,12 +17,12 @@ const ReservationForm = ({ reservation, onSave, fetchReservations, fetchReservat
   useEffect(() => {
     if (reservation) {
       setReservationData({
-        userId: reservation.user_id.toString(),
-        selectedTableIds: reservation.table_ids,
-        paxNumber: reservation.pax_number.toString(),
-        date: reservation.date,
-        time: reservation.time,
-        status: reservation.status,
+        userId: reservation.user_id ? reservation.user_id.toString() : '',
+        selectedTableIds: reservation.table_ids ? reservation.table_ids : [],
+        paxNumber: reservation.pax_number ? reservation.pax_number.toString() : '',
+        date: reservation.date || '',
+        time: reservation.time || '',
+        status: reservation.status || 'pending',
       });
       setIsEditing(true);
     } else {
@@ -42,23 +42,23 @@ const ReservationForm = ({ reservation, onSave, fetchReservations, fetchReservat
     e.preventDefault();
     try {
       const data = {
-        user_id: parseInt(reservationData.userId),
-        table_ids: JSON.stringify(reservationData.selectedTableIds),
-        pax_number: parseInt(reservationData.paxNumber),
+        user_id: parseInt(reservationData.userId) || null,
+        table_ids: reservationData.selectedTableIds,
+        pax_number: parseInt(reservationData.paxNumber) || null,
         date: reservationData.date,
         time: reservationData.time,
         status: reservationData.status,
       };
-  
+
       console.log('Datos enviados:', data);
-  
+
       if (isEditing) {
         await putReservation(reservation.id, data);
       } else {
         const newReservation = await postReservation(data);
         updateReservations(newReservation);
       }
-  
+
       onSave();
       fetchReservations();
       fetchReservationList();
@@ -67,7 +67,6 @@ const ReservationForm = ({ reservation, onSave, fetchReservations, fetchReservat
       console.error('Error al guardar la reserva:', error);
     }
   };
-
 
   const resetForm = () => {
     setReservationData({

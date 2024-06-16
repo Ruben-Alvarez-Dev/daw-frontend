@@ -1,12 +1,14 @@
 import './css/ReservationList.css';
 import React, { useEffect, useState } from 'react';
-import { getReservations, deleteReservation } from '../helpers/api';
+import { getReservations, deleteReservation, getUsers } from '../helpers/api';
 
 const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
   const [reservations, setReservations] = useState([]);
+  const [users, setUsers] = useState({});
 
   useEffect(() => {
     fetchReservationsData();
+    fetchUsersData();
   }, [fetchReservationList]);
 
   const fetchReservationsData = async () => {
@@ -15,6 +17,19 @@ const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
       setReservations(data);
     } catch (error) {
       console.error('Error al obtener las reservas:', error);
+    }
+  };
+
+  const fetchUsersData = async () => {
+    try {
+      const data = await getUsers();
+      const usersMap = data.reduce((acc, user) => {
+        acc[user.id] = user.name;
+        return acc;
+      }, {});
+      setUsers(usersMap);
+    } catch (error) {
+      console.error('Error al obtener los usuarios:', error);
     }
   };
 
@@ -29,20 +44,17 @@ const ReservationList = ({ onEdit, mode, fetchReservationList }) => {
 
   return (
     <div className="reservation-list">
-      {mode === 'create' && reservations && reservations.length > 0 && (
+      {reservations && reservations.length > 0 ? (
         <ul>
           {reservations.map((reservation) => (
             <li key={reservation.id}>
-              Reserva {reservation.id} - Usuario: {reservation.user_id} - Mesas:{' '}
-              {reservation.table_ids ? reservation.table_ids.join(', ') : 'N/A'} - Fecha: {reservation.date} - Hora:{' '}
-              {reservation.time} - Estado: {reservation.status} - Número de personas: {reservation.pax_number}
+              {users[reservation.user_id] || 'Usuario desconocido'} - {reservation.table_ids.length > 2 ? reservation.table_ids.join(', ') : 'Sin mesa'} - Fecha/Hora: {reservation.date} - {reservation.time} - {reservation.status} - Pax: {reservation.pax_number}
               <button onClick={() => onEdit(reservation)}>Editar</button>
               <button onClick={() => handleDelete(reservation.id)}>Eliminar</button>
             </li>
           ))}
         </ul>
-      )}
-      {mode === 'create' && (!reservations || reservations.length === 0) && (
+      ) : (
         <p>No hay reservas disponibles.</p>
       )}
     </div>
