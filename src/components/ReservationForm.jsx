@@ -25,7 +25,7 @@ const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fet
     if (reservation) {
       setFormData({
         id: reservation.id || '',
-        user_id: reservation.user_id ? reservation.user_id.toString() : '',
+        user_id: reservation.user_id || '',
         table_ids: reservation.table_ids ? reservation.table_ids : [],
         date: reservation.date || '',
         time: reservation.time || '',
@@ -37,8 +37,9 @@ const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fet
       const fetchSelectedUser = async () => {
         try {
           const usersData = await getUsers();
-          const selectedUser = usersData.find(user => user.id === reservation.user_id);
+          const selectedUser = usersData.find(user => user.email === reservation.user_id);
           setSelectedUser(selectedUser);
+          setSearchTerm(selectedUser ? selectedUser.name : '');
         } catch (error) {
           console.error('Error al obtener el usuario seleccionado:', error);
         }
@@ -49,6 +50,7 @@ const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fet
       setFormData(initialFormData);
       setSelectedUser(null);
       setOriginalTableIds([]);
+      setSearchTerm('');
     }
   }, [reservation]);
 
@@ -70,14 +72,14 @@ const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fet
   };
 
   const handleUserSelect = (e) => {
-    const userId = parseInt(e.target.value);
-    const selectedUser = filteredUsers.find(user => user.id === userId);
+    const userEmail = e.target.value;
+    const selectedUser = filteredUsers.find(user => user.email === userEmail);
     setSelectedUser(selectedUser);
     setFormData(prevFormData => ({
       ...prevFormData,
-      user_id: selectedUser.id
+      user_id: userEmail
     }));
-    setSearchTerm(selectedUser.name);
+    setSearchTerm(selectedUser ? selectedUser.name : '');
     setShowUserList(false);
   };
 
@@ -88,10 +90,13 @@ const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fet
         const updatedTable = await putTable(selectedTable.id, { status: 'scheduled' });
 
         // Agregar la mesa a la lista de mesas seleccionadas
-        setFormData(prevFormData => ({
-          ...prevFormData,
-          table_ids: [...prevFormData.table_ids, selectedTable.id]
-        }));
+        setFormData(prevFormData => {
+          const newTableIds = [...prevFormData.table_ids];
+          if (!newTableIds.includes(selectedTable.id)) {
+            newTableIds.push(selectedTable.id);
+          }
+          return { ...prevFormData, table_ids: newTableIds };
+        });
 
         // Actualizar el estado de las mesas en el componente padre
         const updatedTables = await getTables();
@@ -161,7 +166,7 @@ const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fet
         <select
           className="user-select"
           onChange={handleUserSelect}
-          value={selectedUser ? selectedUser.id : ''}
+          value={selectedUser ? selectedUser.email : ''}
         >
           {showUserList && (
             filteredUsers.length > 0 ? (
@@ -170,7 +175,7 @@ const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fet
                   {selectedUser ? selectedUser.name : "Ningún usuario seleccionado"}
                 </option>
                 {filteredUsers.map(user => (
-                  <option key={user.id} value={user.id}>
+                  <option key={user.email} value={user.email}>
                     {user.name} - {user.email}
                   </option>
                 ))}
@@ -186,7 +191,7 @@ const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fet
         <div className="block">
           <span>
             {formData.table_ids.length > 0
-              ? `Mesas: ${formData.table_ids.join(', ')}`
+              ? `Mesas: ${formData.table_ids.map(id => tables.find(table => table.id === id)?.name || id).join(', ')}`
               : 'Sin mesa'}
           </span>
         </div>
@@ -195,9 +200,10 @@ const ReservationForm = ({ reservation, onSave, onCancel, fetchReservations, fet
           <div>
             <select
               value={selectedTable ? selectedTable.id : ''}
-              onChange={(e) =>
-                setSelectedTable(tables.find((table) => table.id === parseInt(e.target.value)))
-              }
+              onChange={(e) => {
+                const selectedId = parseInt(e.target.value);
+                setSelectedTable(tables.find((table) => table.id === selectedId));
+              }}
             >
               <option value="">Seleccionar...</option>
               {tables.filter(table => table.status === 'free').map((table) => (

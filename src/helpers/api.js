@@ -1,147 +1,152 @@
-import axios from 'axios';
+// Importar los datos JSON
+import users from '../data/users.json';
+import tables from '../data/tables.json';
+import reservations from '../data/reservations.json';
 
-/* const API_BASE_URL = 'https://reservations.rubenalvarez.dev/public/index.php/api'; */
-const API_BASE_URL = 'http://localhost:8000/api';
-
-// Funciones para usuarios
+// Users
 export const getUsers = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/users`);
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener los usuarios:', error);
-    throw error;
-  }
+  // Asegurarnos de que cada usuario tenga un identificador único (email)
+  return users.map(user => ({
+    ...user,
+    id: user.email // Usar el email como ID
+  }));
 };
 
-export const getUser = async (userId) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/users/${userId}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener el usuario:', error);
-    throw error;
-  }
+export const getUser = async (id) => {
+  // Buscar por email (que estamos usando como ID)
+  return users.find(user => user.email === id);
 };
 
 export const postUser = async (userData) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/users`, userData);
-    return response.data;
-  } catch (error) {
-    console.error('Error al crear el usuario:', error);
-    throw error;
-  }
+  const newUser = {
+    ...userData,
+    id: userData.email // Usar el email como ID
+  };
+  users.push(newUser);
+  await saveToJson('users', users);
+  return newUser;
 };
 
-export const putUser = async (userId, userData) => {
-  try {
-    const response = await axios.put(`${API_BASE_URL}/users/${userId}`, userData);
-    return response.data;
-  } catch (error) {
-    console.error('Error al actualizar el usuario:', error);
-    throw error;
+export const putUser = async (id, userData) => {
+  const index = users.findIndex(user => user.email === id);
+  if (index !== -1) {
+    users[index] = { 
+      ...users[index], 
+      ...userData,
+      email: id // Mantener el email original como ID
+    };
+    await saveToJson('users', users);
+    return users[index];
   }
+  throw new Error('Usuario no encontrado');
 };
 
-export const deleteUser = async (userId) => {
-  try {
-    await axios.delete(`${API_BASE_URL}/users/${userId}`);
-  } catch (error) {
-    console.error('Error al eliminar el usuario:', error);
-    throw error;
+export const deleteUser = async (id) => {
+  const index = users.findIndex(user => user.email === id);
+  if (index !== -1) {
+    users.splice(index, 1);
+    await saveToJson('users', users);
+    return true;
   }
+  return false;
 };
 
-// Funciones para mesas
+// Tables
 export const getTables = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/tables`);
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener las mesas:', error);
-    throw error;
-  }
+  return tables;
 };
 
-export const getTable = async (tableId) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/tables/${tableId}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener la mesa:', error);
-    throw error;
-  }
+export const getTable = async (id) => {
+  return tables.find(table => table.id === id);
 };
 
 export const postTable = async (tableData) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/tables`, tableData);
-    return response.data;
-  } catch (error) {
-    console.error('Error al crear la mesa:', error);
-    throw error;
-  }
+  const newTable = {
+    ...tableData,
+    id: Date.now().toString()
+  };
+  tables.push(newTable);
+  await saveToJson('tables', tables);
+  return newTable;
 };
 
-export const putTable = async (tableId, tableData) => {
-  try {
-    const response = await axios.put(`${API_BASE_URL}/tables/${tableId}`, tableData);
-    return response.data;
-  } catch (error) {
-    console.error('Error al actualizar la mesa:', error);
-    throw error;
+export const putTable = async (id, tableData) => {
+  const index = tables.findIndex(table => table.id === id);
+  if (index !== -1) {
+    tables[index] = { ...tables[index], ...tableData };
+    await saveToJson('tables', tables);
+    return tables[index];
   }
+  throw new Error('Mesa no encontrada');
 };
 
-export const deleteTable = async (tableId) => {
-  try {
-    await axios.delete(`${API_BASE_URL}/tables/${tableId}`);
-  } catch (error) {
-    console.error('Error al eliminar la mesa:', error);
-    throw error;
+export const deleteTable = async (id) => {
+  const index = tables.findIndex(table => table.id === id);
+  if (index !== -1) {
+    tables.splice(index, 1);
+    await saveToJson('tables', tables);
+    return true;
   }
+  return false;
 };
 
-// Funciones para reservas
+// Reservations
 export const getReservations = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/reservations`);
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener las reservas:', error);
-    throw error;
-  }
+  return reservations;
+};
+
+export const getReservation = async (id) => {
+  return reservations.find(reservation => reservation.id === id);
 };
 
 export const postReservation = async (reservationData) => {
-  try {
-    console.log('URL:', `${API_BASE_URL}/reservations`);
-    console.log('Datos:', reservationData);
-
-    const response = await axios.post(`${API_BASE_URL}/reservations`, reservationData);
-    return response.data;
-  } catch (error) {
-    console.error('Error al crear la reserva:', error);
-    throw error;
-  }
+  const newReservation = {
+    ...reservationData,
+    id: Date.now().toString()
+  };
+  reservations.push(newReservation);
+  await saveToJson('reservations', reservations);
+  return newReservation;
 };
 
-export const putReservation = async (reservationId, reservationData) => {
-  try {
-    const response = await axios.put(`${API_BASE_URL}/reservations/${reservationId}`, reservationData);
-    return response.data;
-  } catch (error) {
-    console.error('Error al actualizar la reserva:', error);
-    throw error;
+export const putReservation = async (id, reservationData) => {
+  const index = reservations.findIndex(reservation => reservation.id === id);
+  if (index !== -1) {
+    reservations[index] = { ...reservations[index], ...reservationData };
+    await saveToJson('reservations', reservations);
+    return reservations[index];
   }
+  throw new Error('Reserva no encontrada');
 };
 
-export const deleteReservation = async (reservationId) => {
+export const deleteReservation = async (id) => {
+  const index = reservations.findIndex(reservation => reservation.id === id);
+  if (index !== -1) {
+    reservations.splice(index, 1);
+    await saveToJson('reservations', reservations);
+    return true;
+  }
+  return false;
+};
+
+// Función auxiliar para guardar en JSON
+const saveToJson = async (fileName, data) => {
   try {
-    await axios.delete(`${API_BASE_URL}/reservations/${reservationId}`);
+    const response = await fetch(`/api/save/${fileName}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    
+    if (!response.ok) {
+      throw new Error('Error al guardar los datos');
+    }
+    
+    return await response.json();
   } catch (error) {
-    console.error('Error al eliminar la reserva:', error);
+    console.error('Error saving to JSON:', error);
     throw error;
   }
 };

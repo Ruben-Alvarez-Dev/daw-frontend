@@ -6,6 +6,7 @@ const UserForm = ({ user, onSave, fetchUsers, fetchUserList }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('customer');
   const [isEditing, setIsEditing] = useState(false);
   const [originalUser, setOriginalUser] = useState(null);
   const [passwordError, setPasswordError] = useState(false);
@@ -13,81 +14,124 @@ const UserForm = ({ user, onSave, fetchUsers, fetchUserList }) => {
   useEffect(() => {
     if (user) {
       setIsEditing(true);
-      fetchOriginalUser(user.id);
+      setOriginalUser(user);
+      setName(user.name);
+      setEmail(user.email);
+      setRole(user.role);
+      setPassword('');
     } else {
       setName('');
       setEmail('');
       setPassword('');
+      setRole('customer');
       setIsEditing(false);
       setOriginalUser(null);
       setPasswordError(false);
     }
   }, [user]);
 
-  const fetchOriginalUser = async (userId) => {
-    try {
-      const data = await getUser(userId);
-      setOriginalUser(data);
-      setName(data.name);
-      setEmail(data.email);
-      setPassword('');
-    } catch (error) {
-      console.error('Error al obtener el usuario:', error);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const updatedUser = {
-        name: name !== originalUser?.name ? name : undefined,
-        email: email !== originalUser?.email ? email : undefined,
-        password: user ? (password ? password : undefined) : password,
+      const userData = {
+        name,
+        email,
+        role,
+        ...(password && { password })
       };
-      if (user) {
-        await putUser(user.id, updatedUser);
+
+      if (isEditing) {
+        await putUser(originalUser.email, userData);
       } else {
         if (!password) {
           setPasswordError(true);
           return;
         }
-        await postUser({ name, email, password });
+        await postUser(userData);
       }
-      onSave();
-      fetchUsers();
-      fetchUserList();
-      resetForm();
+
+      // Limpiar el formulario
+      setName('');
+      setEmail('');
+      setPassword('');
+      setRole('customer');
+      setIsEditing(false);
+      setOriginalUser(null);
+      setPasswordError(false);
+
+      // Actualizar la lista de usuarios
+      if (fetchUserList) {
+        fetchUserList();
+      }
+      if (fetchUsers) {
+        fetchUsers();
+      }
     } catch (error) {
       console.error('Error al guardar el usuario:', error);
     }
   };
 
-  const resetForm = () => {
-    setName('');
-    setEmail('');
-    setPassword('');
-    setIsEditing(false);
-    setOriginalUser(null);
-    setPasswordError(false);
-  };
-
   return (
-    <form className="user-form" onSubmit={handleSubmit}>
-      <input type="text" placeholder="Nombre" value={name} onChange={(e) => setName(e.target.value)} />
-      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className={passwordError ? 'error' : ''}
-      />
-      {passwordError && <p className="error-message">La contraseña es obligatoria al crear un nuevo usuario.</p>}
-      <div className='button-bar'>
-        <button type="submit">{user ? 'Guardar' : 'Crear'}</button>
-        {isEditing && <button type="button" onClick={resetForm}>Clear</button>}
+    <form onSubmit={handleSubmit} className="user-form">
+      <div className="form-group">
+        <label htmlFor="name">Nombre:</label>
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
       </div>
-      
+
+      <div className="form-group">
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          disabled={isEditing} // No permitir cambiar el email en modo edición
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="password">
+          Contraseña{isEditing ? ' (dejar en blanco para mantener la actual)' : ''}:
+        </label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setPasswordError(false);
+          }}
+          required={!isEditing}
+        />
+        {passwordError && (
+          <span className="error">La contraseña es obligatoria para nuevos usuarios</span>
+        )}
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="role">Rol:</label>
+        <select
+          id="role"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          required
+        >
+          <option value="customer">Cliente</option>
+          <option value="supervisor">Supervisor</option>
+          <option value="admin">Administrador</option>
+        </select>
+      </div>
+
+      <button type="submit">
+        {isEditing ? 'Actualizar Usuario' : 'Crear Usuario'}
+      </button>
     </form>
   );
 };

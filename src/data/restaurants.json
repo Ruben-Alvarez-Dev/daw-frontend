@@ -1,0 +1,32 @@
+[
+  {
+    "name": "The Gourmet Kitchen",
+    "location": "Downtown",
+    "cuisine": "Italian"
+  },
+  {
+    "name": "Sushi World",
+    "location": "Uptown",
+    "cuisine": "Japanese"
+  },
+  {
+    "name": "Burger Haven",
+    "location": "Midtown",
+    "cuisine": "American"
+  },
+  {
+    "name": "Curry Corner",
+    "location": "Eastside",
+    "cuisine": "Indian"
+  },
+  {
+    "name": "Taco Fiesta",
+    "location": "Westside",
+    "cuisine": "Mexican"
+  },
+  {
+    "name": "Vegan Delights",
+    "location": "Suburbs",
+    "cuisine": "Vegan"
+  }
+]

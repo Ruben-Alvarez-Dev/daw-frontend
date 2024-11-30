@@ -1,49 +1,98 @@
-.table-list{
+.table-list {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 2rem); /* Resta el padding del contenedor */
   border: 1px solid antiquewhite;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
 }
+
 .table-list ul {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 1rem;
+  list-style: none;
+  overflow-y: auto;
   box-sizing: border-box;
+}
+
+.table-list ul::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-list ul::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.table-list ul::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.table-list ul::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+  
+.table-list li {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  }
+  min-height: 2rem;
+  box-sizing: border-box;
+}
+
+.table-list li:last-child {
+  margin-bottom: 0;
+}
+
+.table-list li span {
+  display: flex;
+  align-items: center;
+}
+
+.table-list li span:last-child {
+  display: flex;
+  gap: 0.5rem;
+}
   
-  .table-list li {
-    width: 90%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 0.1rem 0.5rem 0.2rem 1rem;
-    margin: 0.1rem;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.table-list li button {
+  background-color: transparent;
+  padding: 0.2rem;
+  margin: 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-list li button.edit-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.table-list li button.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
   
-  .table-list li button {
-    background-color: #e53935;
-    padding: 0.3rem 0.3rem 0.1rem 0.3rem;
-    margin: 0.1rem;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .table-list li button:hover {
-    background-color: #c62828;
-  }
+.table-list li button:hover {
+  opacity: 0.8;
+}
+
+.table-list li button svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}

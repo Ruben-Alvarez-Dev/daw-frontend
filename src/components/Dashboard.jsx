@@ -28,7 +28,7 @@ const Dashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://reservations.rubenalvarez.dev/public/index.php/api/users');
+      const response = await axios.get('http://localhost:3001/users');
       // Aquí puedes actualizar el estado de los usuarios si es necesario
     } catch (error) {
       console.error('Error al obtener los usuarios:', error);
@@ -55,7 +55,7 @@ const Dashboard = () => {
 
   const fetchReservations = async () => {
     try {
-      const response = await axios.get('https://reservations.rubenalvarez.dev/public/index.php/api/reservations');
+      const response = await axios.get('http://localhost:3001/reservations');
       setReservations(response.data);
     } catch (error) {
       console.error('Error al obtener las reservas:', error);
@@ -77,7 +77,7 @@ const Dashboard = () => {
 
   const handleEditUser = (user) => {
     setUserMode('edit');
-    setUserToEdit(user);
+    setUserToEdit({...user}); // Crear una copia del usuario para evitar referencias
   };
 
   const handleSaveUser = () => {
@@ -115,11 +115,12 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="card">
         <h2>Usuarios</h2>
-        {userMode === 'edit' ? (
-          <UserForm user={userToEdit} onSave={handleSaveUser} fetchUsers={fetchUsers} fetchUserList={fetchUserList} />
-        ) : (
-          <UserForm onSave={handleSaveUser} fetchUsers={fetchUsers} fetchUserList={fetchUserList} />
-        )}
+        <UserForm 
+          user={userMode === 'edit' ? userToEdit : null} 
+          onSave={handleSaveUser} 
+          fetchUsers={fetchUsers} 
+          fetchUserList={fetchUserList} 
+        />
         <UserList users={users} onEdit={handleEditUser} mode={userMode} fetchUserList={fetchUserList} />
       </div>
 

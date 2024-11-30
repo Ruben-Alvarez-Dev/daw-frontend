@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Admin",
+    "email": "admin@admin.com",
+    "role": "admin",
+    "password": "password123"
+  },
+  {
+    "name": "User1",
+    "email": "user1@user.com",
+    "role": "customer",
+    "password": "password123"
+  },
+  {
+    "name": "User2",
+    "email": "user2@user.com",
+    "role": "customer",
+    "password": "password123"
+  },
+  {
+    "name": "User3",
+    "email": "user3@user.com",
+    "role": "customer",
+    "password": "password123"
+  },
+  {
+    "name": "Super1",
+    "email": "super1@supervisor.com",
+    "role": "supervisor",
+    "password": "password123"
+  },
+  {
+    "name": "Super2",
+    "email": "super2@supervisor.com",
+    "role": "supervisor",
+    "password": "password123"
+  },
+  {
+    "name": "Super3",
+    "email": "super3@supervisor.com",
+    "role": "supervisor",
+    "password": "password123"
+  }
+]
