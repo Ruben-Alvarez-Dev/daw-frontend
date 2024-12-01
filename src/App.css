@@ -1,27 +1,84 @@
-.app{
-  
-  width: 100vw;
-  height: 100vh;
-  margin: 1rem;
-  padding: 1rem;
-  box-sizing: border-box;
-  background-color: rgba(255, 255, 255, 0.1);  
-  /* box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5); */
-  border-radius: 15px;
+:root {
+  /* Paleta Light */
+  --light-bg: rgba(255, 255, 255, 0.2);
+  --light-surface: #dae0e4;
+  --light-text: #36264d;
+  --light-primary: #07096d;
+  --light-secondary: #36264d;
+  --light-accent: #f54885;
+  --light-complement: #b8d99d;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
- 
+  /* Paleta Dark */
+  --dark-bg: rgba(255, 255, 255, 0.8);
+  --dark-surface: #1b180e;
+  --dark-text: antiquewhite;
+  --dark-primary: #ffeeb4;
+  --dark-secondary: #593825;
+  --dark-accent: #e11f23;
+  --dark-complement: #593825;
+
+  /* Tema claro (default) */
+  --bg-color: var(--light-bg);
+  --text-color: var(--light-text);
+  --text-light: #ffffff;
+  --text-muted: var(--light-secondary);
+
+  /* Layout */
+  --header-height: 64px;
+  --footer-height: 40px;
+  --sidebar-width: 250px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Z-index */
+  --z-negative: -1;
+  --z-elevate: 1;
+  --z-dropdown: 200;
+  --z-sticky: 300;
+  --z-fixed: 400;
+  --z-modal-backdrop: 500;
+  --z-modal: 501;
+  --z-popover: 502;
+  --z-tooltip: 503;
+
+  /* Transitions */
+  --transition-slow: 0.3s ease-in-out;
+  --transition-normal: 0.2s ease-in-out;
+  --transition-fast: 0.1s ease-in-out;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.dashboard-container{
-  width: calc(100% - 1rem);
-  height: calc(100% - 1rem);
+[data-theme='dark'] {
+  --bg-color: var(--dark-bg);
+  --text-color: var(--dark-text);
+  --text-muted: color-mix(in srgb, var(--dark-text) 70%, var(--dark-surface));
+}
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+/* Estilos base */
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.app {
+  min-height: 100vh;
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+    "footer footer";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: var(--header-height) 1fr var(--footer-height);
 }

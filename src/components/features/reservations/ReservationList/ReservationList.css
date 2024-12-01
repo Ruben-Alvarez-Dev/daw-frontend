@@ -1,0 +1,30 @@
+.reservation-list {
+  background-color: var(--bg-color-secondary);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+.reservation-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.reservation-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reservation-list-table th,
+.reservation-list-table td {
+  padding: var(--spacing-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.reservation-list-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}

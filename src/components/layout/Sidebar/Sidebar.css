@@ -1,0 +1,148 @@
+aside {
+  width: var(--sidebar-width);
+  background-color: var(--sidebar-bg);
+  position: fixed;
+  top: var(--header-height);
+  bottom: var(--footer-height);
+  left: 0;
+  transition: width var(--transition-speed) ease;
+  z-index: var(--z-index-sidebar);
+  overflow: visible !important;
+}
+
+aside.collapsed {
+  width: var(--sidebar-collapsed);
+}
+
+.collapse-toggle {
+  position: absolute;
+  right: -12px;
+  top: 20px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--sidebar-bg);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-index-toggle);
+  transition: transform var(--transition-speed);
+  box-shadow: 2px 0 4px rgba(0,0,0,0.2);
+}
+
+.collapse-toggle:hover {
+  border-color: rgba(255,255,255,0.4);
+}
+
+.collapse-toggle.rotate-180 {
+  transform: rotate(180deg);
+}
+
+/* Asegurarse de que el botón sea visible sobre el contenido principal */
+.collapse-toggle::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  background-color: inherit;
+  z-index: -1;
+}
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.menu-section {
+  padding: 1rem 0;
+}
+
+.menu-section.main {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.menu-section.bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: auto;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Retraso en la aparición del tooltip */
+.menu-item[title]:hover::after {
+  transition-delay: 1s;
+}
+
+.menu-item:hover {
+  background-color: rgba(255,255,255,0.1);
+  text-decoration: none;
+}
+
+.menu-item svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.menu-item span {
+  opacity: 1;
+  max-width: calc(var(--sidebar-width) - 64px);
+  transition: all var(--transition-speed) ease;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.submenu-item {
+  padding-left: 3.5rem;
+  color: white;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.2s;
+}
+
+.submenu-item:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+/* Estado contraído */
+aside.collapsed .menu-item span {
+  opacity: 0;
+  max-width: 0;
+  margin: 0;
+  transition: all var(--transition-speed) ease;
+}
+
+@media (max-width: 768px) {
+  aside {
+    transform: translateX(-100%);
+    transition: transform var(--transition-speed) ease;
+  }
+
+  aside.open {
+    transform: translateX(0);
+  }
+
+  .collapse-toggle {
+    display: none;
+  }
+}

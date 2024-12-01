@@ -1,7 +1,7 @@
-// Importar los datos JSON
-import users from '../data/users.json';
-import tables from '../data/tables.json';
-import reservations from '../data/reservations.json';
+// Importar datos simulados
+import users from '../../data/users.json';
+import tables from '../../data/tables.json';
+import reservations from '../../data/reservations.json';
 
 // Users
 export const getUsers = async () => {

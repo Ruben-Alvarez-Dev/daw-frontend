@@ -1,0 +1,31 @@
+main {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 64px); /* Ajusta según altura del navbar */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main-content {
+  grid-area: main;
+  padding: var(--spacing-lg);
+  margin-left: var(--sidebar-width);
+  margin-top: var(--header-height);
+  margin-bottom: var(--footer-height);
+  overflow-y: auto;
+  background-color: var(--bg-color);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: var(--spacing-md);
+  }
+}
+
+/* El Display component tendrá padding interno */
+.main-content > :last-child {
+  flex: 1;
+}

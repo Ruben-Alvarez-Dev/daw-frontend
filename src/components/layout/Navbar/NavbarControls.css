@@ -1,0 +1,65 @@
+.navbar-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.control-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.lang-button {
+  display: flex;
+  align-items: center;
+}
+
+.lang-indicator {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.theme-toggle {
+  position: relative;
+}
+
+.theme-button {
+  position: relative;
+}
+
+.theme-icons {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.sun-icon,
+.moon-icon {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.sun-icon.active,
+.moon-icon.active {
+  opacity: 1;
+}
+
+.logout-button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--danger-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: var(--danger-color-dark);
+}
