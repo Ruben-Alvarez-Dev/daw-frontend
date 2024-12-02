@@ -2,8 +2,15 @@ import './Navbar.css'
 import Button from '../../common/Button/Button'
 import LanguageSelector from '../../common/LanguageSelector/LanguageSelector'
 import ThemeToggle from '../../common/ThemeToggle/ThemeToggle'
+import { useAlert } from '../../../context/AlertContext'
 
 const Navbar = () => {
+  const alert = useAlert()
+
+  const handleLogout = () => {
+    alert.success('hola')
+  }
+
   return (
     <nav className="navbar">
       <div className="navbar-content">
@@ -11,7 +18,8 @@ const Navbar = () => {
           <span className="logo-text">Restaurant Reservations</span>
         </div>
         <div className="navbar-section left">
-          <span className="user-info">Texto de ejemplo: Ruben Alvarez | admin</span>
+          <span className="user-info">Texto de ejemplo: Ruben Alvarez</span>
+          <span className="user-info">admin</span>
         </div>
         <div className="navbar-section middle">
           <div className="middle-controls">
@@ -34,7 +42,7 @@ const Navbar = () => {
           </Button>
           <Button 
             className="danger"
-            onClick={() => console.log('Logout clicked')}
+            onClick={handleLogout}
           >
             Logout
           </Button>

@@ -2,7 +2,9 @@ import './Main.css'
 
 const Main = () => {
   return (
-    <main className="main">Main</main>
+    <main className="main">
+      {/* Contenido principal */}
+    </main>
   )
 }
 
