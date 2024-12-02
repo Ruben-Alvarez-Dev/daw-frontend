@@ -5,144 +5,390 @@
       "name": "The Gourmet Kitchen",
       "cuisine": "Italian",
       "address": "123 Downtown Street",
+      "city": "Madrid",
       "phone": "555-0101",
+      "email": "info@gourmetkitchen.com",
       "cif": "B12345671",
-      "description": "Auténtica cocina italiana con pasta fresca hecha a mano"
+      "description": "Auténtica cocina italiana con pasta fresca hecha a mano",
+      "openingTime": "12:00",
+      "closingTime": "23:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 50,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 50
+        }
+      ]
     },
     {
       "id": "2",
       "name": "Sushi World",
       "cuisine": "Japanese",
       "address": "456 Uptown Avenue",
+      "city": "Barcelona",
       "phone": "555-0102",
+      "email": "info@sushiworld.com",
       "cif": "B12345672",
-      "description": "El mejor sushi de la ciudad con pescado fresco diario"
+      "description": "El mejor sushi de la ciudad con pescado fresco diario",
+      "openingTime": "13:00",
+      "closingTime": "23:30",
+      "isActive": true,
+      "status": "open",
+      "capacity": 40,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 40
+        }
+      ]
     },
     {
       "id": "3",
       "name": "Burger Haven",
       "cuisine": "American",
       "address": "789 Midtown Road",
+      "city": "Valencia",
       "phone": "555-0103",
+      "email": "info@burgerhaven.com",
       "cif": "B12345673",
-      "description": "Hamburguesas gourmet con ingredientes locales"
+      "description": "Hamburguesas gourmet con ingredientes locales",
+      "openingTime": "12:00",
+      "closingTime": "00:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 60,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 60
+        }
+      ]
     },
     {
       "id": "4",
       "name": "Curry Corner",
       "cuisine": "Indian",
       "address": "321 Eastside Lane",
+      "city": "Sevilla",
       "phone": "555-0104",
+      "email": "info@currycorner.com",
       "cif": "B12345674",
-      "description": "Auténticos sabores de la India con especias importadas"
+      "description": "Auténticos sabores de la India con especias importadas",
+      "openingTime": "12:30",
+      "closingTime": "23:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 45,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 45
+        }
+      ]
     },
     {
       "id": "5",
       "name": "Taco Fiesta",
       "cuisine": "Mexican",
       "address": "654 Westside Blvd",
+      "city": "Bilbao",
       "phone": "555-0105",
+      "email": "info@tacofiesta.com",
       "cif": "B12345675",
-      "description": "Tacos artesanales y auténtica cocina mexicana"
+      "description": "Tacos artesanales y auténtica cocina mexicana",
+      "openingTime": "12:00",
+      "closingTime": "23:30",
+      "isActive": true,
+      "status": "open",
+      "capacity": 55,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 55
+        }
+      ]
     },
     {
       "id": "6",
       "name": "Vegan Delights",
       "cuisine": "Vegan",
       "address": "987 Suburbs Circle",
+      "city": "Málaga",
       "phone": "555-0106",
+      "email": "info@vegandelights.com",
       "cif": "B12345676",
-      "description": "Deliciosa comida vegana creativa y saludable"
+      "description": "Deliciosa comida vegana creativa y saludable",
+      "openingTime": "09:00",
+      "closingTime": "22:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 35,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 35
+        }
+      ]
     },
     {
       "id": "7",
       "name": "Mediterranean Dreams",
       "cuisine": "Mediterranean",
       "address": "147 Beach Road",
+      "city": "Alicante",
       "phone": "555-0107",
+      "email": "info@meddreams.com",
       "cif": "B12345677",
-      "description": "Sabores del Mediterráneo con productos frescos locales"
+      "description": "Sabores del Mediterráneo con productos frescos locales",
+      "openingTime": "13:00",
+      "closingTime": "23:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 65,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 65
+        }
+      ]
     },
     {
       "id": "8",
       "name": "Dim Sum Palace",
       "cuisine": "Chinese",
       "address": "258 Chinatown Street",
+      "city": "Madrid",
       "phone": "555-0108",
+      "email": "info@dimsumpalace.com",
       "cif": "B12345678",
-      "description": "Auténtico dim sum y especialidades cantonesas"
+      "description": "Auténtico dim sum y especialidades cantonesas",
+      "openingTime": "11:00",
+      "closingTime": "23:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 70,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 70
+        }
+      ]
     },
     {
       "id": "9",
       "name": "Le Petit Bistro",
       "cuisine": "French",
       "address": "369 Fashion District",
+      "city": "Barcelona",
       "phone": "555-0109",
+      "email": "info@lepetitbistro.com",
       "cif": "B12345679",
-      "description": "Cocina francesa clásica en ambiente romántico"
+      "description": "Cocina francesa clásica en ambiente romántico",
+      "openingTime": "19:00",
+      "closingTime": "23:30",
+      "isActive": true,
+      "status": "open",
+      "capacity": 40,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 40
+        }
+      ]
     },
     {
       "id": "10",
       "name": "Steakhouse Prime",
       "cuisine": "Steakhouse",
       "address": "741 Business Center",
+      "city": "Valencia",
       "phone": "555-0110",
+      "email": "info@steakhouseprime.com",
       "cif": "B12345680",
-      "description": "Los mejores cortes de carne madurada"
+      "description": "Los mejores cortes de carne madurada",
+      "openingTime": "13:00",
+      "closingTime": "23:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 80,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 80
+        }
+      ]
     },
     {
       "id": "11",
       "name": "Thai Spice",
       "cuisine": "Thai",
       "address": "852 Spice Alley",
+      "city": "Sevilla",
       "phone": "555-0111",
+      "email": "info@thaispice.com",
       "cif": "B12345681",
-      "description": "Auténtica cocina tailandesa con nivel perfecto de picante"
+      "description": "Auténtica cocina tailandesa con nivel perfecto de picante",
+      "openingTime": "12:30",
+      "closingTime": "23:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 45,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 45
+        }
+      ]
     },
     {
       "id": "12",
       "name": "Seafood Harbor",
       "cuisine": "Seafood",
       "address": "963 Harbor View",
+      "city": "Málaga",
       "phone": "555-0112",
+      "email": "info@seafoodharbor.com",
       "cif": "B12345682",
-      "description": "Mariscos frescos con vistas al puerto"
+      "description": "Mariscos frescos con vistas al puerto",
+      "openingTime": "12:00",
+      "closingTime": "23:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 60,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 60
+        }
+      ]
     },
     {
       "id": "13",
       "name": "Pizza Artisan",
       "cuisine": "Italian",
       "address": "159 Artists Quarter",
+      "city": "Alicante",
       "phone": "555-0113",
+      "email": "info@pizzaartisan.com",
       "cif": "B12345683",
-      "description": "Pizzas artesanales en horno de leña"
+      "description": "Pizzas artesanales en horno de leña",
+      "openingTime": "12:00",
+      "closingTime": "23:30",
+      "isActive": true,
+      "status": "open",
+      "capacity": 50,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 50
+        }
+      ]
     },
     {
       "id": "14",
       "name": "BBQ Masters",
       "cuisine": "BBQ",
       "address": "753 Smokehouse Lane",
+      "city": "Bilbao",
       "phone": "555-0114",
+      "email": "info@bbqmasters.com",
       "cif": "B12345684",
-      "description": "Auténtica barbacoa ahumada durante horas"
+      "description": "Auténtica barbacoa ahumada durante horas",
+      "openingTime": "12:00",
+      "closingTime": "23:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 70,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 70
+        }
+      ]
     },
     {
       "id": "15",
       "name": "Fusion Kitchen",
       "cuisine": "Fusion",
       "address": "951 Innovation Street",
+      "city": "Valencia",
       "phone": "555-0115",
+      "email": "info@fusionkitchen.com",
       "cif": "B12345685",
-      "description": "Creativos platos que fusionan cocinas del mundo"
+      "description": "Creativos platos que fusionan cocinas del mundo",
+      "openingTime": "13:00",
+      "closingTime": "23:30",
+      "isActive": true,
+      "status": "open",
+      "capacity": 60,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 60
+        }
+      ]
     },
     {
       "id": "16",
       "name": "Greek Taverna",
       "cuisine": "Greek",
       "address": "357 Mediterranean Ave",
+      "city": "Sevilla",
       "phone": "555-0116",
+      "email": "info@greektaverna.com",
       "cif": "B12345686",
-      "description": "Auténtica cocina griega en ambiente tradicional"
+      "description": "Auténtica cocina griega en ambiente tradicional",
+      "openingTime": "12:30",
+      "closingTime": "23:00",
+      "isActive": true,
+      "status": "open",
+      "capacity": 50,
+      "zones": [
+        {
+          "id": "1",
+          "name": "main",
+          "capacity": 50
+        }
+      ]
+    },
+    {
+      "id": "363b",
+      "name": "rest1",
+      "cuisine": "rest1",
+      "address": "rest1",
+      "phone": "123",
+      "cif": "123",
+      "description": "wfwef",
+      "email": "rest1@rest1.com",
+      "city": "sevilla",
+      "openingTime": "20:20",
+      "closingTime": "23:24",
+      "status": "active",
+      "zones": [
+        {
+          "name": "main"
+        },
+        {
+          "name": "terraza"
+        }
+      ]
     }
   ],
   "tables": [
@@ -207,102 +453,5 @@
       "status": "free"
     }
   ],
-  "reservations": [
-    {
-      "id": "1",
-      "user_id": "1",
-      "table_ids": ["1"],
-      "date": "2023-12-01",
-      "time": "18:00",
-      "status": "confirmed",
-      "pax_number": "4"
-    },
-    {
-      "id": "2",
-      "user_id": "2",
-      "table_ids": ["2"],
-      "date": "2023-12-01",
-      "time": "19:00",
-      "status": "confirmed",
-      "pax_number": "4"
-    },
-    {
-      "id": "3",
-      "user_id": "3",
-      "table_ids": ["3"],
-      "date": "2023-12-01",
-      "time": "20:00",
-      "status": "confirmed",
-      "pax_number": "4"
-    },
-    {
-      "id": "4",
-      "user_id": "4",
-      "table_ids": ["4"],
-      "date": "2023-12-01",
-      "time": "21:00",
-      "status": "confirmed",
-      "pax_number": "4"
-    },
-    {
-      "id": "5",
-      "user_id": "5",
-      "table_ids": ["5"],
-      "date": "2023-12-01",
-      "time": "22:00",
-      "status": "confirmed",
-      "pax_number": "4"
-    }
-  ],
-  "users": [
-    {
-      "id": "1",
-      "name": "Admin",
-      "email": "admin@admin.com",
-      "role": "admin",
-      "password": "password123"
-    },
-    {
-      "id": "2",
-      "name": "User1",
-      "email": "user1@user.com",
-      "role": "customer",
-      "password": "password123"
-    },
-    {
-      "id": "3",
-      "name": "User2",
-      "email": "user2@user.com",
-      "role": "customer",
-      "password": "password123"
-    },
-    {
-      "id": "4",
-      "name": "User3",
-      "email": "user3@user.com",
-      "role": "customer",
-      "password": "password123"
-    },
-    {
-      "id": "5",
-      "name": "Super1",
-      "email": "super1@supervisor.com",
-      "role": "supervisor",
-      "password": "password123"
-    },
-    {
-      "id": "6",
-      "name": "Super2",
-      "email": "super2@supervisor.com",
-      "role": "supervisor",
-      "password": "password123"
-    },
-    {
-      "id": "7",
-      "name": "Super3",
-      "email": "super3@supervisor.com",
-      "role": "supervisor",
-      "password": "password123"
-    }
-  ]
+  "reservations": []
 }
