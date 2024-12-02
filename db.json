@@ -1,7 +1,7 @@
 {
   "restaurants": [
     {
-      "id": 1,
+      "id": "1",
       "name": "La Parrilla Española",
       "cuisine": "Española",
       "address": "Calle Mayor 123, Madrid",
@@ -10,7 +10,7 @@
       "cif": "B12345678"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Sakura Sushi",
       "cuisine": "Japonesa",
       "address": "Avenida Libertad 45, Barcelona",
@@ -19,16 +19,7 @@
       "cif": "B23456789"
     },
     {
-      "id": 3,
-      "name": "Il Gusto Italiano",
-      "cuisine": "Italiana",
-      "address": "Plaza Real 78, Valencia",
-      "phone": "963456789",
-      "description": "Auténtica cocina italiana con pasta fresca hecha a mano y pizzas horneadas en horno de leña",
-      "cif": "B34567890"
-    },
-    {
-      "id": 4,
+      "id": "4",
       "name": "El Rincón Verde",
       "cuisine": "Vegetariana",
       "address": "Calle del Sol 92, Sevilla",
@@ -37,12 +28,12 @@
       "cif": "B45678901"
     },
     {
-      "id": 5,
-      "name": "Taj Mahal",
-      "cuisine": "India",
-      "address": "Paseo de Gracia 15, Barcelona",
-      "phone": "935678901",
-      "description": "Auténtica cocina india con una amplia selección de platos tandoori y currys tradicionales",
+      "id": "5",
+      "name": "Pasta Bella",
+      "cuisine": "Italiana",
+      "address": "Calle Roma 34, Valencia",
+      "phone": "963789012",
+      "description": "Auténtica pasta italiana hecha a mano y pizzas tradicionales en horno de leña",
       "cif": "B56789012"
     }
   ]

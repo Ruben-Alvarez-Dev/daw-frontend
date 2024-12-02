@@ -5,10 +5,10 @@ import RestaurantForm from '../../RestaurantForm/RestaurantForm'
 import './Main.css'
 
 const Main = ({ activeRestaurant, setActiveRestaurant }) => {
-  const [refreshKey, setRefreshKey] = useState(0)
+  const [updateTrigger, setUpdateTrigger] = useState(0)
 
   const handleRestaurantChange = () => {
-    setRefreshKey(prev => prev + 1)
+    setUpdateTrigger(prev => prev + 1)
     setActiveRestaurant(null)
   }
 
@@ -30,9 +30,9 @@ const Main = ({ activeRestaurant, setActiveRestaurant }) => {
             activeRestaurant={activeRestaurant}
           />
           <RestaurantList 
-            key={refreshKey} 
             onRestaurantSelect={handleRestaurantSelect}
             activeRestaurant={activeRestaurant}
+            updateTrigger={updateTrigger}
           />
         </div>
       </div>
@@ -42,7 +42,7 @@ const Main = ({ activeRestaurant, setActiveRestaurant }) => {
 
 Main.propTypes = {
   activeRestaurant: PropTypes.shape({
-    _id: PropTypes.string,
+    id: PropTypes.string,
     name: PropTypes.string,
     cuisine: PropTypes.string,
     address: PropTypes.string

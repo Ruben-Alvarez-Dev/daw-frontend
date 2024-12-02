@@ -34,13 +34,13 @@ const Navbar = ({ activeRestaurant }) => {
           </div>
         </div>
         <div className="navbar-section right">
-          <Button 
+          <Button
             variant="success"
             onClick={() => console.log('Login clicked')}
           >
             Login
           </Button>
-          <Button 
+          <Button
             variant="primary"
             onClick={() => console.log('Register clicked')}
           >

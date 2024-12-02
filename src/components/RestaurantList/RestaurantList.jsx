@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import './RestaurantList.css'
 
-const RestaurantList = ({ activeRestaurant, onRestaurantSelect }) => {
+const RestaurantList = ({ activeRestaurant, onRestaurantSelect, updateTrigger }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [restaurants, setRestaurants] = useState([])
   const [loading, setLoading] = useState(true)
@@ -25,7 +25,7 @@ const RestaurantList = ({ activeRestaurant, onRestaurantSelect }) => {
     }
 
     fetchRestaurants()
-  }, [])
+  }, [updateTrigger]) // Ahora se ejecuta cuando updateTrigger cambia
 
   const filteredRestaurants = restaurants.filter(restaurant => {
     const searchTermLower = searchTerm.toLowerCase()
@@ -92,12 +92,13 @@ const RestaurantList = ({ activeRestaurant, onRestaurantSelect }) => {
 
 RestaurantList.propTypes = {
   activeRestaurant: PropTypes.shape({
-    _id: PropTypes.string,
+    id: PropTypes.string,
     name: PropTypes.string,
     cuisine: PropTypes.string,
     address: PropTypes.string
   }),
-  onRestaurantSelect: PropTypes.func.isRequired
+  onRestaurantSelect: PropTypes.func.isRequired,
+  updateTrigger: PropTypes.number // Nuevo prop para forzar actualizaciones
 }
 
 export default RestaurantList
