@@ -1,5 +1,5 @@
 .aside-content {
-  border: 0px solid white;
+  border: 1px solid white;
   margin: 0rem 0rem 0rem 0.5rem;
   width: calc(100% - 0.5rem); 
   height: calc(100% - 0rem);
@@ -10,7 +10,7 @@
 
 .aside-section {
   flex: 1;
-  border: 0px solid white;
+  border: 1px solid white;
   margin: 0;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   display: flex;
