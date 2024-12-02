@@ -1,0 +1,46 @@
+{
+  "hash": "532cd7ac",
+  "configHash": "d266ed5e",
+  "lockfileHash": "72dc2f77",
+  "browserHash": "4265f86a",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "f9684bee",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "34eed640",
+      "needsInterop": true
+    },
+    "prop-types": {
+      "src": "../../node_modules/prop-types/index.js",
+      "file": "prop-types.js",
+      "fileHash": "5a2682e8",
+      "needsInterop": true
+    },
+    "react-icons/md": {
+      "src": "../../node_modules/react-icons/md/index.mjs",
+      "file": "react-icons_md.js",
+      "fileHash": "503c94f5",
+      "needsInterop": false
+    },
+    "country-flag-icons/react/3x2": {
+      "src": "../../node_modules/country-flag-icons/react/3x2/index.js",
+      "file": "country-flag-icons_react_3x2.js",
+      "fileHash": "c9cce911",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-WNPTCGAH": {
+      "file": "chunk-WNPTCGAH.js"
+    },
+    "chunk-5WRI5ZAA": {
+      "file": "chunk-5WRI5ZAA.js"
+    }
+  }
+}

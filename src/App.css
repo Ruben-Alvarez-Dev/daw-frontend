@@ -6,6 +6,8 @@
   --sidebar-width: 250px;
   --sidebar-collapsed-width: 80px;
   --transition-speed: 0.3s;
+  --background-secondary: rgb(40, 40, 40);
+  --border-color: #444;
 }
 
 /* Estilos base */
@@ -51,4 +53,26 @@ body {
 
 .aside.collapsed + .main {
   width: calc(100% - var(--sidebar-collapsed-width));
+}
+
+/* Card styles */
+.card {
+  background-color: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 1rem;
+  color: var(--text-color);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 550px;
+  overflow-y: auto;
+}
+
+.card h2 {
+  font-size: 0.9rem;
+  margin: 0;
+  color: var(--text-color);
 }

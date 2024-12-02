@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types'
 import './Navbar.css'
 import Button from '../../common/Button/Button'
 import LanguageSelector from '../../common/LanguageSelector/LanguageSelector'
 import ThemeToggle from '../../common/ThemeToggle/ThemeToggle'
 import { useAlert } from '../../../context/AlertContext'
 
-const Navbar = () => {
+const Navbar = ({ activeRestaurant }) => {
   const alert = useAlert()
 
   const handleLogout = () => {
@@ -18,7 +19,12 @@ const Navbar = () => {
           <span className="logo-text">Restaurant Reservations</span>
         </div>
         <div className="navbar-section left">
-          <span className="user-info">Texto de ejemplo: Ruben Alvarez</span>
+          {activeRestaurant && (
+            <span className="user-info">
+              Restaurante: {activeRestaurant.name}
+            </span>
+          )}
+          <span className="user-info">Ruben Alvarez</span>
           <span className="user-info">admin</span>
         </div>
         <div className="navbar-section middle">
@@ -29,19 +35,19 @@ const Navbar = () => {
         </div>
         <div className="navbar-section right">
           <Button 
-            className="success"
+            variant="success"
             onClick={() => console.log('Login clicked')}
           >
             Login
           </Button>
           <Button 
-            className="primary"
+            variant="primary"
             onClick={() => console.log('Register clicked')}
           >
             Register
           </Button>
           <Button 
-            className="danger"
+            variant="danger"
             onClick={handleLogout}
           >
             Logout
@@ -50,6 +56,14 @@ const Navbar = () => {
       </div>
     </nav>
   )
+}
+
+Navbar.propTypes = {
+  activeRestaurant: PropTypes.shape({
+    name: PropTypes.string,
+    cuisine: PropTypes.string,
+    address: PropTypes.string
+  })
 }
 
 export default Navbar

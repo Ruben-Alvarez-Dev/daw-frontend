@@ -1,0 +1,111 @@
+.restaurant-list {
+}
+
+.header-section {
+  flex: 0 0 auto;
+}
+
+.active-restaurant {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.active-restaurant strong {
+  margin-left: 0.5rem;
+  color: var(--text-color);
+}
+
+.search-section {
+  flex: 0 0 auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background-color: #2a2a2a;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.search-input::placeholder {
+  color: #666;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--text-color);
+}
+
+.list-section {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item:hover {
+  background-color: #2a2a2a;
+}
+
+.restaurant-info h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.restaurant-info p {
+  margin: 0.25rem 0 0;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.restaurant-details {
+  margin: 0.25rem 0 0;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.restaurant-description {
+  margin: 0.5rem 0 0;
+  color: #aaa;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Estilizar la scrollbar */
+.list-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list-section::-webkit-scrollbar-track {
+  background: #1e1e1e;
+  border-radius: 4px;
+}
+
+.list-section::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+.list-section::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}

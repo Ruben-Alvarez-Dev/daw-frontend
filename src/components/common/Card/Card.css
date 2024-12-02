@@ -1,3 +1,9 @@
 .card {
-  
+  background-color: #1e1e1e;  /* Fondo oscuro */
+  border: 1px solid var(--text-color);     /* Borde sutil */
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem;
+  color: #fff;               /* Texto blanco */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
