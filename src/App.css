@@ -6,8 +6,8 @@
   --background-input-hover: color-mix(in srgb, var(--background-common) 100%, white);
   --text-color: antiquewhite;
   --font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
-  --sidebar-width: 250px;
-  --sidebar-collapsed-width: 80px;
+  --aside-width: 25vw;
+  --aside-collapsed-width: 80px;
   --transition-speed: 0.3s;
   --navbar-height: 60px;
   --footer-height: 60px;
@@ -58,14 +58,15 @@ body {
 }
 
 .aside.collapsed + .main {
-  width: calc(100% - var(--sidebar-collapsed-width));
+  width: calc(100vw - var(--aside-collapsed-width));
+  --
 }
 
 /* Card styles */
 .card {
   background-color: var(--background-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 25px;
   padding: 2rem;
   margin: 2rem 1rem;
   color: var(--text-color);

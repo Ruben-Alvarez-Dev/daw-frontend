@@ -10,6 +10,7 @@ import './App.css'
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [activeRestaurant, setActiveRestaurant] = useState(null)
+  const [activeSection, setActiveSection] = useState('global')
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed)
@@ -19,11 +20,17 @@ function App() {
     <AlertProvider>
       <RestaurantsProvider>
         <div className="app">
-          <Navbar activeRestaurant={activeRestaurant} />
-          <Aside isCollapsed={isCollapsed} onToggle={toggleSidebar} />
+          <Navbar isCollapsed={isCollapsed} activeRestaurant={activeRestaurant} />
+          <Aside 
+            isCollapsed={isCollapsed} 
+            onToggle={toggleSidebar}
+            onSectionSelect={setActiveSection}
+            activeSection={activeSection}
+          />
           <Main 
             activeRestaurant={activeRestaurant} 
             setActiveRestaurant={setActiveRestaurant}
+            activeSection={activeSection}
           />
           <Footer />
         </div>

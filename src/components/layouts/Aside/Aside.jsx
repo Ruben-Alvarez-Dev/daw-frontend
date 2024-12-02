@@ -1,20 +1,34 @@
 import './Aside.css'
 import { MdSettings, MdPublic, MdRestaurant, MdTableBar, MdEventAvailable, MdQueryStats } from 'react-icons/md'
+import PropTypes from 'prop-types'
 
-const Aside = ({ isCollapsed, onToggle }) => {
+const Aside = ({ isCollapsed, onToggle, onSectionSelect, activeSection }) => {
+  const handleItemClick = (section) => {
+    onSectionSelect(section)
+  }
+
   return (
     <aside className={`aside ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="aside-content">
         <div className="aside-section up">
-          <div className="menu-item">
+          <div 
+            className={`menu-item ${activeSection === 'global' ? 'active' : ''}`}
+            onClick={() => handleItemClick('global')}
+          >
             <MdPublic className="menu-icon" />
             <span className="menu-text">Global</span>
           </div>
-          <div className="menu-item">
+          <div 
+            className={`menu-item ${activeSection === 'restaurants' ? 'active' : ''}`}
+            onClick={() => handleItemClick('restaurants')}
+          >
             <MdRestaurant className="menu-icon" />
             <span className="menu-text">Restaurantes</span>
           </div>
-          <div className="menu-item">
+          <div 
+            className={`menu-item ${activeSection === 'tables' ? 'active' : ''}`}
+            onClick={() => handleItemClick('tables')}
+          >
             <MdTableBar className="menu-icon" />
             <span className="menu-text">Mesas</span>
           </div>
@@ -39,10 +53,17 @@ const Aside = ({ isCollapsed, onToggle }) => {
         className="toggle-button"
         onClick={onToggle}
       >
-        {isCollapsed ? '>' : '<'}
+        <span>{isCollapsed ? '>' : '<'}</span>
       </button>
     </aside>
   )
+}
+
+Aside.propTypes = {
+  isCollapsed: PropTypes.bool,
+  onToggle: PropTypes.func,
+  onSectionSelect: PropTypes.func,
+  activeSection: PropTypes.string
 }
 
 export default Aside

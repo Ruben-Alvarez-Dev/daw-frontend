@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useRestaurants } from '../../context/RestaurantsContext'
+import { useRestaurants } from '../../../context/RestaurantsContext'
 import './RestaurantList.css'
 
 const RestaurantList = () => {

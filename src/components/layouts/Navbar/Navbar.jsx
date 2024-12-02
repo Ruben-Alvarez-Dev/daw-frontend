@@ -4,8 +4,9 @@ import LanguageSelector from '../../common/LanguageSelector/LanguageSelector'
 import ThemeToggle from '../../common/ThemeToggle/ThemeToggle'
 import { useAlert } from '../../../context/AlertContext'
 import { useRestaurants } from '../../../context/RestaurantsContext'
+import PropTypes from 'prop-types'
 
-const Navbar = () => {
+const Navbar = ({ isCollapsed }) => {
   const alert = useAlert()
   const { activeRestaurant } = useRestaurants()
 
@@ -14,7 +15,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="navbar-content">
         <div className="navbar-section logo">
           <span className="logo-text">Restaurant Reservations</span>
@@ -57,6 +58,10 @@ const Navbar = () => {
       </div>
     </nav>
   )
+}
+
+Navbar.propTypes = {
+  isCollapsed: PropTypes.bool
 }
 
 export default Navbar

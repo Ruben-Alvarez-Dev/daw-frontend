@@ -1,12 +1,12 @@
 .main-layout {
-  width: calc(100% - var(--sidebar-width));
+  flex: 1;
   height: calc(100vh - var(--navbar-height) - var(--footer-height));
   background-color: var(--background-main);
   display: flex;
   color: var(--text-color);
   transition: width var(--transition-speed) ease;
-  padding: 1rem;
-  border-radius: 20px 0 0 20px;
+  padding: 2rem;
+  border-radius: 25px 0 0 25px;
 }
 
 .main-content {
@@ -16,14 +16,45 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .main-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
-  height: 100%;
-  align-items: start;
+  align-items: center;
+  max-height: 80vh;
+}
+
+.form-container,
+.list-container {
+  overflow-y: auto;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+/* Scrollbar personalizado */
+.form-container::-webkit-scrollbar,
+.list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-container::-webkit-scrollbar-track,
+.list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.form-container::-webkit-scrollbar-thumb,
+.list-container::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.form-container::-webkit-scrollbar-thumb:hover,
+.list-container::-webkit-scrollbar-thumb:hover {
+  background: #505050;
 }
 
 @media (max-width: 1200px) {
@@ -35,12 +66,13 @@
 @media (max-width: 768px) {
   .main-layout {
     width: 100%;
-    padding: 0.5rem;
+    padding: 1rem;
     border-radius: 0;
   }
 
   .main-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
+    max-height: none;
   }
 }

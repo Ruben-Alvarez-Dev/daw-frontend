@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { useRestaurants } from '../../context/RestaurantsContext'
-import Button from '../common/Button/Button'
-import Modal from '../common/Modal/Modal'
+import { useRestaurants } from '../../../context/RestaurantsContext'
+import Button from '../../common/Button/Button'
+import Modal from '../../common/Modal/Modal'
 import './RestaurantForm.css'
 import PropTypes from 'prop-types'
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
