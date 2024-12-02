@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types'
 import './Navbar.css'
 import Button from '../../common/Button/Button'
 import LanguageSelector from '../../common/LanguageSelector/LanguageSelector'
 import ThemeToggle from '../../common/ThemeToggle/ThemeToggle'
 import { useAlert } from '../../../context/AlertContext'
+import { useRestaurants } from '../../../context/RestaurantsContext'
 
-const Navbar = ({ activeRestaurant }) => {
+const Navbar = () => {
   const alert = useAlert()
+  const { activeRestaurant } = useRestaurants()
 
   const handleLogout = () => {
     alert.success('hola')
@@ -56,14 +57,6 @@ const Navbar = ({ activeRestaurant }) => {
       </div>
     </nav>
   )
-}
-
-Navbar.propTypes = {
-  activeRestaurant: PropTypes.shape({
-    name: PropTypes.string,
-    cuisine: PropTypes.string,
-    address: PropTypes.string
-  })
 }
 
 export default Navbar

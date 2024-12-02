@@ -1,31 +1,15 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useRestaurants } from '../../context/RestaurantsContext'
 import './RestaurantList.css'
 
-const RestaurantList = ({ activeRestaurant, onRestaurantSelect, updateTrigger }) => {
+const RestaurantList = () => {
+  const { restaurants, loading, activeRestaurant, fetchRestaurants, selectRestaurant } = useRestaurants()
   const [searchTerm, setSearchTerm] = useState('')
-  const [restaurants, setRestaurants] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
 
   useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/restaurants')
-        if (!response.ok) {
-          throw new Error('Error al cargar los restaurantes')
-        }
-        const data = await response.json()
-        setRestaurants(data)
-        setLoading(false)
-      } catch (err) {
-        setError(err.message)
-        setLoading(false)
-      }
-    }
-
     fetchRestaurants()
-  }, [updateTrigger]) // Ahora se ejecuta cuando updateTrigger cambia
+  }, [fetchRestaurants])
 
   const filteredRestaurants = restaurants.filter(restaurant => {
     const searchTermLower = searchTerm.toLowerCase()
@@ -38,10 +22,6 @@ const RestaurantList = ({ activeRestaurant, onRestaurantSelect, updateTrigger })
 
   if (loading) {
     return <div className="card">Cargando restaurantes...</div>
-  }
-
-  if (error) {
-    return <div className="card">Error: {error}</div>
   }
 
   return (
@@ -75,8 +55,8 @@ const RestaurantList = ({ activeRestaurant, onRestaurantSelect, updateTrigger })
           {filteredRestaurants.map((restaurant) => (
             <li
               key={restaurant.id}
-              className="list-item"
-              onClick={() => onRestaurantSelect(restaurant)}
+              className={`list-item ${activeRestaurant?.id === restaurant.id ? 'active' : ''}`}
+              onClick={() => selectRestaurant(restaurant)}
             >
               <div className="restaurant-info">
                 <h3>{restaurant.name}</h3>
@@ -91,14 +71,14 @@ const RestaurantList = ({ activeRestaurant, onRestaurantSelect, updateTrigger })
 }
 
 RestaurantList.propTypes = {
-  activeRestaurant: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    cuisine: PropTypes.string,
-    address: PropTypes.string
-  }),
-  onRestaurantSelect: PropTypes.func.isRequired,
-  updateTrigger: PropTypes.number // Nuevo prop para forzar actualizaciones
+  // activeRestaurant: PropTypes.shape({
+  //   id: PropTypes.string,
+  //   name: PropTypes.string,
+  //   cuisine: PropTypes.string,
+  //   address: PropTypes.string
+  // }),
+  // onRestaurantSelect: PropTypes.func.isRequired,
+  // updateTrigger: PropTypes.number // Nuevo prop para forzar actualizaciones
 }
 
 export default RestaurantList

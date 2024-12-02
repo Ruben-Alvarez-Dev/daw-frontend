@@ -1,27 +1,47 @@
 import { useState, useEffect } from 'react'
-import { useAlert } from '../../context/AlertContext'
+import { useRestaurants } from '../../context/RestaurantsContext'
 import Button from '../common/Button/Button'
 import Modal from '../common/Modal/Modal'
 import './RestaurantForm.css'
 import PropTypes from 'prop-types'
 
-const RestaurantForm = ({ onRestaurantCreated, onClear, activeRestaurant }) => {
-  const { showAlert } = useAlert()
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    name: '',
-    cuisine: '',
-    address: '',
-    phone: '',
-    cif: '',
-    description: ''
-  })
+const initialFormState = {
+  name: '',
+  cuisine: '',
+  address: '',
+  phone: '',
+  cif: '',
+  description: ''
+}
 
+const RestaurantForm = () => {
+  const { 
+    activeRestaurant,
+    restaurants,
+    createRestaurant,
+    updateRestaurant,
+    deleteRestaurant,
+    clearActiveRestaurant
+  } = useRestaurants()
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [formData, setFormData] = useState(initialFormState)
+
+  // Efecto para manejar el restaurante activo
   useEffect(() => {
     if (activeRestaurant) {
       setFormData(activeRestaurant)
+    } else {
+      setFormData(initialFormState)
     }
   }, [activeRestaurant])
+
+  // Efecto para limpiar el formulario cuando la lista de restaurantes cambie
+  useEffect(() => {
+    if (!activeRestaurant) {
+      setFormData(initialFormState)
+    }
+  }, [restaurants, activeRestaurant])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -31,79 +51,33 @@ const RestaurantForm = ({ onRestaurantCreated, onClear, activeRestaurant }) => {
     }))
   }
 
-  const handleClear = () => {
-    setFormData({
-      name: '',
-      cuisine: '',
-      address: '',
-      phone: '',
-      cif: '',
-      description: ''
-    })
-    onClear?.()
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     try {
-      const method = formData.id ? 'PUT' : 'POST'
-      const url = formData.id 
-        ? `http://localhost:3001/restaurants/${formData.id}`
-        : 'http://localhost:3001/restaurants'
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      if (!response.ok) {
-        throw new Error(formData.id ? 'Error al actualizar el restaurante' : 'Error al crear el restaurante')
+      if (activeRestaurant) {
+        await updateRestaurant(activeRestaurant.id, formData)
+      } else {
+        await createRestaurant(formData)
       }
-
-      const savedRestaurant = await response.json()
-      showAlert(formData.id ? 'Restaurante actualizado con éxito' : 'Restaurante creado con éxito', 'success')
-      
-      // Primero notificamos el cambio
-      onRestaurantCreated?.(savedRestaurant)
-      // Luego limpiamos el formulario
-      handleClear()
+      // El formulario se limpiará automáticamente cuando el contexto actualice activeRestaurant
     } catch (error) {
-      showAlert(error.message, 'error')
+      console.error('Error:', error)
     }
   }
 
-  const handleDelete = () => {
-    if (!formData.id) {
-      showAlert('Selecciona un restaurante para eliminar', 'error')
-      return
-    }
-    setIsDeleteModalOpen(true)
+  const handleClear = () => {
+    setFormData(initialFormState)
+    clearActiveRestaurant()
   }
 
-  const confirmDelete = async () => {
+  const handleDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/restaurants/${formData.id}`, {
-        method: 'DELETE'
-      })
-
-      if (!response.ok) {
-        throw new Error('Error al eliminar el restaurante')
-      }
-
-      showAlert('Restaurante eliminado con éxito', 'success')
-      // Primero notificamos el cambio
-      onRestaurantCreated?.()
-      // Luego limpiamos el formulario
-      handleClear()
+      setIsDeleteModalOpen(false) // Cerramos el modal primero
+      await deleteRestaurant(activeRestaurant.id)
+      // El formulario se limpiará automáticamente cuando el contexto actualice activeRestaurant
     } catch (error) {
-      showAlert(error.message, 'error')
-    } finally {
-      // Siempre cerramos el modal, tanto en éxito como en error
-      setIsDeleteModalOpen(false)
+      console.error('Error:', error)
+      setIsDeleteModalOpen(false) // Cerramos el modal incluso si hay error
     }
   }
 
@@ -186,12 +160,12 @@ const RestaurantForm = ({ onRestaurantCreated, onClear, activeRestaurant }) => {
 
             <div className="button-group">
               <Button type="submit" variant="success">
-                Guardar
+                {activeRestaurant ? 'Actualizar' : 'Crear'}
               </Button>
               <Button type="button" variant="primary" onClick={handleClear}>
                 Limpiar
               </Button>
-              <Button type="button" variant="danger" onClick={handleDelete}>
+              <Button type="button" variant="danger" onClick={() => setIsDeleteModalOpen(true)}>
                 Eliminar
               </Button>
             </div>
@@ -202,7 +176,7 @@ const RestaurantForm = ({ onRestaurantCreated, onClear, activeRestaurant }) => {
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={confirmDelete}
+        onConfirm={handleDelete}
         title="Confirmar eliminación"
         restaurantName={formData.name}
       />
@@ -211,8 +185,6 @@ const RestaurantForm = ({ onRestaurantCreated, onClear, activeRestaurant }) => {
 }
 
 RestaurantForm.propTypes = {
-  onRestaurantCreated: PropTypes.func.isRequired,
-  onClear: PropTypes.func.isRequired,
   activeRestaurant: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,

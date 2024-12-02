@@ -1,4 +1,5 @@
 import { AlertProvider } from './context/AlertContext'
+import { RestaurantsProvider } from './context/RestaurantsContext'
 import { useState } from 'react'
 import Navbar from './components/layouts/Navbar/Navbar'
 import Aside from './components/layouts/Aside/Aside'
@@ -16,15 +17,17 @@ function App() {
 
   return (
     <AlertProvider>
-      <div className="app">
-        <Navbar activeRestaurant={activeRestaurant} />
-        <Aside isCollapsed={isCollapsed} onToggle={toggleSidebar} />
-        <Main 
-          activeRestaurant={activeRestaurant} 
-          setActiveRestaurant={setActiveRestaurant}
-        />
-        <Footer />
-      </div>
+      <RestaurantsProvider>
+        <div className="app">
+          <Navbar activeRestaurant={activeRestaurant} />
+          <Aside isCollapsed={isCollapsed} onToggle={toggleSidebar} />
+          <Main 
+            activeRestaurant={activeRestaurant} 
+            setActiveRestaurant={setActiveRestaurant}
+          />
+          <Footer />
+        </div>
+      </RestaurantsProvider>
     </AlertProvider>
   )
 }
