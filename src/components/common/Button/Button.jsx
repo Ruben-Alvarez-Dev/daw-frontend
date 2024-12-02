@@ -1,12 +1,24 @@
 import PropTypes from 'prop-types'
 import './Button.css'
 
-const Button = ({ children, type = 'button', variant = 'primary', onClick, className }) => {
+const Button = ({ 
+  children, 
+  variant = 'primary', 
+  type = 'button', 
+  onClick,
+  isEnabled = true 
+}) => {
+  const handleClick = (e) => {
+    if (isEnabled && onClick) {
+      onClick(e)
+    }
+  }
+
   return (
     <button
       type={type}
-      className={`button button-${variant} ${className || ''}`}
-      onClick={onClick}
+      className={`button button-${variant} ${!isEnabled ? 'disabled' : ''}`}
+      onClick={handleClick}
     >
       {children}
     </button>
@@ -15,10 +27,10 @@ const Button = ({ children, type = 'button', variant = 'primary', onClick, class
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,
-  type: PropTypes.oneOf(['button', 'submit', 'reset']),
   variant: PropTypes.oneOf(['primary', 'secondary', 'danger', 'success']),
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
   onClick: PropTypes.func,
-  className: PropTypes.string
+  isEnabled: PropTypes.bool
 }
 
 export default Button

@@ -1,4 +1,19 @@
 .restaurant-list {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  min-width: 50%;
+}
+
+.restaurant-list h2 {
+  margin: 0;
+  padding-bottom: 1rem;
+  color: var(--text-color);
+  font-size: 1.75rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .header-section {
@@ -6,7 +21,7 @@
 }
 
 .active-restaurant {
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
   font-size: 0.9rem;
   color: #888;
 }
@@ -23,10 +38,10 @@
 .search-input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #333;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
-  background-color: #2a2a2a;
-  color: #fff;
+  background-color: var(--background-input);
+  color: var(--text-color);
   font-size: 0.9rem;
 }
 
@@ -43,6 +58,7 @@
   flex: 1 1 auto;
   overflow-y: auto;
   min-height: 0;
+  height: calc(100% - 120px);
 }
 
 .list {
@@ -52,9 +68,13 @@
 }
 
 .list-item {
-  padding: 0.5rem;
-  border-bottom: 1px solid #333;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-color);
 }
 
 .list-item:last-child {
@@ -62,20 +82,24 @@
 }
 
 .list-item:hover {
-  background-color: #2a2a2a;
+  background-color: var(--background-hover);
+}
+
+.list-item.active {
+  border-color: var(--text-color);
 }
 
 .restaurant-info h3 {
   margin: 0;
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-color);
 }
 
 .restaurant-info p {
-  margin: 0.25rem 0 0;
-  color: #888;
-  font-size: 0.85rem;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-color);
 }
 
 .restaurant-details {
@@ -108,4 +132,16 @@
 
 .list-section::-webkit-scrollbar-thumb:hover {
   background: #444;
+}
+
+.no-restaurants {
+  text-align: center;
+  color: var(--text-color);
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .restaurant-list {
+    padding: 1rem;
+  }
 }

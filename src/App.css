@@ -1,11 +1,16 @@
 :root {
   --background-common: rgb(40, 40, 40);
+  --background-main: color-mix(in srgb, var(--background-common) 60%, white);
   --background-hover: color-mix(in srgb, var(--background-common) 80%, white);
+  --background-input: color-mix(in srgb, var(--background-common) 90%, white);
+  --background-input-hover: color-mix(in srgb, var(--background-common) 100%, white);
   --text-color: antiquewhite;
   --font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
   --sidebar-width: 250px;
   --sidebar-collapsed-width: 80px;
   --transition-speed: 0.3s;
+  --navbar-height: 60px;
+  --footer-height: 60px;
   --background-secondary: rgb(40, 40, 40);
   --border-color: #444;
 }
@@ -23,6 +28,7 @@ body {
   overflow: hidden;
   color: var(--text-color);
   font-family: var(--font-family);
+  background-color: var(--background-common);
 }
 
 .app {

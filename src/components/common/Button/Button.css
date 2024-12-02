@@ -2,15 +2,25 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.4rem 0.8rem;
-  border: none;
+  padding: 0.75rem 1.5rem;
+  border-width: 1px;
+  border-style: solid;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s;
   height: 32px;
   min-width: 100px;
+  background-color: transparent;
+}
+
+.button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #808080 !important;
+  border-color: #666 !important;
+  color: #ccc !important;
 }
 
 .button:hover {
@@ -22,38 +32,42 @@
 }
 
 .button-primary {
+  border-color: rgb(37, 99, 235);
+  color: rgb(37, 99, 235);
+}
+
+.button-primary:hover:not(.disabled) {
   background: rgb(37, 99, 235);
   color: white;
 }
 
-.button-primary:hover {
-  background: rgb(29, 78, 216);
-}
-
 .button-secondary {
-  background-color: var(--background-secondary);
+  border-color: var(--border-color);
   color: var(--text-color);
-  border: 1px solid var(--border-color);
+  background-color: var(--background-secondary);
 }
 
-.button-secondary:hover {
+.button-secondary:hover:not(.disabled) {
   background: var(--background-hover);
+  color: var(--text-color);
 }
 
 .button-danger {
+  border-color: rgb(220, 38, 38);
+  color: rgb(220, 38, 38);
+}
+
+.button-danger:hover:not(.disabled) {
   background: rgb(220, 38, 38);
   color: white;
 }
 
-.button-danger:hover {
-  background: rgb(185, 28, 28);
+.button-success {
+  border-color: rgb(22, 163, 74);
+  color: rgb(22, 163, 74);
 }
 
-.button-success {
+.button-success:hover:not(.disabled) {
   background: rgb(22, 163, 74);
   color: white;
-}
-
-.button-success:hover {
-  background: rgb(21, 128, 61);
 }
