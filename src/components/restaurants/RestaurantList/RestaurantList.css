@@ -145,3 +145,11 @@
     padding: 1rem;
   }
 }
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .restaurant-list {
+    padding: 1rem;
+  }
+}

@@ -1,90 +1,83 @@
-import { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { useRestaurants } from '../../../context/RestaurantsContext'
 import './TableList.css'
 
-const TableList = () => {
-  const { activeRestaurant } = useRestaurants()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [tables, setTables] = useState([])
-  const [selectedZone, setSelectedZone] = useState('all')
-
-  useEffect(() => {
-    // Aquí cargaremos las mesas cuando tengamos el backend
-    // Por ahora usamos datos de ejemplo
-    if (activeRestaurant) {
-      const mockTables = [
-        { id: '1', number: 1, capacity: 4, zone: 'Terraza' },
-        { id: '2', number: 2, capacity: 2, zone: 'Interior' },
-        { id: '3', number: 3, capacity: 6, zone: 'Terraza' },
-      ]
-      setTables(mockTables)
-    }
-  }, [activeRestaurant])
-
-  const filteredTables = tables.filter(table => {
-    const matchesSearch = table.number.toString().includes(searchTerm.toLowerCase()) ||
-                         table.zone.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesZone = selectedZone === 'all' || table.zone === selectedZone
-    return matchesSearch && matchesZone
-  })
-
-  const zones = activeRestaurant?.zones || []
-
+const TableList = ({ 
+  activeRestaurant, 
+  tables, 
+  activeTable, 
+  onSelect,
+  searchTerm,
+  onChangeSearchTerm 
+}) => {
   return (
-    <div className="table-list">
-      <div className="list-header">
+    <div className="card table-list">
+      <div className="header-section">
         <h2>Mesas Disponibles</h2>
-        <div className="filters">
-          <input
-            type="text"
-            placeholder="Buscar por número o zona..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          <select
-            value={selectedZone}
-            onChange={(e) => setSelectedZone(e.target.value)}
-            className="zone-filter"
-          >
-            <option value="all">Todas las zonas</option>
-            {zones.map(zone => (
-              <option key={zone} value={zone}>
-                {zone}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="list-content">
-        {!activeRestaurant ? (
-          <div className="no-restaurant">
-            Selecciona un restaurante para ver sus mesas
-          </div>
-        ) : filteredTables.length === 0 ? (
-          <div className="no-tables">
-            No hay mesas que coincidan con la búsqueda
+        {activeRestaurant ? (
+          <div className="active-restaurant">
+            <span>Restaurante:</span>
+            <strong>{activeRestaurant.name}</strong>
           </div>
         ) : (
-          filteredTables.map(table => (
-            <div key={table.id} className="table-item">
+          <div className="active-restaurant">
+            <span>Selecciona un restaurante</span>
+          </div>
+        )}
+      </div>
+
+      <div className="search-section">
+        <input
+          type="text"
+          placeholder="Buscar por número o zona..."
+          value={searchTerm}
+          onChange={onChangeSearchTerm}
+          className="search-input"
+        />
+      </div>
+
+      <div className="list-section">
+        <ul className="list">
+          {tables.map((table) => (
+            <li
+              key={table.id}
+              className={`list-item ${activeTable?.id === table.id ? 'active' : ''}`}
+              onClick={() => onSelect(table)}
+            >
               <div className="table-info">
                 <h3>Mesa {table.number}</h3>
-                <p>Capacidad: {table.capacity} personas</p>
-                <p>Zona: {table.zone}</p>
+                <p>Capacidad: {table.capacity} - Zona: {table.zone}</p>
+                <p className={`status ${table.status}`}>
+                  {table.status === 'available' ? 'Disponible' : 
+                   table.status === 'occupied' ? 'Ocupada' : 'Reservada'}
+                </p>
               </div>
-            </div>
-          ))
-        )}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   )
 }
 
 TableList.propTypes = {
-  onTableSelect: PropTypes.func
+  activeRestaurant: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
+  }),
+  tables: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    number: PropTypes.number,
+    capacity: PropTypes.number,
+    zone: PropTypes.string,
+    status: PropTypes.string
+  })).isRequired,
+  activeTable: PropTypes.shape({
+    id: PropTypes.string
+  }),
+  onSelect: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  onChangeSearchTerm: PropTypes.func.isRequired
 }
 
 export default TableList

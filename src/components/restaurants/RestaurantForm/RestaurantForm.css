@@ -1,56 +1,57 @@
 .restaurant-form {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
   width: 100%;
-  padding: 2rem 2rem 1rem 2rem;
-  background-color: var(--background-color);
   border-radius: 8px;
-  box-shadow: var(--box-shadow);
 }
 
-.form-header {
+.restaurant-form-title {
   flex: 0 0 auto;
+  padding: 2rem 2rem 1rem 2rem;
 }
 
-.form-header h2 {
+.restaurant-form-title h2 {
   margin: 0;
-  padding-bottom: 1rem;
+  margin-bottom: 2rem;
   color: var(--text-color);
   font-size: 1.75rem;
-  border-bottom: 1px solid var(--border-color);
 }
 
-.name-group {
+.title-separator {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 2rem 0;
+}
+
+.name-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
   margin-top: 1.5rem;
 }
 
-.name-group label {
-  white-space: nowrap;
+.name-container label {
+  margin-right: 1rem;
   color: var(--text-color);
   font-size: 0.9rem;
 }
 
-.name-group input {
+.name-container input {
   flex: 1;
   padding: 0.75rem;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  font-size: 0.9rem;
   background-color: var(--background-input);
   color: var(--text-color);
 }
 
-.name-group input::placeholder {
-  color: #666;
+.restaurant-form-body {
+  flex: 1 1 auto;
+  padding: 2rem;
+  overflow-y: auto;
 }
 
-.name-group input:focus {
-  outline: none;
-  border-color: var(--text-color);
+.restaurant-form-footer {
+  flex: 0 0 auto;
+  padding: 1rem 2rem;
+  border-top: 1px solid var(--border-color);
 }
 
 form {
@@ -65,30 +66,13 @@ form {
   overflow-y: auto;
   padding-right: 0.5rem;
   margin-bottom: 0;
-}
-
-/* Scrollbar personalizado */
-.form-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.form-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.form-content::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 3px;
-}
-
-.form-content::-webkit-scrollbar-thumb:hover {
-  background: #505050;
+  height: 100%;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  gap: 1.5rem;
   padding-bottom: 1rem;
 }
 
@@ -99,6 +83,7 @@ form {
 }
 
 .form-group label {
+  margin-bottom: 0.5rem;
   color: var(--text-color);
   font-size: 0.9rem;
 }
@@ -134,9 +119,13 @@ form {
   grid-column: span 2;
 }
 
-.zones-group {
-  grid-column: span 1;
-  width: 100%;
+.form-group.description textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.form-group.zones-group {
+  grid-column: span 2;
 }
 
 .zones-container {
@@ -158,11 +147,10 @@ form {
 .zone-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  background-color: color-mix(in srgb, var(--background-common) 85%, white);
-  border-radius: 4px;
+  background-color: var(--background-input);
+  border-radius: 6px;
 }
 
 .zone-item:hover {
@@ -203,31 +191,25 @@ form {
 .add-zone-button {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem;
+  background-color: var(--background-input);
   border: 1px dashed var(--border-color);
-  border-radius: 4px;
-  background: none;
+  border-radius: 6px;
   color: var(--text-color);
   cursor: pointer;
-  transition: all 0.2s;
 }
 
 .add-zone-button:hover {
-  background-color: var(--background-color);
+  background-color: var(--background-hover);
   border-color: var(--primary-color);
   color: var(--primary-color);
 }
 
 .button-group {
   display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0 0rem 0;
-  margin: 0;
-  margin-top: auto;
-  border-top: 1px solid var(--border-color);
-  background-color: var(--background-color);
+  gap: 1rem;
+  justify-content: flex-end;
 }
 
 .button-group button {
@@ -250,14 +232,28 @@ form {
   background-color: var(--danger-color);
 }
 
+/* Scrollbar personalizado */
+.form-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.form-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.form-content::-webkit-scrollbar-thumb:hover {
+  background: #505050;
+}
+
 .error-message {
-  color: #ff6b6b;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  border-radius: 6px;
-  background-color: rgba(255, 107, 107, 0.1);
-  border: 1px solid #ff6b6b;
+  color: var(--danger-color);
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
 }
 
 @media (max-width: 768px) {

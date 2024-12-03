@@ -32,12 +32,14 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-content">
         <div className="footer-section left">
-          <span className="copyright"> 2024 Restaurant Reservations</span>
+          <span className="copyright">2024 Restaurant Reservations</span>
         </div>
         <div className="footer-section middle"></div>
         <div className="footer-section right">
-          <span className="date">{formatDate(currentTime)}</span>
-          <span className="time">{formatTime(currentTime)}</span>
+          <div className="datetime">
+            <span>{formatDate(currentTime)}</span>
+            <span>{formatTime(currentTime)}</span>
+          </div>
         </div>
       </div>
     </footer>

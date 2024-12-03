@@ -4,7 +4,7 @@
   gap: 0.5rem;
   padding: 0.4rem 0.8rem;
   background: transparent;
-  border: 1px solid var(--text-color);
+  border: 0px solid var(--text-color);
   border-radius: 20px;
   color: var(--text-color);
   cursor: pointer;

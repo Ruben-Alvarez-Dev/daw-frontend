@@ -6,7 +6,7 @@
   --background-input-hover: color-mix(in srgb, var(--background-common) 100%, white);
   --text-color: antiquewhite;
   --font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
-  --aside-width: 25vw;
+  --aside-width: 250px;
   --aside-collapsed-width: 80px;
   --transition-speed: 0.3s;
   --navbar-height: 60px;
@@ -28,7 +28,6 @@ body {
   overflow: hidden;
   color: var(--text-color);
   font-family: var(--font-family);
-  background-color: var(--background-common);
 }
 
 .app {
@@ -37,15 +36,16 @@ body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  background-color: var(--background-common);
 }
 
 /* Contenedores principales */
 .aside {
   position: relative;
-  width: var(--sidebar-width);
+  width: var(--aside-width);
   height: calc(100vh - 120px);
   background-color: var(--background-common);
-  border: 1px solid red;
+  border: 0px solid red;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,12 +54,11 @@ body {
 }
 
 .aside.collapsed {
-  width: var(--sidebar-collapsed-width);
+  width: var(--aside-collapsed-width);
 }
 
 .aside.collapsed + .main {
   width: calc(100vw - var(--aside-collapsed-width));
-  --
 }
 
 /* Card styles */

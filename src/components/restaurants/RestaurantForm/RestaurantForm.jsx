@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRestaurants } from '../../../context/RestaurantsContext'
 import Button from '../../common/Button/Button'
 import Modal from '../../common/Modal/Modal'
+import Card from '../../common/Card/Card'
 import './RestaurantForm.css'
 import PropTypes from 'prop-types'
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -21,9 +22,9 @@ const initialFormState = {
   zones: [{ name: 'main' }]
 }
 
-const RestaurantForm = () => {
+const RestaurantForm = ({ activeRestaurant }) => {
   const { 
-    activeRestaurant,
+    activeRestaurant: activeRestaurantContext,
     restaurants,
     createRestaurant,
     updateRestaurant,
@@ -37,19 +38,19 @@ const RestaurantForm = () => {
 
   // Efecto para manejar el restaurante activo
   useEffect(() => {
-    if (activeRestaurant) {
-      setFormData(activeRestaurant)
+    if (activeRestaurantContext) {
+      setFormData(activeRestaurantContext)
     } else {
       setFormData(initialFormState)
     }
-  }, [activeRestaurant])
+  }, [activeRestaurantContext])
 
   // Efecto para limpiar el formulario cuando la lista de restaurantes cambie
   useEffect(() => {
-    if (!activeRestaurant) {
+    if (!activeRestaurantContext) {
       setFormData(initialFormState)
     }
-  }, [restaurants, activeRestaurant])
+  }, [restaurants, activeRestaurantContext])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -62,8 +63,8 @@ const RestaurantForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      if (activeRestaurant) {
-        await updateRestaurant(activeRestaurant.id, formData)
+      if (activeRestaurantContext) {
+        await updateRestaurant(activeRestaurantContext.id, formData)
       } else {
         await createRestaurant(formData)
       }
@@ -81,7 +82,7 @@ const RestaurantForm = () => {
   const handleDelete = async () => {
     try {
       setIsDeleteModalOpen(false) // Cerramos el modal primero
-      await deleteRestaurant(activeRestaurant.id)
+      await deleteRestaurant(activeRestaurantContext.id)
       // El formulario se limpiará automáticamente cuando el contexto actualice activeRestaurant
     } catch (error) {
       console.error('Error:', error)
@@ -131,225 +132,236 @@ const RestaurantForm = () => {
     setFormData(prev => ({ ...prev, zones: newZones }))
   }
 
-  return (
+  const titleContent = (
     <>
-      <div className="card restaurant-form">
-        <div className="form-header">
-          <h2>Gestionar Restaurante</h2>
-          <div className="name-group">
-            <label htmlFor="name">Nombre:</label>
+      <h2>Gestionar Restaurante</h2>
+      <div className="title-separator"></div>
+      <div className="name-container">
+        <label>Nombre:</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+      </div>
+    </>
+  )
+
+  const bodyContent = (
+    <form onSubmit={handleSubmit}>
+      <div className="form-content">
+        <div className="form-grid">
+          <div className="form-group">
+            <label htmlFor="cuisine">Tipo de cocina:</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="cuisine"
+              name="cuisine"
+              value={formData.cuisine}
               onChange={handleChange}
               required
             />
           </div>
-        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-content">
-            <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="cuisine">Tipo de cocina:</label>
-                <input
-                  type="text"
-                  id="cuisine"
-                  name="cuisine"
-                  value={formData.cuisine}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="email">Email:</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label htmlFor="phone">Teléfono:</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="phone">Teléfono:</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label htmlFor="city">Ciudad:</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="city">Ciudad:</label>
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label htmlFor="address">Dirección:</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="address">Dirección:</label>
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label htmlFor="cif">CIF:</label>
+            <input
+              type="text"
+              id="cif"
+              name="cif"
+              value={formData.cif}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="cif">CIF:</label>
-                <input
-                  type="text"
-                  id="cif"
-                  name="cif"
-                  value={formData.cif}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label htmlFor="openingTime">Hora de apertura:</label>
+            <input
+              type="time"
+              id="openingTime"
+              name="openingTime"
+              value={formData.openingTime}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="openingTime">Hora de apertura:</label>
-                <input
-                  type="time"
-                  id="openingTime"
-                  name="openingTime"
-                  value={formData.openingTime}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label htmlFor="closingTime">Hora de cierre:</label>
+            <input
+              type="time"
+              id="closingTime"
+              name="closingTime"
+              value={formData.closingTime}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="closingTime">Hora de cierre:</label>
-                <input
-                  type="time"
-                  id="closingTime"
-                  name="closingTime"
-                  value={formData.closingTime}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label htmlFor="status">Estado:</label>
+            <select
+              id="status"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              required
+            >
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
+              <option value="maintenance">En mantenimiento</option>
+            </select>
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="status">Estado:</label>
-                <select
-                  id="status"
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="active">Activo</option>
-                  <option value="inactive">Inactivo</option>
-                  <option value="maintenance">En mantenimiento</option>
-                </select>
-              </div>
+          <div className="form-group description">
+            <label htmlFor="description">Descripción:</label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-              <div className="form-group description">
-                <label htmlFor="description">Descripción:</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group zones-group">
-                <label>Zonas:</label>
-                <div className="zones-container">
-                  <div className="zones-list">
-                    {formData.zones.map((zone, index) => (
-                      <div key={index} className="zone-item">
-                        {zone.editing ? (
-                          <input
-                            type="text"
-                            value={zone.name}
-                            onChange={(e) => handleZoneChange(index, e.target.value)}
-                            onBlur={() => handleZoneBlur(index)}
-                            autoFocus
-                          />
-                        ) : (
-                          <span>{zone.name}</span>
-                        )}
-                        <div className="zone-actions">
-                          <button
-                            type="button"
-                            className="icon-button"
-                            onClick={() => handleEditZone(index)}
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            type="button"
-                            className="icon-button"
-                            onClick={() => handleDeleteZone(index)}
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
+          <div className="form-group zones-group">
+            <label>Zonas:</label>
+            <div className="zones-container">
+              <div className="zones-list">
+                {formData.zones.map((zone, index) => (
+                  <div key={index} className="zone-item">
+                    {zone.editing ? (
+                      <input
+                        type="text"
+                        value={zone.name}
+                        onChange={(e) => handleZoneChange(index, e.target.value)}
+                        onBlur={() => handleZoneBlur(index)}
+                        autoFocus
+                      />
+                    ) : (
+                      <span>{zone.name}</span>
+                    )}
+                    <div className="zone-actions">
+                      <button
+                        type="button"
+                        className="icon-button"
+                        onClick={() => handleEditZone(index)}
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        type="button"
+                        className="icon-button"
+                        onClick={() => handleDeleteZone(index)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    type="button"
-                    className="add-zone-button"
-                    onClick={handleAddZone}
-                  >
-                    <FaPlus /> Añadir zona
-                  </button>
-                </div>
+                ))}
               </div>
+              <button
+                type="button"
+                className="add-zone-button"
+                onClick={handleAddZone}
+              >
+                <FaPlus /> Añadir zona
+              </button>
             </div>
           </div>
+        </div>
+      </div>
+    </form>
+  )
 
-          <div className="button-group">
-            <Button type="submit" variant="success">
-              {activeRestaurant ? 'Actualizar' : 'Crear'}
-            </Button>
-            <Button type="button" variant="primary" onClick={handleClear}>
-              Limpiar
-            </Button>
-            <Button 
-              type="button" 
-              variant="danger" 
-              onClick={() => setIsDeleteModalOpen(true)}
-              isEnabled={!!activeRestaurant}
-            >
-              Eliminar
-            </Button>
-          </div>
-        </form>
+  const footerContent = (
+    <>
+      <div className="button-group">
+        <Button type="submit" variant="success" onClick={handleSubmit}>
+          {activeRestaurantContext ? 'Actualizar' : 'Crear'}
+        </Button>
+        <Button type="button" variant="primary" onClick={handleClear}>
+          Limpiar
+        </Button>
+        <Button 
+          type="button" 
+          variant="danger" 
+          onClick={() => setIsDeleteModalOpen(true)}
+          isEnabled={!!activeRestaurantContext}
+        >
+          Eliminar
+        </Button>
       </div>
 
       <Modal
+        title="Confirmar eliminación"
         show={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Confirmar eliminación"
         onConfirm={handleDelete}
       >
         <p>¿Estás seguro de que deseas eliminar este restaurante?</p>
       </Modal>
     </>
+  )
+
+  return (
+    <Card
+      className="restaurant-form"
+      title={titleContent}
+      body={bodyContent}
+      footer={footerContent}
+    />
   )
 }
 
