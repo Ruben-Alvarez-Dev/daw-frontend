@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { useRestaurants } from '../../../context/RestaurantsContext'
+import Card from '../../common/Card/Card'
 import './RestaurantList.css'
 
 const RestaurantList = () => {
@@ -21,26 +21,23 @@ const RestaurantList = () => {
   })
 
   if (loading) {
-    return <div className="card">Cargando restaurantes...</div>
+    return <Card 
+      header={<h2>Restaurantes</h2>}
+      body={<div>Cargando restaurantes...</div>}
+    />
   }
 
-  return (
-    <div className="card restaurant-list">
-      <div className="header-section">
-        <h2>Restaurantes Disponibles</h2>
-        {activeRestaurant ? (
-          <div className="active-restaurant">
-            <span>Restaurante activo:</span>
-            <strong>{activeRestaurant.name}</strong>
-          </div>
-        ) : (
-          <div className="active-restaurant">
-            <span>No hay un restaurante activo</span>
-          </div>
-        )}
+  const header = (
+    <>
+      <div className='title'>Lista de Restaurantes</div>
+      <div className="subtitle">
+        {activeRestaurant ? `Restaurante activo: ${activeRestaurant.name}` : 'No hay restaurante activo'}
       </div>
+    </>
+  )
 
-      <div className="search-section">
+  const body = (
+    <>
         <input
           type="text"
           placeholder="Buscar por nombre, cocina o dirección..."
@@ -48,37 +45,33 @@ const RestaurantList = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
         />
-      </div>
 
-      <div className="list-section">
-        <ul className="list">
-          {filteredRestaurants.map((restaurant) => (
-            <li
-              key={restaurant.id}
-              className={`list-item ${activeRestaurant?.id === restaurant.id ? 'active' : ''}`}
-              onClick={() => selectRestaurant(restaurant)}
-            >
-              <div className="restaurant-info">
-                <h3>{restaurant.name}</h3>
-                <p>{restaurant.cuisine} - {restaurant.address}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+      <ul className="list">
+        {filteredRestaurants.map((restaurant) => (
+          <li
+            key={restaurant.id}
+            className={`list-item ${activeRestaurant?.id === restaurant.id ? 'active' : ''}`}
+            onClick={() => selectRestaurant(restaurant)}
+          >
+            <div className="restaurant-info">
+              <h3>{restaurant.name}</h3>
+              <p className="restaurant-details">
+                <span className="cuisine">{restaurant.cuisine}</span>
+                <span className="address">{restaurant.address}</span>
+              </p>
+              {restaurant.rating && (
+                <div className="rating">
+                  <span>⭐ {restaurant.rating}</span>
+                </div>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
   )
-}
 
-RestaurantList.propTypes = {
-  // activeRestaurant: PropTypes.shape({
-  //   id: PropTypes.string,
-  //   name: PropTypes.string,
-  //   cuisine: PropTypes.string,
-  //   address: PropTypes.string
-  // }),
-  // onRestaurantSelect: PropTypes.func.isRequired,
-  // updateTrigger: PropTypes.number // Nuevo prop para forzar actualizaciones
+  return <Card header={header} body={body} />
 }
 
 export default RestaurantList
