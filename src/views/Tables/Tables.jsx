@@ -1,9 +1,7 @@
 const Tables = () => {
   return (
-    <div className="tables-view">
-      <h1>Tables</h1>
-    </div>
-  )
-}
+    <h3>Mesas</h3>
+  );
+};
 
-export default Tables
+export default Tables;

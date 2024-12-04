@@ -1,11 +1,7 @@
-import './Dashboard.css'
-
 const Dashboard = () => {
   return (
-    <div className="dashboard-view">
-      <h1>Dashboard</h1>
-    </div>
-  )
-}
+    <h3>Dashboard</h3>
+  );
+};
 
-export default Dashboard
+export default Dashboard;

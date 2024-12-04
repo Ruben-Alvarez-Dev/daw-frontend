@@ -48,12 +48,14 @@ const Aside = ({ isCollapsed, onToggle }) => {
           </button>
           <button
             className="menu-item"
+            onClick={() => handleNavigation('/reservations')}
           >
             <MdEventAvailable className="menu-icon" />
             <span className="menu-text">Reservas</span>
           </button>
           <button
             className="menu-item"
+            onClick={() => handleNavigation('/statistics')}
           >
             <MdQueryStats className="menu-icon" />
             <span className="menu-text">Estadísticas</span>
@@ -63,6 +65,7 @@ const Aside = ({ isCollapsed, onToggle }) => {
         <div className="aside-section down">
           <button
             className="menu-item"
+            onClick={() => handleNavigation('/settings')}
           >
             <MdSettings className="menu-icon" />
             <span className="menu-text">Configuración</span>
