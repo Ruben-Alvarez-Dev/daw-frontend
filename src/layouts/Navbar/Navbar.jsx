@@ -1,9 +1,9 @@
 import './Navbar.css'
-import Button from '../../common/Button/Button'
-import LanguageSelector from '../../common/LanguageSelector/LanguageSelector'
-import ThemeToggle from '../../common/ThemeToggle/ThemeToggle'
-import { useAlert } from '../../../context/AlertContext'
-import { useRestaurants } from '../../../context/RestaurantsContext'
+import Button from '../../components/common/Button/Button'
+import LanguageSelector from '../../components/common/LanguageSelector/LanguageSelector'
+import ThemeToggle from '../../components/common/ThemeToggle/ThemeToggle'
+import { useAlert } from '../../context/AlertContext'
+import { useRestaurants } from '../../context/RestaurantsContext'
 
 const Navbar = () => {
   const alert = useAlert()
