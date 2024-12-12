@@ -1,40 +1,10 @@
-:root {
-  --background-common: rgb(40, 40, 40);
-  --background-main: color-mix(in srgb, var(--background-common) 60%, white);
-  --background-hover: color-mix(in srgb, var(--background-common) 80%, white);
-  --background-input: color-mix(in srgb, var(--background-common) 90%, white);
-  --background-input-hover: color-mix(in srgb, var(--background-common) 100%, white);
-  --text-color: antiquewhite;
-  --font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
-  --aside-width: 250px;
-  --aside-collapsed-width: 80px;
-  --transition-speed: 0.3s;
-  --navbar-height: 60px;
-  --footer-height: 60px;
-  --background-secondary: rgb(40, 40, 40);
-  --border-color: #444;
-}
-
-/* Estilos base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  color: var(--text-color);
-  font-family: var(--font-family);
-}
-
 .app {
+  min-height: 100vh;
   display: flex;
-  flex-wrap: wrap;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  background-color: var(--background-common);
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
 }
