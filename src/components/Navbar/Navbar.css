@@ -22,32 +22,26 @@
   font-weight: bold;
 }
 
-.nav-menu {
+.navbar-links {
   display: flex;
-  align-items: center;
+  flex-direction: row;
   list-style: none;
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
 
-.nav-item {
-  margin-left: 20px;
+.navbar-links li {
+  margin-right: 1rem;
 }
 
-.nav-links {
-  display: flex;
-  gap: 1rem;
-}
-
-.nav-link {
+.navbar-links a {
   color: white;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  font-size: 1rem;
 }
 
-.nav-link:hover {
-  background-color: #444;
+.navbar-links a:hover {
+  text-decoration: underline;
 }
 
 .nav-icon {

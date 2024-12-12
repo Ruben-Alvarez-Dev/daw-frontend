@@ -1,27 +1,28 @@
 import { Link } from 'react-router-dom'
-import { FaHome, FaInfo } from 'react-icons/fa'
+import { FaHome, FaInfo, FaList } from 'react-icons/fa'
 import './Navbar.css'
 
 const Navbar = () => {
   return (
     <nav className="navbar">
-      <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
-          Mi App
-        </Link>
-        <ul className="nav-menu">
-          <li className="nav-item">
-            <Link to="/" className="nav-links">
-              <FaHome className="nav-icon" /> Inicio
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/about" className="nav-links">
-              <FaInfo className="nav-icon" /> Sobre Nosotros
-            </Link>
-          </li>
-        </ul>
-      </div>
+      <h1 className="navbar-title">Mi App</h1>
+      <ul className="navbar-links">
+        <li>
+          <Link to="/" className="nav-links">
+            <FaHome className="nav-icon" /> Inicio
+          </Link>
+        </li>
+        <li>
+          <Link to="/lists" className="nav-links">
+            <FaList className="nav-icon" /> Listas
+          </Link>
+        </li>
+        <li>
+          <Link to="/about" className="nav-links">
+            <FaInfo className="nav-icon" /> Sobre Nosotros
+          </Link>
+        </li>
+      </ul>
     </nav>
   )
 }

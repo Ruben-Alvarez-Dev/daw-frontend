@@ -1,0 +1,21 @@
+/* Lists Component Styles */
+
+.lists-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  height: calc(100vh - 3rem);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.lists-item {
+  flex: 1 1 33%;
+  max-width: 33%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
