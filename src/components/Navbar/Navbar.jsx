@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FaHome, FaInfo, FaList } from 'react-icons/fa'
+import { FaHome, FaInfo, FaList, FaWpforms } from 'react-icons/fa'
 import './Navbar.css'
 
 const Navbar = () => {
@@ -15,6 +15,11 @@ const Navbar = () => {
         <li>
           <Link to="/lists" className="nav-links">
             <FaList className="nav-icon" /> Listas
+          </Link>
+        </li>
+        <li>
+          <Link to="/forms" className="nav-links">
+            <FaWpforms className="nav-icon" /> Formularios
           </Link>
         </li>
         <li>
