@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useSelectedItem } from '../../context/SelectedItemContext'
 import './RestaurantsList.css'
 import '../../pages/Lists.css'
 
 const RestaurantsList = () => {
   const [restaurants, setRestaurants] = useState([])
-  const [selectedRestaurant, setSelectedRestaurant] = useState(null)
+  const { selectItem } = useSelectedItem()
 
   useEffect(() => {
     fetch('http://localhost:3000/restaurants')
@@ -14,7 +15,7 @@ const RestaurantsList = () => {
   }, [])
 
   const handleRestaurantClick = (restaurant) => {
-    setSelectedRestaurant(selectedRestaurant?.id === restaurant.id ? null : restaurant)
+    selectItem('restaurant', restaurant)
   }
 
   return (
@@ -24,7 +25,7 @@ const RestaurantsList = () => {
         {restaurants.map(restaurant => (
           <div
             key={restaurant.id}
-            className={`list-item ${selectedRestaurant?.id === restaurant.id ? 'selected' : ''}`}
+            className="list-item"
             onClick={() => handleRestaurantClick(restaurant)}
           >
             <h3>{restaurant.name}</h3>

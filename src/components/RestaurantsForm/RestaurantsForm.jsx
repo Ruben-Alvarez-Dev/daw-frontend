@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelectedItem } from '../../context/SelectedItemContext'
 import './RestaurantsForm.css'
 
 const RestaurantsForm = () => {
+  const { selectedItem } = useSelectedItem()
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -10,6 +12,19 @@ const RestaurantsForm = () => {
     openingTime: '',
     closingTime: ''
   })
+
+  useEffect(() => {
+    if (selectedItem.type === 'restaurant' && selectedItem.item) {
+      setFormData({
+        name: selectedItem.item.name || '',
+        address: selectedItem.item.address || '',
+        phone: selectedItem.item.phone || '',
+        capacity: selectedItem.item.capacity || '',
+        openingTime: selectedItem.item.openingTime || '',
+        closingTime: selectedItem.item.closingTime || ''
+      })
+    }
+  }, [selectedItem])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -103,7 +118,7 @@ const RestaurantsForm = () => {
         </div>
         
         <button type="submit" className="submit-button">
-          Submit
+          {selectedItem.item ? 'Update Restaurant' : 'Create Restaurant'}
         </button>
       </form>
     </div>

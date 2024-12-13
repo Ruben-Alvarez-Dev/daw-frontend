@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelectedItem } from '../../context/SelectedItemContext'
 import './ReservationsForm.css'
 
 const ReservationsForm = () => {
+  const { selectedItem } = useSelectedItem()
   const [formData, setFormData] = useState({
     userId: '',
     tableId: '',
@@ -11,6 +13,20 @@ const ReservationsForm = () => {
     status: 'pending',
     specialRequests: ''
   })
+
+  useEffect(() => {
+    if (selectedItem.type === 'reservation' && selectedItem.item) {
+      setFormData({
+        userId: selectedItem.item.userId || '',
+        tableId: selectedItem.item.tableId || '',
+        date: selectedItem.item.date || '',
+        time: selectedItem.item.time || '',
+        numberOfGuests: selectedItem.item.numberOfGuests || '',
+        status: selectedItem.item.status || 'pending',
+        specialRequests: selectedItem.item.specialRequests || ''
+      })
+    }
+  }, [selectedItem])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -118,7 +134,7 @@ const ReservationsForm = () => {
         </div>
         
         <button type="submit" className="submit-button">
-          Submit
+          {selectedItem.item ? 'Update Reservation' : 'Create Reservation'}
         </button>
       </form>
     </div>

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useSelectedItem } from '../../context/SelectedItemContext'
 import '../../pages/Lists.css'
 
 const TablesList = () => {
   const [tables, setTables] = useState([])
-  const [selectedTable, setSelectedTable] = useState(null)
   const [selectedZone, setSelectedZone] = useState('all')
+  const { selectItem } = useSelectedItem()
 
   useEffect(() => {
     fetch('http://localhost:3000/tables')
@@ -14,7 +15,7 @@ const TablesList = () => {
   }, [])
 
   const handleTableClick = (table) => {
-    setSelectedTable(selectedTable?.id === table.id ? null : table)
+    selectItem('table', table)
   }
 
   const zones = ['all', ...new Set(tables.map(table => table.zone))]
@@ -38,7 +39,7 @@ const TablesList = () => {
         {filteredTables.map(table => (
           <div
             key={table.id}
-            className={`list-item ${selectedTable?.id === table.id ? 'selected' : ''}`}
+            className="list-item"
             onClick={() => handleTableClick(table)}
           >
             <h3>Table #{table.id}</h3>

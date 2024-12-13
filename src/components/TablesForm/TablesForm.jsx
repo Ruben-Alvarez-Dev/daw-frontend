@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelectedItem } from '../../context/SelectedItemContext'
 import './TablesForm.css'
 
 const TablesForm = () => {
+  const { selectedItem } = useSelectedItem()
   const [formData, setFormData] = useState({
     number: '',
     capacity: '',
@@ -9,6 +11,18 @@ const TablesForm = () => {
     status: 'available',
     restaurantId: ''
   })
+
+  useEffect(() => {
+    if (selectedItem.type === 'table' && selectedItem.item) {
+      setFormData({
+        number: selectedItem.item.number || '',
+        capacity: selectedItem.item.capacity || '',
+        location: selectedItem.item.location || '',
+        status: selectedItem.item.status || 'available',
+        restaurantId: selectedItem.item.restaurantId || ''
+      })
+    }
+  }, [selectedItem])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -95,7 +109,7 @@ const TablesForm = () => {
         </div>
         
         <button type="submit" className="submit-button">
-          Submit
+          {selectedItem.item ? 'Update Table' : 'Create Table'}
         </button>
       </form>
     </div>

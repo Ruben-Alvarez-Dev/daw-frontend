@@ -1,13 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelectedItem } from '../../context/SelectedItemContext'
 import './UsersForm.css'
 
 const UsersForm = () => {
+  const { selectedItem } = useSelectedItem()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     role: 'user'
   })
+
+  useEffect(() => {
+    if (selectedItem.type === 'user' && selectedItem.item) {
+      setFormData({
+        name: selectedItem.item.name || '',
+        email: selectedItem.item.email || '',
+        password: '', // No incluimos la contraseña por seguridad
+        role: selectedItem.item.role || 'user'
+      })
+    }
+  }, [selectedItem])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -59,7 +72,8 @@ const UsersForm = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            required
+            required={!selectedItem.item} // Solo requerido para nuevos usuarios
+            placeholder={selectedItem.item ? '(unchanged)' : ''}
           />
         </div>
         
@@ -77,7 +91,7 @@ const UsersForm = () => {
         </div>
         
         <button type="submit" className="submit-button">
-          Submit
+          {selectedItem.item ? 'Update User' : 'Create User'}
         </button>
       </form>
     </div>

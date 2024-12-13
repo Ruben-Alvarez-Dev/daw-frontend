@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useSelectedItem } from '../../context/SelectedItemContext'
 import '../../pages/Lists.css'
 
 const ReservationsList = () => {
   const [reservations, setReservations] = useState([])
-  const [selectedReservation, setSelectedReservation] = useState(null)
+  const { selectItem } = useSelectedItem()
 
   useEffect(() => {
     fetch('http://localhost:3000/reservations')
@@ -13,7 +14,7 @@ const ReservationsList = () => {
   }, [])
 
   const handleReservationClick = (reservation) => {
-    setSelectedReservation(selectedReservation?.id === reservation.id ? null : reservation)
+    selectItem('reservation', reservation)
   }
 
   return (
@@ -23,7 +24,7 @@ const ReservationsList = () => {
         {reservations.map(reservation => (
           <div
             key={reservation.id}
-            className={`list-item ${selectedReservation?.id === reservation.id ? 'selected' : ''}`}
+            className="list-item"
             onClick={() => handleReservationClick(reservation)}
           >
             <h3>Reservation #{reservation.id}</h3>

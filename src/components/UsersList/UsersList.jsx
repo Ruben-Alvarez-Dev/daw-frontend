@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useSelectedItem } from '../../context/SelectedItemContext'
 import '../../pages/Lists.css'
 
 const UsersList = () => {
   const [users, setUsers] = useState([])
-  const [selectedUser, setSelectedUser] = useState(null)
+  const { selectItem } = useSelectedItem()
 
   useEffect(() => {
     fetch('http://localhost:3000/users')
@@ -13,7 +14,7 @@ const UsersList = () => {
   }, [])
 
   const handleUserClick = (user) => {
-    setSelectedUser(selectedUser?.id === user.id ? null : user)
+    selectItem('user', user)
   }
 
   return (
@@ -23,7 +24,7 @@ const UsersList = () => {
         {users.map(user => (
           <div
             key={user.id}
-            className={`list-item ${selectedUser?.id === user.id ? 'selected' : ''}`}
+            className="list-item"
             onClick={() => handleUserClick(user)}
           >
             <h3>{user.name}</h3>
