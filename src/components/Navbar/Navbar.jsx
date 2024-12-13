@@ -1,28 +1,44 @@
 import { Link } from 'react-router-dom'
-import { FaHome, FaInfo, FaList, FaWpforms } from 'react-icons/fa'
+import { FaHome, FaInfo, FaList, FaWpforms, FaTimes } from 'react-icons/fa'
 import './Navbar.css'
 import { useSelectedItem } from '../../context/SelectedItemContext'
 
 const Navbar = () => {
-  const { selectedItems } = useSelectedItem()
+  const { selectedItems, clearSelection } = useSelectedItem()
 
   const getSelectedItemsLabels = () => {
     const labels = []
     
     if (selectedItems.user) {
-      labels.push(`Usuario: ${selectedItems.user.user_id}`)
+      labels.push({
+        type: 'user',
+        text: `Usuario: ${selectedItems.user.user_id}`
+      })
     }
     if (selectedItems.restaurant) {
-      labels.push(`Restaurante: ${selectedItems.restaurant.restaurant_id}`)
+      labels.push({
+        type: 'restaurant',
+        text: `Restaurante: ${selectedItems.restaurant.restaurant_id}`
+      })
     }
     if (selectedItems.table) {
-      labels.push(`Mesa: ${selectedItems.table.table_id}`)
+      labels.push({
+        type: 'table',
+        text: `Mesa: ${selectedItems.table.table_id}`
+      })
     }
     if (selectedItems.reservation) {
-      labels.push(`Reserva: ${selectedItems.reservation.reservation_id}`)
+      labels.push({
+        type: 'reservation',
+        text: `Reserva: ${selectedItems.reservation.reservation_id}`
+      })
     }
     
     return labels
+  }
+
+  const handleClearItem = (type) => {
+    clearSelection(type)
   }
 
   return (
@@ -32,7 +48,14 @@ const Navbar = () => {
         <div className="selected-items-labels">
           {getSelectedItemsLabels().map((label, index) => (
             <span key={index} className="selected-item-label">
-              {label}
+              {label.text}
+              <button 
+                className="clear-label-button"
+                onClick={() => handleClearItem(label.type)}
+                aria-label={`Eliminar ${label.text}`}
+              >
+                <FaTimes />
+              </button>
             </span>
           ))}
         </div>

@@ -11,26 +11,22 @@ export const SelectedItemProvider = ({ children }) => {
   })
 
   const selectItem = (type, item) => {
-    setSelectedItems(prev => ({
-      ...prev,
-      [type]: item
-    }))
+    console.log(`[Context] Selecting ${type}:`, item)
+    setSelectedItems(prev => {
+      const newState = {
+        ...prev,
+        [type]: item
+      }
+      console.log('[Context] New state:', newState)
+      return newState
+    })
   }
 
   const clearSelection = (type) => {
-    if (type) {
-      setSelectedItems(prev => ({
-        ...prev,
-        [type]: null
-      }))
-    } else {
-      setSelectedItems({
-        user: null,
-        restaurant: null,
-        table: null,
-        reservation: null
-      })
-    }
+    setSelectedItems(prev => ({
+      ...prev,
+      [type]: null
+    }))
   }
 
   return (
@@ -47,3 +43,5 @@ export const useSelectedItem = () => {
   }
   return context
 }
+
+export default SelectedItemProvider

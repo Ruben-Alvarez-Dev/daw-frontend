@@ -1,35 +1,42 @@
 .forms-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  height: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
+  padding: 1rem;
+  background-color: #1a1f2e;
+  height: calc(100vh - 64px); /* Altura total menos el header */
+  overflow: hidden;
 }
 
 .forms-item {
-  flex: 1;
-  min-width: 300px;
-  height: 100%;
   background-color: #1f2937;
+  padding: 1.5rem;
   border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+  height: 100%;
   overflow-y: auto;
 }
 
-/* Estilos comunes para todos los componentes de formulario */
+.forms-item h2 {
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #374151;
+  color: white;
+}
+
 .form-group {
-  margin-bottom: 1rem;
+  background-color: #283548;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #374151;
 }
 
 .form-group label {
   display: block;
-  color: white;
+  color: #9ca3af;
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
 }
@@ -39,11 +46,17 @@
 .form-group textarea {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #374151;
   border-radius: 0.375rem;
-  background-color: #374151;
+  border: 1px solid #374151;
+  background-color: #1f2937;
   color: white;
-  font-size: 0.875rem;
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background-color: #1a1f2e;
+  cursor: not-allowed;
 }
 
 .form-group input:focus,
@@ -54,44 +67,52 @@
   box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
 }
 
-.submit-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #60a5fa;
-  color: white;
-  border: none;
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: flex-end;
+  padding: 1rem;
+  background-color: #283548;
   border-radius: 0.375rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: auto;
 }
 
-.submit-button:hover {
+.form-actions button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #374151;
+  color: white;
+  border: none;
+}
+
+.form-actions button[type="button"] {
+  background-color: #4b5563;
+}
+
+.form-actions button[type="submit"] {
   background-color: #3b82f6;
 }
 
-.submit-button:disabled {
-  background-color: #4b5563;
-  cursor: not-allowed;
+.form-actions button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
-/* Título del formulario */
-h2 {
-  color: white;
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
+.form-actions button:active {
+  transform: translateY(0);
 }
 
-/* Responsive */
+@media (max-width: 1400px) {
+  .forms-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .forms-container {
-    flex-direction: column;
-  }
-  
-  .forms-item {
-    width: 100%;
-    height: auto;
-    min-height: 400px;
+    grid-template-columns: 1fr;
   }
 }

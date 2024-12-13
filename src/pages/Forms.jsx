@@ -7,18 +7,10 @@ import ReservationsForm from '../components/ReservationsForm/ReservationsForm'
 const Forms = () => {
   return (
     <div className="forms-container">
-      <div className="forms-item">
-        <UsersForm />
-      </div>
-      <div className="forms-item">
-        <RestaurantsForm />
-      </div>
-      <div className="forms-item">
-        <TablesForm />
-      </div>
-      <div className="forms-item">
-        <ReservationsForm />
-      </div>
+      <UsersForm />
+      <RestaurantsForm />
+      <TablesForm />
+      <ReservationsForm />
     </div>
   )
 }
