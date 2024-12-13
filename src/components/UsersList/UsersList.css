@@ -1,55 +1,74 @@
 /* UsersList Component Styles */
 
-.users-list-container {
-  background-color: #1f2937; /* bg-gray-900 */
-  border: 1px solid #374151; /* border-gray-700 */
-  border-radius: 0.5rem; /* rounded-lg */
-  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15); /* Increased shadow */
-  padding: 1rem; /* p-4 */
+.users-list {
+  background-color: #1f2937;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   height: 100%;
+  border: 1px solid #374151; /* border-gray-700 */
+}
+
+.users-list h2 {
+  color: white;
+  margin-bottom: 1rem;
+  font-size: 1.25rem; /* text-xl */
+  font-weight: bold;
 }
 
 .users-list-content {
+  flex: 1;
   overflow-y: auto;
-  flex-grow: 1;
+  color: white;
 }
 
-.users-list-title {
-  font-size: 1.25rem; /* text-xl */
-  font-weight: bold;
-  margin-bottom: 1rem; /* mb-4 */
-  color: #ffffff; /* text-white */
-}
-
-.user-card {
-  padding: 0.75rem; /* p-3 */
-  background-color: #374151; /* bg-gray-800 */
-  border-radius: 0.375rem; /* rounded-md */
-  transition: background-color 0.3s;
+.user-item {
+  background-color: #374151;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
   border: 1px solid #4b5563; /* border-gray-600 */
 }
 
-.user-card:hover {
-  background-color: #4b5563; /* hover:bg-gray-700 */
+.user-item:hover {
+  background-color: #4b5563;
+  transform: translateY(-1px);
 }
 
-.user-name {
-  font-weight: bold;
+.user-item:active {
+  transform: translateY(0);
+}
+
+.user-item.selected {
+  background-color: #4b5563;
+}
+
+.user-item h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
   color: #ffffff; /* text-white */
 }
 
-.user-info {
-  font-size: 0.875rem; /* text-sm */
+.user-item p {
+  font-size: 0.875rem;
   color: #d1d5db; /* text-gray-300 */
+  margin: 0.25rem 0;
+  line-height: 1.25;
 }
 
 .user-role {
   display: inline-block;
   padding: 0.25rem 0.5rem;
-  font-size: 0.75rem; /* text-xs */
-  border-radius: 9999px; /* rounded-full */
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  background-color: #4b5563;
+  color: white;
+  margin-top: 0.5rem;
 }
 
 .user-role.admin {

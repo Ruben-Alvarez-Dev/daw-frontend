@@ -1,7 +1,8 @@
+import './Lists.css'
 import UsersList from '../components/UsersList/UsersList'
 import RestaurantsList from '../components/RestaurantsList/RestaurantsList'
 import TablesList from '../components/TablesList/TablesList'
-import './Lists.css'
+import ReservationsList from '../components/ReservationsList/ReservationsList'
 
 const Lists = () => {
   return (
@@ -14,6 +15,9 @@ const Lists = () => {
       </div>
       <div className="lists-item">
         <TablesList />
+      </div>
+      <div className="lists-item">
+        <ReservationsList />
       </div>
     </div>
   )

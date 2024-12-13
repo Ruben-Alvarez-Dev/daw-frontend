@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import './UsersList.css'
+import '../../pages/Lists.css'
 
 const UsersList = () => {
   const [users, setUsers] = useState([])
+  const [selectedUser, setSelectedUser] = useState(null)
 
   useEffect(() => {
     fetch('http://localhost:3000/users')
@@ -11,15 +12,23 @@ const UsersList = () => {
       .catch(error => console.error('Error fetching users:', error))
   }, [])
 
+  const handleUserClick = (user) => {
+    setSelectedUser(selectedUser?.id === user.id ? null : user)
+  }
+
   return (
-    <div className="users-list-container">
-      <h2 className="users-list-title">Users</h2>
-      <div className="space-y-3">
+    <div className="lists-item">
+      <h2 className="list-title">Users</h2>
+      <div className="list-content">
         {users.map(user => (
-          <div key={user.id} className="user-card">
-            <h3 className="user-name">{user.name}</h3>
-            <p className="user-info">Email: {user.email}</p>
-            <p className="user-info">Phone: {user.phone}</p>
+          <div
+            key={user.id}
+            className={`list-item ${selectedUser?.id === user.id ? 'selected' : ''}`}
+            onClick={() => handleUserClick(user)}
+          >
+            <h3>{user.name}</h3>
+            <p>Email: {user.email}</p>
+            <p>Phone: {user.phone}</p>
             <span className={`user-role ${user.role}`}>{user.role}</span>
           </div>
         ))}

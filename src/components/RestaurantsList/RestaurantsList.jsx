@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import './RestaurantsList.css'
+import '../../pages/Lists.css'
 
 const RestaurantsList = () => {
   const [restaurants, setRestaurants] = useState([])
+  const [selectedRestaurant, setSelectedRestaurant] = useState(null)
 
   useEffect(() => {
     fetch('http://localhost:3000/restaurants')
@@ -11,15 +13,24 @@ const RestaurantsList = () => {
       .catch(error => console.error('Error fetching restaurants:', error))
   }, [])
 
+  const handleRestaurantClick = (restaurant) => {
+    setSelectedRestaurant(selectedRestaurant?.id === restaurant.id ? null : restaurant)
+  }
+
   return (
-    <div className="restaurants-list-container">
-      <h2 className="restaurants-list-title">Restaurants</h2>
-      <div className="space-y-3">
+    <div className="lists-item">
+      <h2 className="list-title">Restaurants</h2>
+      <div className="list-content">
         {restaurants.map(restaurant => (
-          <div key={restaurant.id} className="restaurant-card">
-            <h3 className="restaurant-name">{restaurant.name}</h3>
-            <p className="restaurant-info">Address: {restaurant.address}</p>
-            <p className="restaurant-info">Phone: {restaurant.phone}</p>
+          <div
+            key={restaurant.id}
+            className={`list-item ${selectedRestaurant?.id === restaurant.id ? 'selected' : ''}`}
+            onClick={() => handleRestaurantClick(restaurant)}
+          >
+            <h3>{restaurant.name}</h3>
+            <p>Address: {restaurant.address}</p>
+            <p>Phone: {restaurant.phone}</p>
+            <p>Cuisine: {restaurant.cuisine}</p>
           </div>
         ))}
       </div>

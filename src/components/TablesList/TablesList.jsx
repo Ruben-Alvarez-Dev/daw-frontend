@@ -1,48 +1,50 @@
 import { useState, useEffect } from 'react'
-import './TablesList.css'
+import '../../pages/Lists.css'
 
 const TablesList = () => {
   const [tables, setTables] = useState([])
-  const [zones, setZones] = useState([])
-  const [activeZone, setActiveZone] = useState('all')
+  const [selectedTable, setSelectedTable] = useState(null)
+  const [selectedZone, setSelectedZone] = useState('all')
 
   useEffect(() => {
     fetch('http://localhost:3000/tables')
       .then(response => response.json())
-      .then(data => {
-        setTables(data)
-        const uniqueZones = [...new Set(data.map(table => table.zone))]
-        setZones(uniqueZones)
-      })
+      .then(data => setTables(data))
       .catch(error => console.error('Error fetching tables:', error))
   }, [])
 
+  const handleTableClick = (table) => {
+    setSelectedTable(selectedTable?.id === table.id ? null : table)
+  }
+
+  const zones = ['all', ...new Set(tables.map(table => table.zone))]
+  const filteredTables = selectedZone === 'all' ? tables : tables.filter(table => table.zone === selectedZone)
+
   return (
-    <div className="tables-list-container">
-      <h2 className="tables-list-title">Tables</h2>
-      <div className="tabs">
-        <button
-          className={`tab-button ${activeZone === 'all' ? 'active' : ''}`}
-          onClick={() => setActiveZone('all')}
-        >
-          All
-        </button>
+    <div className="lists-item">
+      <h2 className="list-title">Tables</h2>
+      <div className="zones-container">
         {zones.map(zone => (
           <button
             key={zone}
-            className={`tab-button ${zone === activeZone ? 'active' : ''}`}
-            onClick={() => setActiveZone(zone)}
+            className={`zone-button ${selectedZone === zone ? 'selected' : ''}`}
+            onClick={() => setSelectedZone(zone)}
           >
-            {zone}
+            {zone.toUpperCase()}
           </button>
         ))}
       </div>
-      <div className="tables-list-content">
-        {tables.filter(table => activeZone === 'all' || table.zone === activeZone).map(table => (
-          <div key={table.id} className="table-card">
-            <h3 className="table-name">{table.name}</h3>
-            <p className="table-info">Seats: {table.seats}</p>
-            <span className="table-zone">Zone: {table.zone}</span>
+      <div className="list-content">
+        {filteredTables.map(table => (
+          <div
+            key={table.id}
+            className={`list-item ${selectedTable?.id === table.id ? 'selected' : ''}`}
+            onClick={() => handleTableClick(table)}
+          >
+            <h3>Table #{table.id}</h3>
+            <p>Zone: {table.zone}</p>
+            <p>Seats: {table.seats}</p>
+            <p>Status: {table.status}</p>
           </div>
         ))}
       </div>
