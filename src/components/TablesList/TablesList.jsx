@@ -15,11 +15,13 @@ const TablesList = () => {
   }, [])
 
   const handleTableClick = (table) => {
-    selectItem('table', table)
+    selectItem('table', {...table})
   }
 
-  const zones = ['all', ...new Set(tables.map(table => table.zone))]
-  const filteredTables = selectedZone === 'all' ? tables : tables.filter(table => table.zone === selectedZone)
+  const zones = ['all', ...new Set(tables.map(table => table.table_zone))]
+  const filteredTables = selectedZone === 'all' 
+    ? tables 
+    : tables.filter(table => table.table_zone === selectedZone)
 
   return (
     <div className="lists-item">
@@ -38,14 +40,18 @@ const TablesList = () => {
       <div className="list-content">
         {filteredTables.map(table => (
           <div
-            key={table.id}
+            key={table.table_id}
             className="list-item"
             onClick={() => handleTableClick(table)}
           >
-            <h3>Table #{table.id}</h3>
-            <p>Zone: {table.zone}</p>
-            <p>Seats: {table.seats}</p>
-            <p>Status: {table.status}</p>
+            <h3>Table #{table.table_id}</h3>
+            <p>table_id: {table.table_id}</p>
+            <p>table_name: {table.table_name}</p>
+            <p>table_restaurant_id: {table.table_restaurant_id}</p>
+            <p>table_zone: {table.table_zone}</p>
+            <p>table_capacity: {table.table_capacity}</p>
+            <p>table_status: {table.table_status}</p>
+            <p>table_position: x={table.table_position.x}, y={table.table_position.y}</p>
           </div>
         ))}
       </div>

@@ -23,16 +23,22 @@ const ReservationsList = () => {
       <div className="list-content">
         {reservations.map(reservation => (
           <div
-            key={reservation.id}
+            key={reservation.reservation_id}
             className="list-item"
             onClick={() => handleReservationClick(reservation)}
           >
-            <h3>Reservation #{reservation.id}</h3>
-            <p>Date: {reservation.date}</p>
-            <p>Time: {reservation.time}</p>
-            <p>Table: {reservation.table}</p>
-            <p>Guests: {reservation.guests}</p>
-            <p>Status: {reservation.status}</p>
+            <h3>Reservation #{reservation.reservation_id}</h3>
+            <p>reservation_id: {reservation.reservation_id}</p>
+            <p>reservation_user_id: {reservation.reservation_user_id}</p>
+            <p>reservation_restaurant_id: {reservation.reservation_restaurant_id}</p>
+            <p>reservation_table_id: {reservation.reservation_table_id}</p>
+            <p>reservation_date: {reservation.reservation_date}</p>
+            <p>reservation_time_slot: {reservation.reservation_time_slot}</p>
+            <p>reservation_num_guests: {reservation.reservation_num_guests}</p>
+            <p>reservation_status: {reservation.reservation_status}</p>
+            <p>reservation_special_requests: {reservation.reservation_special_requests}</p>
+            <p>reservation_created_at: {reservation.reservation_created_at}</p>
+            <p>reservation_updated_at: {reservation.reservation_updated_at}</p>
           </div>
         ))}
       </div>

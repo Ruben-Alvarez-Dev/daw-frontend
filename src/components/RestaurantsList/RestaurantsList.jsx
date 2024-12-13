@@ -24,14 +24,21 @@ const RestaurantsList = () => {
       <div className="list-content">
         {restaurants.map(restaurant => (
           <div
-            key={restaurant.id}
+            key={restaurant.restaurant_id}
             className="list-item"
             onClick={() => handleRestaurantClick(restaurant)}
           >
-            <h3>{restaurant.name}</h3>
-            <p>Address: {restaurant.address}</p>
-            <p>Phone: {restaurant.phone}</p>
-            <p>Cuisine: {restaurant.cuisine}</p>
+            <h3>Restaurant #{restaurant.restaurant_id}</h3>
+            <p>restaurant_id: {restaurant.restaurant_id}</p>
+            <p>restaurant_name: {restaurant.restaurant_name}</p>
+            <p>restaurant_address: {restaurant.restaurant_address}</p>
+            <p>restaurant_phone: {restaurant.restaurant_phone}</p>
+            <p>restaurant_supervisor_id: {restaurant.restaurant_supervisor_id}</p>
+            <p>restaurant_capacity: {restaurant.restaurant_capacity}</p>
+            <p>restaurant_cuisine_type: {restaurant.restaurant_cuisine_type}</p>
+            <p>restaurant_rating: {restaurant.restaurant_rating}</p>
+            <p>restaurant_booking_hours: {JSON.stringify(restaurant.restaurant_booking_hours)}</p>
+            <p>restaurant_zones: {restaurant.restaurant_zones.join(', ')}</p>
           </div>
         ))}
       </div>

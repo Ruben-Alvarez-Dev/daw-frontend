@@ -23,14 +23,16 @@ const UsersList = () => {
       <div className="list-content">
         {users.map(user => (
           <div
-            key={user.id}
+            key={user.user_id}
             className="list-item"
             onClick={() => handleUserClick(user)}
           >
-            <h3>{user.name}</h3>
-            <p>Email: {user.email}</p>
-            <p>Phone: {user.phone}</p>
-            <span className={`user-role ${user.role}`}>{user.role}</span>
+            <h3>User #{user.user_id}</h3>
+            <p>user_id: {user.user_id}</p>
+            <p>user_name: {user.user_name}</p>
+            <p>user_email: {user.user_email}</p>
+            <p>user_phone: {user.user_phone}</p>
+            <p>user_role: {user.user_role}</p>
           </div>
         ))}
       </div>

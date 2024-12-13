@@ -5,19 +5,23 @@ import './UsersForm.css'
 const UsersForm = () => {
   const { selectedItem } = useSelectedItem()
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'user'
+    user_id: '',
+    user_name: '',
+    user_email: '',
+    user_password: '',
+    user_role: 'customer',
+    user_phone: ''
   })
 
   useEffect(() => {
     if (selectedItem.type === 'user' && selectedItem.item) {
       setFormData({
-        name: selectedItem.item.name || '',
-        email: selectedItem.item.email || '',
-        password: '', // No incluimos la contraseña por seguridad
-        role: selectedItem.item.role || 'user'
+        user_id: selectedItem.item.user_id || '',
+        user_name: selectedItem.item.user_name || '',
+        user_email: selectedItem.item.user_email || '',
+        user_password: '', // No incluimos la contraseña por seguridad
+        user_role: selectedItem.item.user_role || 'customer',
+        user_phone: selectedItem.item.user_phone || ''
       })
     }
   }, [selectedItem])
@@ -32,8 +36,26 @@ const UsersForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // TODO: Implement API call to create/update user
-    console.log('Form submitted:', formData)
+    const url = 'http://localhost:3000/users'
+    const method = selectedItem.item ? 'PUT' : 'POST'
+    const path = selectedItem.item ? `${url}/${selectedItem.item.user_id}` : url
+
+    fetch(path, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data)
+      // TODO: Add success notification
+    })
+    .catch((error) => {
+      console.error('Error:', error)
+      // TODO: Add error notification
+    })
   }
 
   return (
@@ -41,53 +63,78 @@ const UsersForm = () => {
       <h2>User Form</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="user_id">user_id:</label>
+          <input
+            type="number"
+            id="user_id"
+            name="user_id"
+            value={formData.user_id || ''}
+            onChange={handleChange}
+            disabled
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="user_name">user_name:</label>
           <input
             type="text"
-            id="name"
-            name="name"
-            value={formData.name}
+            id="user_name"
+            name="user_name"
+            value={formData.user_name}
             onChange={handleChange}
             required
           />
         </div>
         
         <div className="form-group">
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="user_email">user_email:</label>
           <input
             type="email"
-            id="email"
-            name="email"
-            value={formData.email}
+            id="user_email"
+            name="user_email"
+            value={formData.user_email}
             onChange={handleChange}
             required
           />
         </div>
         
         <div className="form-group">
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="user_password">user_password:</label>
           <input
             type="password"
-            id="password"
-            name="password"
-            value={formData.password}
+            id="user_password"
+            name="user_password"
+            value={formData.user_password}
             onChange={handleChange}
-            required={!selectedItem.item} // Solo requerido para nuevos usuarios
+            required={!selectedItem.item}
             placeholder={selectedItem.item ? '(unchanged)' : ''}
           />
         </div>
         
         <div className="form-group">
-          <label htmlFor="role">Role:</label>
+          <label htmlFor="user_role">user_role:</label>
           <select
-            id="role"
-            name="role"
-            value={formData.role}
+            id="user_role"
+            name="user_role"
+            value={formData.user_role}
             onChange={handleChange}
           >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
+            <option value="customer">customer</option>
+            <option value="supervisor">supervisor</option>
+            <option value="admin">admin</option>
           </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="user_phone">user_phone:</label>
+          <input
+            type="tel"
+            id="user_phone"
+            name="user_phone"
+            value={formData.user_phone}
+            onChange={handleChange}
+            required
+          />
         </div>
         
         <button type="submit" className="submit-button">
