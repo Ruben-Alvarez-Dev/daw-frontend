@@ -1,22 +1,22 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 import { SelectedItemProvider } from './context/SelectedItemContext'
-import Navbar from './components/Navbar'
 import AppRoutes from './routes/AppRoutes'
+import LoadingSpinner from './components/common/LoadingSpinner'
 import './App.css'
 
 function App() {
   return (
-    <SelectedItemProvider>
-      <Router>
-        <div className="app">
-          <Navbar />
-          <div className="display">
+    <AuthProvider>
+      <SelectedItemProvider>
+        <Router>
+          <Suspense fallback={<LoadingSpinner />}>
             <AppRoutes />
-          </div>
-        </div>
-      </Router>
-    </SelectedItemProvider>
+          </Suspense>
+        </Router>
+      </SelectedItemProvider>
+    </AuthProvider>
   )
 }
 
