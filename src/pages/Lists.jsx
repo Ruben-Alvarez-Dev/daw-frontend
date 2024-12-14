@@ -1,23 +1,28 @@
+import React from 'react'
+import { Routes, Route, Link } from 'react-router-dom'
+import UserList from '../components/lists/UserList'
+import RestaurantList from '../components/lists/RestaurantList'
+import TableList from '../components/lists/TableList'
+import ReservationList from '../components/lists/ReservationList'
 import './Lists.css'
-import UsersList from '../components/UsersList/UsersList'
-import RestaurantsList from '../components/RestaurantsList/RestaurantsList'
-import TablesList from '../components/TablesList/TablesList'
-import ReservationsList from '../components/ReservationsList/ReservationsList'
 
 const Lists = () => {
   return (
-    <div className="lists-container" style={{ height: 'calc(100vh - 4rem)' }}>
-      <div className="lists-item">
-        <UsersList />
-      </div>
-      <div className="lists-item">
-        <RestaurantsList />
-      </div>
-      <div className="lists-item">
-        <TablesList />
-      </div>
-      <div className="lists-item">
-        <ReservationsList />
+    <div className="lists-page">
+      <nav className="list-nav">
+        <Link to="/lists/users">Users</Link>
+        <Link to="/lists/restaurants">Restaurants</Link>
+        <Link to="/lists/tables">Tables</Link>
+        <Link to="/lists/reservations">Reservations</Link>
+      </nav>
+      <div className="list-content">
+        <Routes>
+          <Route path="/" element={<div>Select a list to view</div>} />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/restaurants" element={<RestaurantList />} />
+          <Route path="/tables" element={<TableList />} />
+          <Route path="/reservations" element={<ReservationList />} />
+        </Routes>
       </div>
     </div>
   )

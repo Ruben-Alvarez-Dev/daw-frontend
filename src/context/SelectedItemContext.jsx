@@ -1,47 +1,20 @@
-import { createContext, useContext, useState } from 'react'
+import React, { createContext, useState, useContext } from 'react'
 
 const SelectedItemContext = createContext()
 
-export const SelectedItemProvider = ({ children }) => {
-  const [selectedItems, setSelectedItems] = useState({
-    user: null,
-    restaurant: null,
-    table: null,
-    reservation: null
+export function SelectedItemProvider({ children }) {
+  const [selectedItem, setSelectedItem] = useState({
+    type: null, // 'user', 'restaurant', 'table', 'reservation'
+    item: null
   })
 
-  const selectItem = (type, item) => {
-    console.log(`[Context] Selecting ${type}:`, item)
-    setSelectedItems(prev => {
-      const newState = {
-        ...prev,
-        [type]: item
-      }
-      console.log('[Context] New state:', newState)
-      return newState
-    })
-  }
-
-  const clearSelection = (type) => {
-    setSelectedItems(prev => ({
-      ...prev,
-      [type]: null
-    }))
-  }
-
   return (
-    <SelectedItemContext.Provider value={{ selectedItems, selectItem, clearSelection }}>
+    <SelectedItemContext.Provider value={{ selectedItem, setSelectedItem }}>
       {children}
     </SelectedItemContext.Provider>
   )
 }
 
-export const useSelectedItem = () => {
-  const context = useContext(SelectedItemContext)
-  if (!context) {
-    throw new Error('useSelectedItem must be used within a SelectedItemProvider')
-  }
-  return context
+export function useSelectedItem() {
+  return useContext(SelectedItemContext)
 }
-
-export default SelectedItemProvider

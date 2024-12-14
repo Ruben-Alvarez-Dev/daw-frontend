@@ -1,0 +1,41 @@
+.page-container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.page-content {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  height: 100%;
+}
+
+.list-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.form-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  
+  .list-section {
+    max-height: 300px;
+  }
+}
