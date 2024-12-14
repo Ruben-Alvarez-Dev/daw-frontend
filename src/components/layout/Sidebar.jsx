@@ -11,7 +11,7 @@ const Sidebar = () => {
         <NavLink to="/app/dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
           Dashboard
         </NavLink>
-        {auth.role === 'Admin' && (
+        {auth?.user?.role === 'admin' && (
           <>
             <NavLink to="/app/users" className={({ isActive }) => isActive ? 'active' : ''}>
               Users

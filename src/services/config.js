@@ -1,11 +1,11 @@
 export const API_CONFIG = {
   development: {
-    baseUrl: 'http://localhost:3000',
-    idField: 'id'  // json-server usa 'id'
+    baseUrl: 'http://localhost:8000/api',
+    idField: 'id'
   },
   production: {
-    baseUrl: '/api',  // Ajustar según tu API real
-    idField: '_id'    // Ajustar según tu API real (ej: MongoDB usa '_id')
+    baseUrl: '/api',
+    idField: 'id'
   }
 }
 
@@ -14,22 +14,34 @@ export const getCurrentConfig = () => {
   return API_CONFIG[env]
 }
 
-// Mapeo de nombres de campos entre json-server y API real
-export const ID_MAPPING = {
+// Mapeo de campos para la API de Laravel
+export const FIELD_MAPPING = {
   users: {
-    jsonServer: 'id',
-    real: 'user_id'
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    password: 'password',
+    role: 'role'
   },
   restaurants: {
-    jsonServer: 'id',
-    real: 'restaurant_id'
+    id: 'id',
+    name: 'name',
+    capacity: 'capacity',
+    zones: 'zones'
   },
   tables: {
-    jsonServer: 'id',
-    real: 'table_id'
+    id: 'id',
+    number: 'number',
+    zone: 'zone',
+    capacity: 'capacity',
+    restaurant_id: 'restaurant_id'
   },
   reservations: {
-    jsonServer: 'id',
-    real: 'reservation_id'
+    id: 'id',
+    guests: 'guests',
+    date: 'date',
+    time: 'time',
+    table_id: 'table_id',
+    user_id: 'user_id'
   }
 }

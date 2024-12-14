@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import './Navbar.css';
 
 const Navbar = () => {
   const { auth, logout, activeItems } = useAuth();
@@ -21,18 +22,9 @@ const Navbar = () => {
           <>
             <div className="navbar-info">
               <span>{auth.user?.email}</span>
-              <span>{auth.role}</span>
+              <span>{auth.user?.role}</span>
               {activeItems.user && (
                 <span className="active-item">User: {activeItems.user.name}</span>
-              )}
-              {activeItems.restaurant && (
-                <span className="active-item">Restaurant: {activeItems.restaurant.name}</span>
-              )}
-              {activeItems.table && (
-                <span className="active-item">Table: {activeItems.table.number}</span>
-              )}
-              {activeItems.reservation && (
-                <span className="active-item">Reservation: {activeItems.reservation.customerName}</span>
               )}
             </div>
             <div className="navbar-actions">

@@ -1,99 +1,116 @@
-import React, { useEffect, useState } from 'react'
-import { useSelectedItem } from '../../context/SelectedItemContext'
-import { api } from '../../services/api'
-import './ListComponent.css'
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../../services/api';
+import './ListComponent.css';
 
 const ListComponent = ({ type }) => {
-  const [items, setItems] = useState([])
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const { selectedItem, setSelectedItem } = useSelectedItem()
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (type) {
-      loadItems()
+      loadItems();
     }
-  }, [type])
+  }, [type]);
 
   const loadItems = async () => {
     try {
-      setLoading(true)
-      setError(null)
-      const data = await api.getList(type)
-      setItems(data)
-    } catch (error) {
-      console.error(`Error fetching ${type}:`, error)
-      setError(`Error al cargar los ${type}: ${error.message}`)
+      setLoading(true);
+      const data = await api.getList(type);
+      setItems(data || []);
+      setError(null);
+    } catch (err) {
+      console.error(`Error fetching ${type}:`, err);
+      setError(`Error al cargar los ${type}`);
+      setItems([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const handleItemClick = (item) => {
-    setSelectedItem({ type, item })
-  }
+  const handleEdit = async (id) => {
+    navigate(`/app/${type}/${id}/edit`);
+  };
 
-  const getDisplayName = (item) => {
-    switch (type) {
-      case 'users':
-        return item.user_name
-      case 'restaurants':
-        return item.restaurant_name
-      case 'tables':
-        return `Mesa ${item.table_number}`
-      case 'reservations':
-        return `Reserva ${item.id} - ${item.user_name}`
-      default:
-        return `${type} ${item.id}`
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este elemento?')) {
+      try {
+        await api.delete(type, id);
+        await loadItems();
+      } catch (err) {
+        console.error('Error deleting item:', err);
+        setError('Error al eliminar el elemento');
+      }
     }
-  }
+  };
+
+  const handleAddNew = () => {
+    navigate(`/app/${type}/new`);
+  };
 
   if (!type) {
-    return <div className="list-component">Tipo de lista no especificado</div>
+    return <div className="list-component">Tipo de lista no especificado</div>;
   }
 
   if (loading) {
-    return <div className="list-component">Cargando...</div>
+    return <div className="list-component">Cargando...</div>;
   }
 
   if (error) {
-    return (
-      <div className="list-component error">
-        <p>{error}</p>
-        <button onClick={loadItems}>Reintentar</button>
-      </div>
-    )
+    return <div className="list-component error-message">{error}</div>;
   }
 
-  const getTitle = () => {
-    const titles = {
-      users: 'Usuarios',
-      restaurants: 'Restaurantes',
-      tables: 'Mesas',
-      reservations: 'Reservas'
+  const renderItemDetails = (item) => {
+    switch (type) {
+      case 'restaurants':
+        return (
+          <>
+            <h3>{item.name}</h3>
+            <div className="item-info">
+              <p><strong>Capacidad:</strong> {item.capacity}</p>
+              <p><strong>Zonas:</strong> {item.zones ? JSON.stringify(item.zones) : 'No definidas'}</p>
+              <p><strong>Estado:</strong> {item.status}</p>
+              <p><strong>Activo:</strong> {item.isActive ? 'Sí' : 'No'}</p>
+            </div>
+          </>
+        );
+      // Añade más casos según necesites para otros tipos
+      default:
+        return <p>{JSON.stringify(item)}</p>;
     }
-    return titles[type] || type
-  }
+  };
 
   return (
     <div className="list-component">
-      <h2>{getTitle()}</h2>
-      <div className="items-container">
-        {items.map((item) => (
-          <div
-            key={`${type}-${item.user_name || item.restaurant_name || item.table_number || item.id}`}
-            className={`list-item ${selectedItem?.item?.id === item.id ? 'selected' : ''}`}
-            onClick={() => handleItemClick(item)}
-          >
-            {getDisplayName(item)}
-          </div>
-        ))}
-        {items.length === 0 && (
-          <div className="no-items">No hay elementos</div>
-        )}
+      <div className="header">
+        <h2>{type.charAt(0).toUpperCase() + type.slice(1)}</h2>
+        <button onClick={handleAddNew} className="btn-primary">Add New</button>
       </div>
-    </div>
-  )
-}
 
-export default ListComponent
+      {items.length === 0 ? (
+        <div className="empty-state">
+          <p>No hay {type} disponibles.</p>
+          <p>Haz clic en "Add New" para añadir uno nuevo.</p>
+        </div>
+      ) : (
+        <div className="items-list">
+          {items.map(item => (
+            <div key={item.id_restaurant || item.id} className="list-item">
+              <div className="item-details">
+                {renderItemDetails(item)}
+              </div>
+              <div className="item-actions">
+                <button onClick={() => handleEdit(item.id_restaurant || item.id)} className="btn-edit">Edit</button>
+                <button onClick={() => handleDelete(item.id_restaurant || item.id)} className="btn-delete">Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ListComponent;

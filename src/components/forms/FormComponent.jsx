@@ -5,26 +5,28 @@ import './FormComponent.css'
 
 const defaultFields = {
   users: [
-    { name: 'user_name', label: 'Nombre', type: 'text', required: true },
-    { name: 'user_email', label: 'Email', type: 'email', required: true },
-    { name: 'user_password', label: 'Contraseña', type: 'password', required: true },
-    { name: 'user_role', label: 'Rol', type: 'select', required: true, options: ['admin', 'supervisor', 'customer'] }
+    { name: 'name', label: 'Nombre', type: 'text', required: true },
+    { name: 'email', label: 'Email', type: 'email', required: true },
+    { name: 'password', label: 'Contraseña', type: 'password', required: true },
+    { name: 'role', label: 'Rol', type: 'select', required: true, options: ['admin', 'supervisor', 'customer'] }
   ],
   restaurants: [
-    { name: 'restaurant_name', label: 'Nombre', type: 'text', required: true },
-    { name: 'restaurant_capacity', label: 'Capacidad', type: 'number', required: true },
-    { name: 'restaurant_zones', label: 'Zonas', type: 'text', required: true }
+    { name: 'name', label: 'Nombre', type: 'text', required: true },
+    { name: 'capacity', label: 'Capacidad', type: 'number', required: true },
+    { name: 'zones', label: 'Zonas', type: 'text', required: true }
   ],
   tables: [
-    { name: 'table_number', label: 'Número', type: 'text', required: true },
-    { name: 'table_zone', label: 'Zona', type: 'text', required: true },
-    { name: 'table_capacity', label: 'Capacidad', type: 'number', required: true }
+    { name: 'number', label: 'Número', type: 'text', required: true },
+    { name: 'zone', label: 'Zona', type: 'text', required: true },
+    { name: 'capacity', label: 'Capacidad', type: 'number', required: true },
+    { name: 'restaurant_id', label: 'Restaurante ID', type: 'number', required: true }
   ],
   reservations: [
-    { name: 'reservation_guests', label: 'Número de invitados', type: 'number', required: true },
-    { name: 'reservation_timedate', label: 'Fecha y hora', type: 'datetime-local', required: true },
-    { name: 'table_number', label: 'Número de mesa', type: 'text', required: true },
-    { name: 'user_name', label: 'Usuario', type: 'text', required: true }
+    { name: 'guests', label: 'Número de invitados', type: 'number', required: true },
+    { name: 'date', label: 'Fecha', type: 'date', required: true },
+    { name: 'time', label: 'Hora', type: 'time', required: true },
+    { name: 'table_id', label: 'Mesa ID', type: 'number', required: true },
+    { name: 'user_id', label: 'Usuario ID', type: 'number', required: true }
   ]
 }
 
@@ -104,10 +106,10 @@ const FormComponent = ({ type }) => {
         // Preparamos los datos para actualizar
         const dataToUpdate = {
           ...formData,
-          user_name: formData.user_name,
-          user_email: formData.user_email,
-          user_password: formData.user_password,
-          user_role: formData.user_role
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role
         }
         // No enviamos el id en el body
         delete dataToUpdate.id

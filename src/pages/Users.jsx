@@ -1,199 +1,133 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../services/api';
+import UserForm from '../components/user/UserForm';
+import './Users.css';
 
 const Users = () => {
   const { setActiveUser, activeItems } = useAuth();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    role: 'Customer'
-  });
-  
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: 'John Admin',
-      email: 'john@admin.com',
-      role: 'Admin'
-    },
-    {
-      id: 2,
-      name: 'Sarah Supervisor',
-      email: 'sarah@supervisor.com',
-      role: 'Supervisor'
-    },
-    {
-      id: 3,
-      name: 'Mike Customer',
-      email: 'mike@customer.com',
-      role: 'Customer'
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  const loadUsers = async () => {
+    try {
+      setLoading(true);
+      const data = await api.getList('users');
+      setUsers(data || []);
+      setError(null);
+    } catch (err) {
+      console.error('Error loading users:', err);
+      setError('Error al cargar los usuarios');
+      setUsers([]);
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
 
   const handleSelect = (user) => {
     setActiveUser(user);
-    setFormData({
-      name: user.name,
-      email: user.email,
-      role: user.role
-    });
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSave = async (formData) => {
+    setError(null);
     
-    if (activeItems.user) {
-      // Update existing user
-      const updatedUsers = users.map(user => {
-        if (user.id === activeItems.user.id) {
-          const updatedUser = {
-            ...user,
-            ...formData
-          };
-          setActiveUser(updatedUser); // Update active user in context
-          return updatedUser;
+    try {
+      const dataToSend = { ...formData };
+      
+      if (activeItems.user && !formData.password) {
+        delete dataToSend.password;
+        delete dataToSend.password_confirmation;
+      }
+
+      let result;
+      if (activeItems.user) {
+        result = await api.update('users', activeItems.user.id, dataToSend);
+      } else {
+        result = await api.create('users', dataToSend);
+      }
+
+      if (result) {
+        await loadUsers();
+        setActiveUser(null);
+        setError(null);
+      }
+    } catch (err) {
+      console.error('Error saving user:', err);
+      setError(err.message || 'Error al guardar el usuario');
+    }
+  };
+
+  const handleDelete = async (userId) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+      try {
+        await api.delete('users', userId);
+        await loadUsers();
+        if (activeItems.user && activeItems.user.id === userId) {
+          setActiveUser(null);
         }
-        return user;
-      });
-      setUsers(updatedUsers);
-    } else {
-      // Add new user
-      const newUser = {
-        id: users.length + 1,
-        ...formData
-      };
-      setUsers([...users, newUser]);
-    }
-    
-    handleClear(); // Reset form and active user
-  };
-
-  const handleDelete = (id) => {
-    const updatedUsers = users.filter(user => user.id !== id);
-    setUsers(updatedUsers);
-    if (activeItems.user?.id === id) {
-      handleClear();
+      } catch (err) {
+        console.error('Error deleting user:', err);
+        setError('Error al eliminar el usuario');
+      }
     }
   };
 
-  const handleClear = () => {
-    setActiveUser(null);
-    setFormData({
-      name: '',
-      email: '',
-      role: 'Customer'
-    });
-  };
+  if (loading) {
+    return <div className="users-page loading">Cargando usuarios...</div>;
+  }
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <h2>Users</h2>
-        <button className="btn-primary" onClick={handleClear}>Add User</button>
-      </div>
-      <div className="card-content">
-        <div className="card-list">
-          {users.map((user) => (
-            <div 
-              key={user.id} 
-              className={`card-list-item ${activeItems.user?.id === user.id ? 'active' : ''}`}
-              onClick={() => handleSelect(user)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div>
-                <h3>{user.name}</h3>
-                <p>{user.email}</p>
-                <p>Role: {user.role}</p>
-              </div>
-              <div className="card-actions">
-                <button 
-                  className="btn-secondary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSelect(user);
-                  }}
+    <div className="users-page">
+      <div className="users-container">
+        <div className="users-list">
+          <h2>Users List</h2>
+          {error && <div className="error-message">{error}</div>}
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map(user => (
+                <tr 
+                  key={user.id}
+                  className={activeItems.user?.id === user.id ? 'selected' : ''}
+                  onClick={() => handleSelect(user)}
                 >
-                  Edit
-                </button>
-                <button 
-                  className="btn-danger"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(user.id);
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.role}</td>
+                  <td>
+                    <button 
+                      className="btn-danger"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(user.id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
-      
-      <div className="card">
-        <div className="card-header">
-          <h3>{activeItems.user ? 'Edit User' : 'Add User'}</h3>
-        </div>
-        <div className="card-content">
-          <form className="form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Name</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                placeholder="Full Name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Email</label>
-              <input 
-                type="email" 
-                className="form-input" 
-                placeholder="Email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Role</label>
-              <select 
-                className="form-input"
-                name="role"
-                value={formData.role}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="Admin">Admin</option>
-                <option value="Supervisor">Supervisor</option>
-                <option value="Customer">Customer</option>
-              </select>
-            </div>
-            <div className="form-actions">
-              <button type="submit" className="btn-primary">
-                {activeItems.user ? 'Update User' : 'Save User'}
-              </button>
-              {activeItems.user && (
-                <button type="button" className="btn-secondary" onClick={handleClear}>
-                  Cancel
-                </button>
-              )}
-            </div>
-          </form>
-        </div>
+
+        <UserForm 
+          activeUser={activeItems.user}
+          onSave={handleSave}
+          onClean={() => setActiveUser(null)}
+        />
       </div>
     </div>
   );
