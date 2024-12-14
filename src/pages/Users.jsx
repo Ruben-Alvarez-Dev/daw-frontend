@@ -80,14 +80,6 @@ const Users = () => {
 
   const renderUserList = () => (
     <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
       <tbody>
         {users.map(user => (
           <tr 
@@ -95,19 +87,17 @@ const Users = () => {
             className={activeItems.user?.id === user.id ? 'selected' : ''}
             onClick={() => handleSelect(user)}
           >
-            <td>{user.name}</td>
-            <td>{user.email}</td>
-            <td>{user.role}</td>
             <td>
-              <button 
-                className="btn-danger"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDelete(user.id);
-                }}
-              >
-                Delete
-              </button>
+              <span>Name:</span>
+              {user.name}
+            </td>
+            <td>
+              <span>Email:</span>
+              {user.email}
+            </td>
+            <td>
+              <span>Role:</span>
+              {user.role}
             </td>
           </tr>
         ))}
@@ -126,9 +116,6 @@ const Users = () => {
           header={
             <div className="list-header">
               <h2>Users List</h2>
-              <button onClick={() => handleSelect(null)} className="btn-primary">
-                Add User
-              </button>
             </div>
           }
           body={
@@ -136,6 +123,21 @@ const Users = () => {
               {error && <div className="error-message">{error}</div>}
               {renderUserList()}
             </>
+          }
+          footer={
+            <div>
+              <button onClick={() => handleSelect(null)} className="btn-primary">
+                Add User
+              </button>
+              {activeItems.user && (
+                <button 
+                  className="btn-danger"
+                  onClick={() => handleDelete(activeItems.user.id)}
+                >
+                  Delete User
+                </button>
+              )}
+            </div>
           }
         />
         <UserForm 

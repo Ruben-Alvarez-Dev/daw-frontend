@@ -32,6 +32,8 @@
 .card-footer {
   padding: 1rem;
   border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 1rem;
 }
 
 .card-footer hr {
