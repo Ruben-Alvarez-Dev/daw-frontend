@@ -1,9 +1,9 @@
 import React from 'react';
-import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
-  const { auth, logout } = useAuth();
+  const { auth, logout, activeItems } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -11,40 +11,38 @@ const Navbar = () => {
     navigate('/');
   };
 
-  const renderContextInfo = () => {
-    if (!auth.isAuthenticated) return null;
-
-    return (
-      <div className="context-info">
-        <span>Role: {auth.role}</span>
-        {auth.activeRestaurant && <span>Restaurant: {auth.activeRestaurant.name}</span>}
-        {auth.activeTable && <span>Table: {auth.activeTable.name}</span>}
-        {auth.activeReservation && <span>Reservation: #{auth.activeReservation.id}</span>}
-      </div>
-    );
-  };
-
   return (
     <nav className="navbar">
-      <Link to="/" className="logo">
-        Restaurant App
-      </Link>
-      
-      {auth.isAuthenticated ? (
-        <>
-          {renderContextInfo()}
-          <div className="nav-actions">
-            <span>Welcome, {auth.user?.name}</span>
-            <Link to="/app/dashboard" className="nav-link">Dashboard</Link>
-            <button onClick={handleLogout} className="nav-button">Logout</button>
+      <div className="navbar-brand">
+        <Link to="/">Restaurant App</Link>
+      </div>
+      <div className="navbar-content">
+        {auth.isAuthenticated ? (
+          <>
+            <div className="navbar-info">
+              <span>{auth.user?.email}</span>
+              <span>{auth.role}</span>
+              {activeItems.restaurant && (
+                <span className="active-item">Restaurant: {activeItems.restaurant.name}</span>
+              )}
+              {activeItems.table && (
+                <span className="active-item">Table: {activeItems.table.number}</span>
+              )}
+              {activeItems.reservation && (
+                <span className="active-item">Reservation: #{activeItems.reservation.id}</span>
+              )}
+            </div>
+            <div className="navbar-actions">
+              <button onClick={handleLogout} className="btn-secondary">Logout</button>
+            </div>
+          </>
+        ) : (
+          <div className="navbar-actions">
+            <Link to="/login" className="btn-link">Login</Link>
+            <Link to="/register" className="btn-link">Register</Link>
           </div>
-        </>
-      ) : (
-        <div className="nav-actions">
-          <Link to="/login" className="nav-link">Login</Link>
-          <Link to="/register" className="nav-button">Register</Link>
-        </div>
-      )}
+        )}
+      </div>
     </nav>
   );
 };

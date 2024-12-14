@@ -1,25 +1,25 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
     isAuthenticated: false,
     user: null,
-    role: null, // 'admin', 'supervisor', 'user'
-    activeRestaurant: null,
-    activeTable: null,
-    activeReservation: null
+    role: null
+  });
+
+  const [activeItems, setActiveItems] = useState({
+    restaurant: null,
+    table: null,
+    reservation: null
   });
 
   const login = (userData) => {
     setAuth({
       isAuthenticated: true,
       user: userData,
-      role: userData.role,
-      activeRestaurant: null,
-      activeTable: null,
-      activeReservation: null
+      role: userData.role
     });
   };
 
@@ -27,27 +27,46 @@ export function AuthProvider({ children }) {
     setAuth({
       isAuthenticated: false,
       user: null,
-      role: null,
-      activeRestaurant: null,
-      activeTable: null,
-      activeReservation: null
+      role: null
+    });
+    setActiveItems({
+      restaurant: null,
+      table: null,
+      reservation: null
     });
   };
 
-  const setActiveItems = (items) => {
-    setAuth(prev => ({
-      ...prev,
-      ...items
-    }));
+  const setActiveRestaurant = (restaurant) => {
+    setActiveItems(prev => ({ ...prev, restaurant }));
+  };
+
+  const setActiveTable = (table) => {
+    setActiveItems(prev => ({ ...prev, table }));
+  };
+
+  const setActiveReservation = (reservation) => {
+    setActiveItems(prev => ({ ...prev, reservation }));
   };
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout, setActiveItems }}>
+    <AuthContext.Provider value={{
+      auth,
+      login,
+      logout,
+      activeItems,
+      setActiveRestaurant,
+      setActiveTable,
+      setActiveReservation
+    }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
