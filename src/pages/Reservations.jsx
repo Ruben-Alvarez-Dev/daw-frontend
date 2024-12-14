@@ -1,30 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import ReservationList from '../components/reservation/ReservationList';
 import ReservationForm from '../components/reservation/ReservationForm';
 
 const Reservations = () => {
-  const { setActiveReservation } = useAuth();
+  const { setActiveReservation, activeItems } = useAuth();
+  const [formData, setFormData] = useState({
+    date: '',
+    time: '',
+    guests: '',
+    status: 'pending',
+    notes: ''
+  });
   
   const reservations = [
     {
       id: 1,
-      customerName: 'John Doe',
-      date: '2024-12-14 at 19:00',
+      date: '2024-12-15',
+      time: '20:00',
       guests: 4,
-      status: 'confirmed'
+      status: 'confirmed',
+      notes: 'Birthday celebration'
     },
     {
       id: 2,
-      customerName: 'Jane Smith',
-      date: '2024-12-15 at 20:00',
+      date: '2024-12-16',
+      time: '21:00',
       guests: 2,
-      status: 'pending'
+      status: 'pending',
+      notes: 'Window table preferred'
     }
   ];
 
   const handleSelect = (reservation) => {
     setActiveReservation(reservation);
+    setFormData({
+      date: reservation.date,
+      time: reservation.time,
+      guests: reservation.guests,
+      status: reservation.status,
+      notes: reservation.notes
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+  };
+
+  const handleClear = () => {
+    setActiveReservation(null);
+    setFormData({
+      date: '',
+      time: '',
+      guests: '',
+      status: 'pending',
+      notes: ''
+    });
   };
 
   return (
@@ -32,26 +72,27 @@ const Reservations = () => {
       <div className="card">
         <div className="card-header">
           <h2>Reservations</h2>
-          <button className="btn-primary">Add Reservation</button>
+          <button className="btn-primary" onClick={handleClear}>Add Reservation</button>
         </div>
         <div className="card-content">
           <div className="card-list">
             {reservations.map((reservation) => (
               <div 
                 key={reservation.id} 
-                className="card-list-item"
+                className={`card-list-item ${activeItems.reservation?.id === reservation.id ? 'active' : ''}`}
                 onClick={() => handleSelect(reservation)}
                 style={{ cursor: 'pointer' }}
               >
                 <div>
-                  <h3>{reservation.customerName}</h3>
-                  <p>{reservation.date}</p>
-                  <p>Guests: {reservation.guests}</p>
+                  <h3>Reservation for {reservation.guests} guests</h3>
+                  <p>Date: {reservation.date}</p>
+                  <p>Time: {reservation.time}</p>
                   <p>Status: {reservation.status}</p>
+                  {reservation.notes && <p>Notes: {reservation.notes}</p>}
                 </div>
                 <div className="card-actions">
                   <button className="btn-secondary">Edit</button>
-                  <button className="btn-danger">Cancel</button>
+                  <button className="btn-danger">Delete</button>
                 </div>
               </div>
             ))}
@@ -60,10 +101,75 @@ const Reservations = () => {
         
         <div className="card">
           <div className="card-header">
-            <h3>Add Reservation</h3>
+            <h3>{activeItems.reservation ? 'Edit Reservation' : 'Add Reservation'}</h3>
           </div>
           <div className="card-content">
-            <ReservationForm />
+            <form className="form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Date</label>
+                <input 
+                  type="date" 
+                  className="form-input"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Time</label>
+                <input 
+                  type="time" 
+                  className="form-input"
+                  name="time"
+                  value={formData.time}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Number of Guests</label>
+                <input 
+                  type="number" 
+                  className="form-input"
+                  min="1"
+                  name="guests"
+                  value={formData.guests}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Status</label>
+                <select
+                  className="form-input"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleInputChange}
+                >
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Notes</label>
+                <textarea 
+                  className="form-input"
+                  name="notes"
+                  value={formData.notes}
+                  onChange={handleInputChange}
+                  rows="3"
+                ></textarea>
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="btn-primary">
+                  {activeItems.reservation ? 'Update Reservation' : 'Save Reservation'}
+                </button>
+                {activeItems.reservation && (
+                  <button type="button" className="btn-secondary" onClick={handleClear}>
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </form>
           </div>
         </div>
       </div>
