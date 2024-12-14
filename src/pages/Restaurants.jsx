@@ -10,7 +10,7 @@ const Restaurants = () => {
     email: ''
   });
   
-  const restaurants = [
+  const [restaurants, setRestaurants] = useState([
     {
       id: 1,
       name: 'La Tasca',
@@ -25,7 +25,7 @@ const Restaurants = () => {
       phone: '987654321',
       email: 'elrincon@email.com'
     }
-  ];
+  ]);
 
   const handleSelect = (restaurant) => {
     setActiveRestaurant(restaurant);
@@ -47,7 +47,39 @@ const Restaurants = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    
+    if (activeItems.restaurant) {
+      // Update existing restaurant
+      const updatedRestaurants = restaurants.map(restaurant => {
+        if (restaurant.id === activeItems.restaurant.id) {
+          const updatedRestaurant = {
+            ...restaurant,
+            ...formData
+          };
+          setActiveRestaurant(updatedRestaurant); // Update active restaurant in context
+          return updatedRestaurant;
+        }
+        return restaurant;
+      });
+      setRestaurants(updatedRestaurants);
+    } else {
+      // Add new restaurant
+      const newRestaurant = {
+        id: restaurants.length + 1,
+        ...formData
+      };
+      setRestaurants([...restaurants, newRestaurant]);
+    }
+    
+    handleClear(); // Reset form and active restaurant
+  };
+
+  const handleDelete = (id) => {
+    const updatedRestaurants = restaurants.filter(restaurant => restaurant.id !== id);
+    setRestaurants(updatedRestaurants);
+    if (activeItems.restaurant?.id === id) {
+      handleClear();
+    }
   };
 
   const handleClear = () => {
@@ -82,8 +114,24 @@ const Restaurants = () => {
                 <p>Email: {restaurant.email}</p>
               </div>
               <div className="card-actions">
-                <button className="btn-secondary">Edit</button>
-                <button className="btn-danger">Delete</button>
+                <button 
+                  className="btn-secondary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelect(restaurant);
+                  }}
+                >
+                  Edit
+                </button>
+                <button 
+                  className="btn-danger"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(restaurant.id);
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}
@@ -105,6 +153,7 @@ const Restaurants = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="form-group">
@@ -116,6 +165,7 @@ const Restaurants = () => {
                 name="address"
                 value={formData.address}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="form-group">
@@ -127,6 +177,7 @@ const Restaurants = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="form-group">
@@ -138,6 +189,7 @@ const Restaurants = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="form-actions">

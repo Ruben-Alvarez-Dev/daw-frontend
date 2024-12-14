@@ -9,7 +9,7 @@ const Users = () => {
     role: 'Customer'
   });
   
-  const users = [
+  const [users, setUsers] = useState([
     {
       id: 1,
       name: 'John Admin',
@@ -28,7 +28,7 @@ const Users = () => {
       email: 'mike@customer.com',
       role: 'Customer'
     }
-  ];
+  ]);
 
   const handleSelect = (user) => {
     setActiveUser(user);
@@ -49,8 +49,39 @@ const Users = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí iría la lógica para guardar/actualizar el usuario
-    console.log('Form submitted:', formData);
+    
+    if (activeItems.user) {
+      // Update existing user
+      const updatedUsers = users.map(user => {
+        if (user.id === activeItems.user.id) {
+          const updatedUser = {
+            ...user,
+            ...formData
+          };
+          setActiveUser(updatedUser); // Update active user in context
+          return updatedUser;
+        }
+        return user;
+      });
+      setUsers(updatedUsers);
+    } else {
+      // Add new user
+      const newUser = {
+        id: users.length + 1,
+        ...formData
+      };
+      setUsers([...users, newUser]);
+    }
+    
+    handleClear(); // Reset form and active user
+  };
+
+  const handleDelete = (id) => {
+    const updatedUsers = users.filter(user => user.id !== id);
+    setUsers(updatedUsers);
+    if (activeItems.user?.id === id) {
+      handleClear();
+    }
   };
 
   const handleClear = () => {
@@ -83,8 +114,24 @@ const Users = () => {
                 <p>Role: {user.role}</p>
               </div>
               <div className="card-actions">
-                <button className="btn-secondary">Edit</button>
-                <button className="btn-danger">Delete</button>
+                <button 
+                  className="btn-secondary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelect(user);
+                  }}
+                >
+                  Edit
+                </button>
+                <button 
+                  className="btn-danger"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(user.id);
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}
@@ -106,6 +153,7 @@ const Users = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="form-group">
@@ -117,6 +165,7 @@ const Users = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="form-group">
@@ -126,6 +175,7 @@ const Users = () => {
                 name="role"
                 value={formData.role}
                 onChange={handleInputChange}
+                required
               >
                 <option value="Admin">Admin</option>
                 <option value="Supervisor">Supervisor</option>

@@ -9,7 +9,7 @@ const Tables = () => {
     status: 'available'
   });
   
-  const tables = [
+  const [tables, setTables] = useState([
     {
       id: 1,
       number: '1',
@@ -22,7 +22,7 @@ const Tables = () => {
       capacity: 2,
       status: 'occupied'
     }
-  ];
+  ]);
 
   const handleSelect = (table) => {
     setActiveTable(table);
@@ -43,7 +43,39 @@ const Tables = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    
+    if (activeItems.table) {
+      // Update existing table
+      const updatedTables = tables.map(table => {
+        if (table.id === activeItems.table.id) {
+          const updatedTable = {
+            ...table,
+            ...formData
+          };
+          setActiveTable(updatedTable); // Update active table in context
+          return updatedTable;
+        }
+        return table;
+      });
+      setTables(updatedTables);
+    } else {
+      // Add new table
+      const newTable = {
+        id: tables.length + 1,
+        ...formData
+      };
+      setTables([...tables, newTable]);
+    }
+    
+    handleClear(); // Reset form and active table
+  };
+
+  const handleDelete = (id) => {
+    const updatedTables = tables.filter(table => table.id !== id);
+    setTables(updatedTables);
+    if (activeItems.table?.id === id) {
+      handleClear();
+    }
   };
 
   const handleClear = () => {
@@ -76,8 +108,24 @@ const Tables = () => {
                 <p>Status: {table.status}</p>
               </div>
               <div className="card-actions">
-                <button className="btn-secondary">Edit</button>
-                <button className="btn-danger">Delete</button>
+                <button 
+                  className="btn-secondary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelect(table);
+                  }}
+                >
+                  Edit
+                </button>
+                <button 
+                  className="btn-danger"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(table.id);
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}
@@ -99,6 +147,7 @@ const Tables = () => {
                 name="number"
                 value={formData.number}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="form-group">
@@ -110,6 +159,7 @@ const Tables = () => {
                 name="capacity"
                 value={formData.capacity}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="form-group">
@@ -119,6 +169,7 @@ const Tables = () => {
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
+                required
               >
                 <option value="available">Available</option>
                 <option value="occupied">Occupied</option>

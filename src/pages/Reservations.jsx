@@ -13,7 +13,7 @@ const Reservations = () => {
     notes: ''
   });
   
-  const reservations = [
+  const [reservations, setReservations] = useState([
     {
       id: 1,
       date: '2024-12-15',
@@ -30,7 +30,7 @@ const Reservations = () => {
       status: 'pending',
       notes: 'Window table preferred'
     }
-  ];
+  ]);
 
   const handleSelect = (reservation) => {
     setActiveReservation(reservation);
@@ -53,7 +53,39 @@ const Reservations = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    
+    if (activeItems.reservation) {
+      // Update existing reservation
+      const updatedReservations = reservations.map(reservation => {
+        if (reservation.id === activeItems.reservation.id) {
+          const updatedReservation = {
+            ...reservation,
+            ...formData
+          };
+          setActiveReservation(updatedReservation); // Update active reservation in context
+          return updatedReservation;
+        }
+        return reservation;
+      });
+      setReservations(updatedReservations);
+    } else {
+      // Add new reservation
+      const newReservation = {
+        id: reservations.length + 1,
+        ...formData
+      };
+      setReservations([...reservations, newReservation]);
+    }
+    
+    handleClear(); // Reset form and active reservation
+  };
+
+  const handleDelete = (id) => {
+    const updatedReservations = reservations.filter(reservation => reservation.id !== id);
+    setReservations(updatedReservations);
+    if (activeItems.reservation?.id === id) {
+      handleClear();
+    }
   };
 
   const handleClear = () => {
@@ -91,8 +123,24 @@ const Reservations = () => {
                   {reservation.notes && <p>Notes: {reservation.notes}</p>}
                 </div>
                 <div className="card-actions">
-                  <button className="btn-secondary">Edit</button>
-                  <button className="btn-danger">Delete</button>
+                  <button 
+                    className="btn-secondary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelect(reservation);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    className="btn-danger"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(reservation.id);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
@@ -113,6 +161,7 @@ const Reservations = () => {
                   name="date"
                   value={formData.date}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className="form-group">
@@ -123,6 +172,7 @@ const Reservations = () => {
                   name="time"
                   value={formData.time}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className="form-group">
@@ -134,6 +184,7 @@ const Reservations = () => {
                   name="guests"
                   value={formData.guests}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className="form-group">
@@ -143,6 +194,7 @@ const Reservations = () => {
                   name="status"
                   value={formData.status}
                   onChange={handleInputChange}
+                  required
                 >
                   <option value="pending">Pending</option>
                   <option value="confirmed">Confirmed</option>
