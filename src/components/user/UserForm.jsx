@@ -22,7 +22,14 @@ const UserForm = ({ activeUser, onSave, onClean, error }) => {
       });
       setMode('view');
     } else {
-      setMode('edit');
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+        role: 'customer'
+      });
+      setMode('view');
     }
   }, [activeUser]);
 
@@ -40,6 +47,7 @@ const UserForm = ({ activeUser, onSave, onClean, error }) => {
   };
 
   const handleClean = () => {
+    setMode('view');
     setFormData({
       name: '',
       email: '',
@@ -47,7 +55,6 @@ const UserForm = ({ activeUser, onSave, onClean, error }) => {
       password_confirmation: '',
       role: 'customer'
     });
-    setMode('view');
     onClean();
   };
 
@@ -56,7 +63,10 @@ const UserForm = ({ activeUser, onSave, onClean, error }) => {
   };
 
   const renderForm = () => (
-    <form className="card-form" onSubmit={handleSubmit}>
+    <form 
+      onSubmit={handleSubmit}
+      className={mode === 'edit' ? 'card-form edit-mode' : 'card-form'}
+    >
       {error && <div className="error-message">{error}</div>}
       <div className="form-group">
         <label>Name:</label>
@@ -135,7 +145,7 @@ const UserForm = ({ activeUser, onSave, onClean, error }) => {
                 Edit
               </button>
               <button className="btn-secondary" onClick={handleClean}>
-                Clean
+                Clear
               </button>
             </>
           ) : (

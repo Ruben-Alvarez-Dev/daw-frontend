@@ -80,6 +80,16 @@ tr.selected {
   border: 1px solid orange;
 }
 
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-header button {
+  margin-left: 1rem;
+}
+
 .form-group {
   margin-bottom: 1rem;
 }
@@ -108,6 +118,28 @@ input:focus, select:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Form edit mode */
+.card-form.edit-mode input,
+.card-form.edit-mode select {
+  background-color: #e8ffe8;
+  border-color: #4caf50;
+  color: #00a000;
+}
+
+.card-form.edit-mode input::placeholder {
+  color: #4caf50;
+}
+
+.card-form.edit-mode select option {
+  background-color: white;
+  color: var(--text-color);
+}
+
+.card-form.edit-mode select option:checked {
+  background-color: #e8ffe8;
+  color: #00a000;
 }
 
 /* Loading and error states */

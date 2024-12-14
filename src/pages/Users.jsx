@@ -126,7 +126,13 @@ const Users = () => {
           }
           footer={
             <div>
-              <button onClick={() => handleSelect(null)} className="btn-primary">
+              <button 
+                onClick={() => {
+                  setError(null);
+                  setActiveUser(null);
+                }} 
+                className="btn-primary"
+              >
                 Add User
               </button>
               {activeItems.user && (
