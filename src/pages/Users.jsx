@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import UserForm from '../components/user/UserForm';
+import Card from '../components/common/Card';
 import './Users.css';
 
 const Users = () => {
@@ -77,6 +78,43 @@ const Users = () => {
     }
   };
 
+  const renderUserList = () => (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map(user => (
+          <tr 
+            key={user.id}
+            className={activeItems.user?.id === user.id ? 'selected' : ''}
+            onClick={() => handleSelect(user)}
+          >
+            <td>{user.name}</td>
+            <td>{user.email}</td>
+            <td>{user.role}</td>
+            <td>
+              <button 
+                className="btn-danger"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(user.id);
+                }}
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
   if (loading) {
     return <div className="users-page loading">Cargando usuarios...</div>;
   }
@@ -84,49 +122,27 @@ const Users = () => {
   return (
     <div className="users-page">
       <div className="users-container">
-        <div className="users-list">
-          <h2>Users List</h2>
-          {error && <div className="error-message">{error}</div>}
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(user => (
-                <tr 
-                  key={user.id}
-                  className={activeItems.user?.id === user.id ? 'selected' : ''}
-                  onClick={() => handleSelect(user)}
-                >
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>
-                    <button 
-                      className="btn-danger"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(user.id);
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+        <Card
+          header={
+            <div className="list-header">
+              <h2>Users List</h2>
+              <button onClick={() => handleSelect(null)} className="btn-primary">
+                Add User
+              </button>
+            </div>
+          }
+          body={
+            <>
+              {error && <div className="error-message">{error}</div>}
+              {renderUserList()}
+            </>
+          }
+        />
         <UserForm 
           activeUser={activeItems.user}
-          onSave={handleSave}
+          onSave={handleSave} 
           onClean={() => setActiveUser(null)}
+          error={error}
         />
       </div>
     </div>

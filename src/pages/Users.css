@@ -1,201 +1,130 @@
 .users-page {
-  padding: 20px;
-}
-
-.users-container {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* Users List styles */
-.users-list {
-  background: white;
-  padding: 20px;
-}
-
-.users-list h2 {
-  margin: 0 0 20px 0;
-  color: #333;
-  font-size: 1.2rem;
-}
-
-.users-list table {
+  height: 100%;
   width: 100%;
-  border-collapse: collapse;
-}
-
-.users-list th,
-.users-list td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-.users-list th {
-  font-weight: 500;
-  color: #333;
-  background-color: #f8f9fa;
-}
-
-.users-list tr {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.users-list tr:hover {
-  background-color: #f8f9fa;
-}
-
-.users-list tr.selected {
-  background-color: #e8f0fe;
-}
-
-.users-list td button {
-  margin: 0;
-}
-
-/* Card styles - Solo para UserForm */
-.card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
-.card-header {
-  padding: 16px 20px;
-  border-bottom: 1px solid #eee;
+.users-container {
+  display: flex;
+  flex: 1;
+  border: 1px solid blue;
+  overflow: hidden;
+  min-height: 0;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.users-container > * {
+  flex: 1;
+}
+
+/* List header styles */
+.list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.card-header h2 {
+.list-header h2 {
   margin: 0;
-  color: #333;
-  font-size: 1.2rem;
 }
 
-.card-body {
-  padding: 20px;
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  font-weight: 500;
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+tr {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+tr:hover {
+  background-color: var(--background-color);
+}
+
+tr.selected {
+  background-color: #e8f0fe;
 }
 
 /* Form styles */
 .card-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
+  border: 1px solid orange;
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 8px;
-  color: #555;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
   font-size: 0.9rem;
 }
 
 input, select {
   width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: white;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
 }
 
 input:disabled, select:disabled {
-  background-color: #f8f9fa;
+  background-color: var(--background-color);
   cursor: not-allowed;
 }
 
 input:focus, select:focus {
   outline: none;
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-}
-
-/* Button styles */
-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background-color: #4a90e2;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #357abd;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background-color: #5a6268;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: white;
-}
-
-.btn-danger:hover {
-  background-color: #c82333;
-}
-
-/* Form actions */
-.form-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  margin-top: 20px;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
 /* Loading and error states */
 .loading {
   text-align: center;
-  padding: 40px;
-  color: #666;
+  padding: 2rem;
+  color: var(--text-color);
 }
 
 .error-message {
-  color: #dc3545;
-  padding: 16px;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  border-radius: 4px;
-  margin-bottom: 16px;
+  color: #dc2626;
+  padding: 1rem;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
 }
 
-.no-data {
-  text-align: center;
-  color: #666;
-  padding: 20px;
-}
-
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 1024px) {
   .users-container {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+  
+  .users-container > * {
+    max-width: 100%;
   }
 }

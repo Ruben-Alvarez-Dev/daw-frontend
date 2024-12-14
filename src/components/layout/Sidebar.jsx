@@ -1,34 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { RiDashboardLine, RiUserLine, RiStore2Line, RiLayoutGridLine, RiCalendarLine, RiSettings4Line } from 'react-icons/ri';
 
 const Sidebar = () => {
   const { auth } = useAuth();
+  const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isExpanded ? 'expanded' : 'collapsed'}`}
+         onMouseEnter={() => setIsExpanded(true)}
+         onMouseLeave={() => setIsExpanded(false)}>
       <nav className="sidebar-nav">
         <NavLink to="/app/dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
-          Dashboard
+          <RiDashboardLine className="nav-icon" />
+          <span className="nav-text">Dashboard</span>
         </NavLink>
         {auth?.user?.role === 'admin' && (
           <>
             <NavLink to="/app/users" className={({ isActive }) => isActive ? 'active' : ''}>
-              Users
+              <RiUserLine className="nav-icon" />
+              <span className="nav-text">Users</span>
             </NavLink>
             <NavLink to="/app/restaurants" className={({ isActive }) => isActive ? 'active' : ''}>
-              Restaurants
+              <RiStore2Line className="nav-icon" />
+              <span className="nav-text">Restaurants</span>
             </NavLink>
           </>
         )}
         <NavLink to="/app/tables" className={({ isActive }) => isActive ? 'active' : ''}>
-          Tables
+          <RiLayoutGridLine className="nav-icon" />
+          <span className="nav-text">Tables</span>
         </NavLink>
         <NavLink to="/app/reservations" className={({ isActive }) => isActive ? 'active' : ''}>
-          Reservations
+          <RiCalendarLine className="nav-icon" />
+          <span className="nav-text">Reservations</span>
         </NavLink>
         <NavLink to="/app/settings" className={({ isActive }) => isActive ? 'active' : ''}>
-          Settings
+          <RiSettings4Line className="nav-icon" />
+          <span className="nav-text">Settings</span>
         </NavLink>
       </nav>
     </div>

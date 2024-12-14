@@ -1,0 +1,39 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid green;
+  overflow: hidden;
+}
+
+/* Header */
+.card-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-header hr {
+  display: none;
+}
+
+/* Body */
+.card-body {
+  flex: 1;
+  padding: 1rem;
+  overflow: auto;
+  min-height: 0; /* Importante para que el scroll funcione correctamente */
+}
+
+/* Footer */
+.card-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.card-footer hr {
+  display: none;
+}
