@@ -5,50 +5,33 @@ import { useAuth } from '../../context/AuthContext';
 const Sidebar = () => {
   const { auth } = useAuth();
 
-  const getMenuItems = () => {
-    const commonItems = [
-      { path: '/app/dashboard', label: 'Dashboard' },
-    ];
-
-    const roleSpecificItems = {
-      admin: [
-        { path: '/app/users', label: 'Users' },
-        { path: '/app/restaurants', label: 'Restaurants' },
-        { path: '/app/tables', label: 'Tables' },
-        { path: '/app/reservations', label: 'Reservations' },
-        { path: '/app/settings', label: 'Settings' }
-      ],
-      supervisor: [
-        { path: '/app/users', label: 'Users' },
-        { path: '/app/tables', label: 'Tables' },
-        { path: '/app/reservations', label: 'Reservations' },
-        { path: '/app/profile', label: 'Profile' },
-        { path: '/app/settings', label: 'Settings' }
-      ],
-      user: [
-        { path: '/app/reservations', label: 'Reservations' },
-        { path: '/app/profile', label: 'Profile' },
-        { path: '/app/settings', label: 'Settings' }
-      ]
-    };
-
-    return [...commonItems, ...(roleSpecificItems[auth.role] || [])];
-  };
-
   return (
-    <aside className="sidebar">
-      <nav>
-        {getMenuItems().map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) => isActive ? 'active' : ''}
-          >
-            {item.label}
-          </NavLink>
-        ))}
+    <div className="sidebar">
+      <nav className="sidebar-nav">
+        <NavLink to="/app/dashboard" className={({ isActive }) => isActive ? 'active' : ''}>
+          Dashboard
+        </NavLink>
+        {auth.role === 'Admin' && (
+          <>
+            <NavLink to="/app/users" className={({ isActive }) => isActive ? 'active' : ''}>
+              Users
+            </NavLink>
+            <NavLink to="/app/restaurants" className={({ isActive }) => isActive ? 'active' : ''}>
+              Restaurants
+            </NavLink>
+          </>
+        )}
+        <NavLink to="/app/tables" className={({ isActive }) => isActive ? 'active' : ''}>
+          Tables
+        </NavLink>
+        <NavLink to="/app/reservations" className={({ isActive }) => isActive ? 'active' : ''}>
+          Reservations
+        </NavLink>
+        <NavLink to="/app/settings" className={({ isActive }) => isActive ? 'active' : ''}>
+          Settings
+        </NavLink>
       </nav>
-    </aside>
+    </div>
   );
 };
 

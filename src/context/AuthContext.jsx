@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   });
 
   const [activeItems, setActiveItems] = useState({
+    user: null,
     restaurant: null,
     table: null,
     reservation: null
@@ -30,22 +31,42 @@ export const AuthProvider = ({ children }) => {
       role: null
     });
     setActiveItems({
+      user: null,
       restaurant: null,
       table: null,
       reservation: null
     });
   };
 
+  const setActiveUser = (user) => {
+    setActiveItems(prev => ({
+      ...prev,
+      user
+    }));
+  };
+
   const setActiveRestaurant = (restaurant) => {
-    setActiveItems(prev => ({ ...prev, restaurant }));
+    setActiveItems(prev => ({
+      ...prev,
+      restaurant,
+      table: null,
+      reservation: null
+    }));
   };
 
   const setActiveTable = (table) => {
-    setActiveItems(prev => ({ ...prev, table }));
+    setActiveItems(prev => ({
+      ...prev,
+      table,
+      reservation: null
+    }));
   };
 
   const setActiveReservation = (reservation) => {
-    setActiveItems(prev => ({ ...prev, reservation }));
+    setActiveItems(prev => ({
+      ...prev,
+      reservation
+    }));
   };
 
   return (
@@ -54,6 +75,7 @@ export const AuthProvider = ({ children }) => {
       login,
       logout,
       activeItems,
+      setActiveUser,
       setActiveRestaurant,
       setActiveTable,
       setActiveReservation

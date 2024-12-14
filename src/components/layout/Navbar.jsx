@@ -22,6 +22,9 @@ const Navbar = () => {
             <div className="navbar-info">
               <span>{auth.user?.email}</span>
               <span>{auth.role}</span>
+              {activeItems.user && (
+                <span className="active-item">User: {activeItems.user.name}</span>
+              )}
               {activeItems.restaurant && (
                 <span className="active-item">Restaurant: {activeItems.restaurant.name}</span>
               )}
@@ -29,7 +32,7 @@ const Navbar = () => {
                 <span className="active-item">Table: {activeItems.table.number}</span>
               )}
               {activeItems.reservation && (
-                <span className="active-item">Reservation: #{activeItems.reservation.id}</span>
+                <span className="active-item">Reservation: {activeItems.reservation.customerName}</span>
               )}
             </div>
             <div className="navbar-actions">
